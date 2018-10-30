@@ -1,28 +1,30 @@
 import React from 'react';
 import axios from 'axios';
 
-const editPage = ({itemToEdit, onRouteChange }) => {
+const editPage = ({itemToEdit, onRouteChange, apiURL }) => {
 
   return(
     <section className='container'>
       <h1>Edit</h1>
+      <button className="btn btn-info" onClick={e => onRouteChange()}>Back</button>
       <form>
       {
-        Object.keys(itemToEdit).map((item, i) => {
+        Object.keys(itemToEdit).map((itemProperty, i) => {
+          if (itemProperty.includes('id')) return;
           return (
             <div className='form-group' key={i}>
-              <label className='col-2 col-form-label'>{item}</label>
+              <label className='col-2 col-form-label'>{itemProperty}</label>
               <input 
                 className='form-control' 
                 type='text' 
-                defaultValue={itemToEdit[item]}
-                onChange={e => {itemToEdit[item] = e.target.value; console.log(itemToEdit)}} />
+                defaultValue={itemToEdit[itemProperty]}
+                onChange={e => {itemToEdit[itemProperty] = e.target.value}} />
             </div>
           )
         })
       }
       </form>
-      <button onClick={e => {axios.put(`https://case-users.herokuapp.com/updateAddress/1`, itemToEdit).then(response => onRouteChange())}} type="button" className="btn btn-warning btn-lg">Save</button>
+      <button onClick={e => {axios.put(apiURL + itemToEdit.address_id, itemToEdit).then(response => onRouteChange())}} type="button" className="btn btn-warning btn-lg">Save</button>
       <button onClick={console.log(itemToEdit)} type="button" className="btn btn-danger btn-lg btn-block">Delete</button>
     </section>
   )

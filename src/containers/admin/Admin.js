@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Address from './admin-components/Address';
+import Dashboard from './admin-components/Dashboard';
 
 class Admin extends Component {
   constructor(props) {
@@ -12,8 +13,7 @@ class Admin extends Component {
   renderPage() {
     switch (this.state.currentPage) {
       case 'dashBoard':
-        return <h1>Dashboard</h1>
-        break;
+        return <Dashboard />
       case 'address':
         return <Address />;
       default:
