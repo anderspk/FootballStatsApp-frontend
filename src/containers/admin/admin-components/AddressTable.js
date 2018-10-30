@@ -57,9 +57,7 @@ class addressTable extends Component {
         address.city.toLowerCase().includes(searchValue) ||
         address.country.toLowerCase().includes(searchValue) ||
         address.location_name.toLowerCase().includes(searchValue) ||
-        (address.description ? address.description.toLowerCase() : '').includes(searchValue)
-
-        ;
+        (address.description ? address.description.toLowerCase() : '').includes(searchValue);
     });
     return (
       <section className='address-page'>
