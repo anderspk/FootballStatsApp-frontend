@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import Address from './admin-components/Address';
+import Address from './admin-components/Addresses/Address';
+import Person from './admin-components/Person/Person';
 import Dashboard from './admin-components/Dashboard';
 
 class Admin extends Component {
@@ -16,6 +17,8 @@ class Admin extends Component {
         return <Dashboard />
       case 'address':
         return <Address />;
+      case 'person':
+        return <Person />;
       default:
         break;
     }
@@ -27,7 +30,7 @@ class Admin extends Component {
         <ul className='admin-menu'>
           <li><button onClick={e => this.setState({currentPage: 'dashBoard'})}>Dashboard</button></li>
           <li><button onClick={e => this.setState({currentPage: 'address'})}>Address</button></li>
-          <li><button>Menu</button></li>
+          <li><button onClick={e => this.setState({currentPage: 'person'})}>People</button></li>
           <li><button>Menu</button></li>
           <li><button>Menu</button></li>
         </ul>

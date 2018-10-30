@@ -28,19 +28,12 @@ class addressTable extends Component {
     return filteredAddresses.map(address => {
       return(
         <tr key={address.address_id}>
-          <td>{address.address_id}</td>
-          <td>{address.address_line_1}</td>
-          <td>{address.address_line_2}</td>
-          <td>{address.address_line_3}</td>
-          <td>{address.postal_code}</td>
-          <td>{address.city}</td>
-          <td>{address.country}</td>
-          <td>{address.location_id}</td>
-          <td>{address.location_name}</td>
-          <td>{address.description}</td>
-          <td>
-            <button className="btn btn-info" onClick={e => {this.props.onEdit(address)}} >Edit</button>
-          </td>
+          {this.props.itemFields.map(fieldName => {
+              return (
+                  <td>{address[fieldName]} </td>
+                )
+            })}
+            <td><button className="btn btn-info" onClick={e => {this.props.onEdit(address)}} >Edit</button></td>
         </tr>
       )
     })
@@ -49,17 +42,13 @@ class addressTable extends Component {
   render() {
     const { searchField } = this.state;
     const filteredAddresses = this.props.addresses.filter((address) => {
-      let searchValue = searchField.toLowerCase();
-      return (address.address_line_1 ? address.address_line_1.toLowerCase() : '').includes(searchValue) ||
-        (address.address_line_2 ? address.address_line_2.toLowerCase() : '').includes(searchValue) ||
-        (address.address_line_3 ? address.address_line_3.toLowerCase() : '').includes(searchValue) ||
-        address.postal_code.includes(searchValue) ||
-        address.city.toLowerCase().includes(searchValue) ||
-        address.country.toLowerCase().includes(searchValue) ||
-        address.location_name.toLowerCase().includes(searchValue) ||
-        (address.description ? address.description.toLowerCase() : '').includes(searchValue)
 
-        ;
+      let searchValue = searchField.toLowerCase();
+
+      return this.props.itemFields.find(fieldName => {
+        if (address[fieldName]) {
+          if (address[fieldName].toLowerCase().includes(searchValue)) {return true}}
+      })
     });
     return (
       <section className='address-page'>
@@ -75,6 +64,7 @@ class addressTable extends Component {
                     return <th>{fieldName}</th>
                   })
                 }
+                <th></th>
               </tr>
             </thead>
             <tbody>{!filteredAddresses ? <p>Loading...</p> : this.renderTable(filteredAddresses)}</tbody>
