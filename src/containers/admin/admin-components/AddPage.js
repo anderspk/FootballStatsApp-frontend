@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 class AddPage extends Component {
 
@@ -7,9 +8,23 @@ class AddPage extends Component {
     this.state = {};
   }
 
+  componentDidMount() {
+    let newState = {};
+    for (const fieldName of this.props.formFields) {
+      console.log(this.props.formFields, 'formfield')
+      if (fieldName.includes('id'))
+        continue;
+      console.log(fieldName, 'fieldName');
+      this.setState({[fieldName]:null})
+      newState[fieldName] = null;
+    }
+    console.log(this.state);
+  }
+
   handleSubmit(e) {
      e.preventDefault();
      console.log(this.state);
+     axios.post('https://case-users.herokuapp.com/createAddress', this.state).then(response => console.log(response)).catch(error => console.log(error));
   }
 
   render() {
