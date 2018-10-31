@@ -44,7 +44,6 @@ class addressTable extends Component {
     const filteredAddresses = this.props.addresses.filter((address) => {
 
       let searchValue = searchField.toLowerCase();
-
       return this.props.itemFields.find(fieldName => {
         if (address[fieldName]) {
           if (address[fieldName].toLowerCase().includes(searchValue)) {return true}}
