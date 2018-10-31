@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import AddressTable from './AddressTable';
+import AddressTable from '../Table';
 import EditPage from '../EditPage';
 import AddPage from '../AddPage';
 
@@ -39,11 +39,11 @@ class Address extends Component {
   getView() {
     switch (this.state.activePage) {
       case 'addressTable':
-        return <AddressTable addresses={this.state.addresses} onEdit={this.onEdit} addPage={this.addPage} itemFieldsName={this.state.itemFieldsName} itemFields={this.state.itemFields}/>
+        return <AddressTable objectList={this.state.addresses} onEdit={this.onEdit} addPage={this.addPage} itemFieldsName={this.state.itemFieldsName} itemFields={this.state.itemFields} title='Addresses' addButton='Add Address'/>
       case 'editPage':
-        return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/updateAddress/' />
+        return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/updateAddress' />
       case 'addPage':
-        return <AddPage formFields={this.state.itemFields} onRouteChange={this.onRouteChange} />
+        return <AddPage formFields={this.state.itemFields} onRouteChange={this.onRouteChange} apiURL= 'https://case-users.herokuapp.com/createAddress' />
       default:
         break;
     }

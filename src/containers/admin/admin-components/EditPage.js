@@ -24,7 +24,7 @@ const editPage = ({itemToEdit, onRouteChange, apiURL, editName }) => {
         })
       }
       </form>
-      <button onClick={e => {axios.put(apiURL + itemToEdit.address_id, itemToEdit).then(response => onRouteChange()).catch(error => console.log(error))}} type="button" className="btn btn-warning btn-lg">Save</button>
+      <button onClick={e => {axios.put(apiURL, itemToEdit).then(response => onRouteChange()).catch(error => console.log(error))}} type="button" className="btn btn-warning btn-lg">Save</button>
       <button onClick={console.log(itemToEdit, 'hei')} type="button" className="btn btn-danger btn-lg btn-block">Delete</button>
     </section>
   )

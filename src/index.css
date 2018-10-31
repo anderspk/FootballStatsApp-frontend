@@ -83,3 +83,7 @@ article p {
   display: inline;
   vertical-align:middle;
 }
+
+.player-menu {
+  background: #646F72;
+}

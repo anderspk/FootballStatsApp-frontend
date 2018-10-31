@@ -24,7 +24,7 @@ class AddPage extends Component {
   handleSubmit(e) {
      e.preventDefault();
      console.log(this.state);
-     axios.post('https://case-users.herokuapp.com/createAddress', this.state).then(response => console.log(response)).catch(error => console.log(error));
+     axios.post((this.props.apiURL) , this.state).then(response => console.log(response)).catch(error => console.log(error));
   }
 
   render() {

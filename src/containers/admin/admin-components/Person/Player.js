@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import PeopleTable from './Table';
+import PeopleTable from '../Table';
 import EditPage from '../EditPage';
 import AddPage from '../AddPage';
 
-class Address extends Component {
+class Player extends Component {
 
   constructor(props) {
     super(props);
@@ -41,9 +41,9 @@ class Address extends Component {
       case 'personTable':
         return <PeopleTable objectList={this.state.people} onEdit={this.onEdit} addPage={this.addPage} itemFieldsName={this.state.itemFieldsName} itemFields={this.state.itemFields} title='Player' addButton='Add Player' />
       case 'editPage':
-        return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/updatePlayer/' editName='Player'/>
+        return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/updatePlayer' editName='Player'/>
       case 'addPage':
-        return <AddPage formFields={this.state.itemFields} onRouteChange={this.onRouteChange} />
+        return <AddPage formFields={this.state.itemFields} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/createPlayer'/>
       default:
         break;
     }
@@ -58,4 +58,4 @@ class Address extends Component {
   }
 }
 
-export default Address;
+export default Player;
