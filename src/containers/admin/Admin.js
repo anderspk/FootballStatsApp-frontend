@@ -8,6 +8,8 @@ import Season from './admin-components/Season/Season';
 import Team from './admin-components/Team/Team';
 import Result from './admin-components/Result/Result';
 import Goals from './admin-components/Goals/Goals';
+import GoalType from './admin-components/GoalType/GoalType';
+import Contacts from './admin-components/Contacts/Contacts';
 import Dashboard from './admin-components/Dashboard';
 
 class Admin extends Component {
@@ -31,6 +33,8 @@ class Admin extends Component {
         return <Coach />;
       case 'owner':
         return <Owner />;
+      case 'contacts':
+        return <Contacts />;
       case 'match':
         return <Match />;
       case 'season':
@@ -41,6 +45,8 @@ class Admin extends Component {
         return <Result />;
       case 'goals':
         return <Goals />;  
+      case 'goalType':
+        return <GoalType />;  
       default:
         break;
     }
@@ -57,11 +63,13 @@ class Admin extends Component {
           {showPeople && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'player'})}>Players</button></li>}
           {showPeople && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'coach'})}>Coaches</button></li>}
           {showPeople && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'owner'})}>Owners</button></li>}
+          <li><button onClick={e => this.setState({currentPage: 'contacts'})}>Contacts</button></li>
           <li><button onClick={e => this.setState({currentPage: 'match'})}>Matches</button></li>
           <li><button onClick={e => this.setState({currentPage: 'season'})}>Seasons</button></li>
           <li><button onClick={e => this.setState({currentPage: 'team'})}>Teams</button></li>
           <li><button onClick={e => this.setState({currentPage: 'result'})}>Result</button></li>
           <li><button onClick={e => this.setState({currentPage: 'goals'})}>Goals</button></li>
+          <li><button onClick={e => this.setState({currentPage: 'goalType'})}>Goal Type</button></li>
         </ul>
         <div className='admin-main-container'>
           {this.renderPage()}

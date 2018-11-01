@@ -12,7 +12,7 @@ class Address extends Component {
       data: [],
       activePage: 'table',
       itemToEdit: {},
-      itemFields: ['match_id', 'match_date', 'home_team_id', 'away_team_id', 'season_id', 'locaton_id'],
+      itemFields: ['match_id', 'match_date', 'home_team_id', 'away_team_id', 'season_id', 'location_id'],
       itemFieldsName: ['Match ID', 'Match Date', 'Home Team ID', 'Away Team ID', 'Season ID', 'Location ID']
     }
     this.getData();

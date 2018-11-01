@@ -44,9 +44,10 @@ class Table extends Component {
       let searchValue = searchField.toLowerCase();
 
       return this.props.itemFields.find(fieldName => {
-        if (filteredObject[fieldName]) {
-          if (filteredObject[fieldName].toLowerCase().includes(searchValue)) {return true}}
+          if (filteredObject[fieldName]) {
+            if (filteredObject[fieldName].toLowerCase().includes(searchValue)) {return true}}
       })
+
     });
     return (
       <section className='address-page'>
