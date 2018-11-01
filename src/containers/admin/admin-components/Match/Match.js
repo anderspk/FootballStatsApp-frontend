@@ -3,6 +3,8 @@ import axios from 'axios';
 import Table from '../Table';
 import EditPage from '../EditPage';
 import AddPage from '../AddPage';
+import { connect } from 'react-redux';
+import { fetchTableData } from '../../../../actions/actions';
 
 class Address extends Component {
 
@@ -13,7 +15,19 @@ class Address extends Component {
       activePage: 'table',
       itemToEdit: {},
       itemFields: ['match_id', 'match_date', 'home_team_id', 'away_team_id', 'season_id', 'locaton_id'],
-      itemFieldsName: ['Match ID', 'Match Date', 'Home Team ID', 'Away Team ID', 'Season ID', 'Location ID']
+      itemFieldsName: ['Match ID', 'Match Date', 'Home Team ID', 'Away Team ID', 'Season ID', 'Location ID'],
+      helperAPI: [
+        'https://case-team.herokuapp.com/showOneTeam/',
+        'https://case-team.herokuapp.com/showOneTeam/',
+        'http://case-season.herokuapp.com/showOneSeason/',
+        'http://case-address.herokuapp.com/showOneAddress/'
+      ],
+      helperAPIfield: [
+        'association_name',
+        'association_name',
+        'name',
+        'location_name'
+      ]
     }
     this.getData();
     this.onEdit = this.onEdit.bind(this);
@@ -39,7 +53,7 @@ class Address extends Component {
   getView() {
     switch (this.state.activePage) {
       case 'table':
-        return <Table objectList={this.state.data} onEdit={this.onEdit} addPage={this.addPage} itemFieldsName={this.state.itemFieldsName} itemFields={this.state.itemFields} title='Matches' addButton='Add Match' />
+        return <Table objectList={this.state.data} onEdit={this.onEdit} addPage={this.addPage} itemFieldsName={this.state.itemFieldsName} itemFields={this.state.itemFields} title='Matches' addButton='Add Match' helperAPI={this.state.helperAPI} helperAPIfield={this.state.helperAPIfield} />
       case 'editPage':
         return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/updateMatch' editName='Match'/>
       case 'addPage':

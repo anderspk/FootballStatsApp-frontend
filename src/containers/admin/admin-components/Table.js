@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import TableRow from './TableRow';
 
 class Table extends Component {
 
@@ -23,18 +24,7 @@ class Table extends Component {
   }
 
   renderTable(filteredObjectList) {
-    return filteredObjectList.map(filteredObject => {
-      return(
-        <tr>
-          {this.props.itemFields.map(fieldName => {
-              return (
-                  <td>{filteredObject[fieldName]} </td>
-                )
-            })}
-            <td><button className="btn btn-info" onClick={e => {this.props.onEdit(filteredObject)}} >Edit</button></td>
-        </tr>
-      )
-    })
+    return filteredObjectList.map(filteredObject => <TableRow row={filteredObject} itemFields={this.props.itemFields} helperAPI={this.state.helperAPI} helperAPIfield={this.state.helperAPIfield} />)
   }
 
   render() {
