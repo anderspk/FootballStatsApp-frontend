@@ -12,15 +12,15 @@ class Goal extends Component {
       data: [],
       activePage: 'table',
       itemToEdit: {},
-      itemFields: ['type'],
-      itemFieldsName: ['Goal Type']
+      itemFields: ['goal_type_id','type'],
+      itemFieldsName: ['Goal Type ID', 'Goal Type']
     }
     this.getData();
     this.onEdit = this.onEdit.bind(this);
   }
 
   getData() {
-    axios.get('https://case-goal.herokuapp.com/showGoals')
+    axios.get('https://case-goal.herokuapp.com/showGoalTypes')
       .then(response => this.setState({ data: response.data }));
   }
 

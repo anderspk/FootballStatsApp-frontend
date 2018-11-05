@@ -24,18 +24,18 @@ class AddPage extends Component {
   handleSubmit(e) {
      e.preventDefault();
      console.log(this.state);
-     axios.post((this.props.apiURL) , this.state).then(response => console.log(response)).catch(error => console.log(error));
+     axios.post((this.props.apiURL) , this.state).then(response => this.props.onRouteChange()).catch(error => console.log(error));
   }
 
   render() {
     return (
       <section className='container'>
-        <h1>Edit</h1>
+        <h1>Add</h1>
         <button className="btn btn-info" onClick={e => this.props.onRouteChange()}>Back</button>
         <form onSubmit={e => this.handleSubmit(e)}>
         {
           this.props.formFields.map((formField, i) => {
-            if (formField.includes('id')) return;
+            if(i === 0) return;
             return (
               <div className='form-group' key={i}>
                 <label className='col-2 col-form-label'>{formField}</label>

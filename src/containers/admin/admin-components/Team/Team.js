@@ -12,8 +12,8 @@ class Team extends Component {
       data: [],
       activePage: 'table',
       itemToEdit: {},
-      itemFields: ['team_id', 'association_id', 'coach_id', 'owner_id', 'location_id', 'association_name', 'association_description'],
-      itemFieldsName: ['Team ID', 'Association ID', 'Coach ID', 'Owner ID', 'Location ID', 'Association Name', 'Association Description']
+      itemFields: ['team_id', 'association_id', 'coach_id', 'owner_id', 'location_id', ],
+      itemFieldsName: ['Team ID', 'Association ID', 'Coach ID', 'Owner ID', 'Location ID']
     }
     this.getData();
     this.onEdit = this.onEdit.bind(this);
@@ -43,7 +43,7 @@ class Team extends Component {
       case 'editPage':
         return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/updateTeam' editName='Team'/>
       case 'addPage':
-        return <AddPage formFields={this.state.itemFields} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/createTeam' />
+        return <AddPage formFields={this.state.itemFields} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/createTeam' addName='Team'/>
       default:
         break;
     }

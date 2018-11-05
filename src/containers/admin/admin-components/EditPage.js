@@ -10,7 +10,6 @@ const editPage = ({itemToEdit, onRouteChange, apiURL, editName}) => {
       <form>
       {
         Object.keys(itemToEdit).map((itemProperty, i) => {
-          if (itemProperty.includes('id')) return;
           return (
             <div className='form-group' key={i}>
               <label className='col-2 col-form-label'>{itemProperty}</label>

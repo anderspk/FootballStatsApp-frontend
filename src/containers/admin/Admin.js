@@ -6,6 +6,7 @@ import Coach from './admin-components/Person/Coach';
 import Match from './admin-components/Match/Match';
 import Season from './admin-components/Season/Season';
 import Team from './admin-components/Team/Team';
+import Association from './admin-components/Association/Association';
 import Result from './admin-components/Result/Result';
 import Goals from './admin-components/Goals/Goals';
 import GoalType from './admin-components/GoalType/GoalType';
@@ -39,6 +40,8 @@ class Admin extends Component {
         return <Match />;
       case 'season':
         return <Season />;
+      case 'association':
+        return <Association />;
       case 'team':
         return <Team />;
       case 'result':
@@ -66,6 +69,7 @@ class Admin extends Component {
           <li><button onClick={e => this.setState({currentPage: 'contacts'})}>Contacts</button></li>
           <li><button onClick={e => this.setState({currentPage: 'match'})}>Matches</button></li>
           <li><button onClick={e => this.setState({currentPage: 'season'})}>Seasons</button></li>
+          <li><button onClick={e => this.setState({currentPage: 'association'})}>Association</button></li>
           <li><button onClick={e => this.setState({currentPage: 'team'})}>Teams</button></li>
           <li><button onClick={e => this.setState({currentPage: 'result'})}>Result</button></li>
           <li><button onClick={e => this.setState({currentPage: 'goals'})}>Goals</button></li>

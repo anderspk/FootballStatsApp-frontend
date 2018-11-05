@@ -25,6 +25,7 @@ class Table extends Component {
 
   renderTable(filteredObjectList) {
     return filteredObjectList.map(filteredObject => <TableRow row={filteredObject} itemFields={this.props.itemFields} onEdit={this.props.onEdit} helperAPI={this.state.helperAPI} helperAPIfield={this.state.helperAPIfield} />)
+    
   }
 
   render() {
