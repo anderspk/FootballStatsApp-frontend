@@ -4,39 +4,84 @@ import Table from '../Table';
 import EditPage from '../EditPage';
 import AddPage from '../AddPage';
 import { connect } from 'react-redux';
-import { fetchTableData } from '../../../../actions/actions';
+import { fetchTableData, setRowAPIhelpers } from '../../../../actions/actions';
 
 class Address extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
       activePage: 'table',
       itemToEdit: {},
-      itemFields: ['match_id', 'match_date', 'home_team_id', 'away_team_id', 'season_id', 'locaton_id'],
+      itemFields: ['match_id', 'match_date', 'home_team_id', 'away_team_id', 'season_id', 'location_id'],
       itemFieldsName: ['Match ID', 'Match Date', 'Home Team ID', 'Away Team ID', 'Season ID', 'Location ID'],
-      helperAPI: [
-        'https://case-team.herokuapp.com/showOneTeam/',
-        'https://case-team.herokuapp.com/showOneTeam/',
-        'http://case-season.herokuapp.com/showOneSeason/',
-        'http://case-address.herokuapp.com/showOneAddress/'
-      ],
-      helperAPIfield: [
-        'association_name',
-        'association_name',
-        'name',
-        'location_name'
-      ]
+      renderTable: [],
+      renderComplete: false
     }
-    this.getData();
     this.onEdit = this.onEdit.bind(this);
   }
 
-  getData() {
-    axios.get('https://case-match.herokuapp.com/showMatches')
-      .then(response => this.setState({ data: response.data }));
+  componentWillMount() {
+    this.props.fetchTableData('https://case-match.herokuapp.com/showMatches');
   }
+
+  componentWillReceiveProps(newProps) {
+    this.doThing(newProps);
+  }
+
+  doThing(input) {
+
+
+    
+
+    const apiURLs = 
+    ['https://case-team.herokuapp.com/showOneTeam/',
+      'https://case-team.herokuapp.com/showOneTeam/',
+      'http://case-season.herokuapp.com/showOneSeason/',
+      'http://case-address.herokuapp.com/showOneAddress/'];
+    
+    const apiURLfieldNames =
+    ['association_name',
+      'association_name',
+      'name',
+      'location_name'];
+
+    const columns = [2,3,4,5];
+    let counter=0;
+    input.table.data.forEach((row,i) => {
+      let index = 0
+      axios.get(apiURLs[index] + row[this.state.itemFields[columns[index]]]).then(first => {
+        first = first.data[apiURLfieldNames[index]];
+        index++;
+        axios.get(apiURLs[index] + row[this.state.itemFields[columns[index]]]).then(second => {
+          second = second.data[apiURLfieldNames[index]];
+          index++;
+          axios.get(apiURLs[index] + row[this.state.itemFields[columns[index]]]).then(third => {
+            third = third.data[apiURLfieldNames[index]];
+            index++;
+            axios.get(apiURLs[index] + row[this.state.itemFields[columns[index]]]).then(fourth => {
+              fourth = fourth.data[apiURLfieldNames[index]];
+              let newRenderTable = this.state.renderTable;
+              newRenderTable[i] = {
+                match_id: row.match_id,
+                match_date: row.match_date,
+                home_team_id: first,
+                away_team_id: second,
+                season_id: third,
+                location_id:fourth
+              }
+              counter++
+              this.setState({ renderTable: newRenderTable })
+              console.log(counter, input.table.data.length);
+              if (counter === input.table.data.length/4) this.setState({ renderComplete: true })
+
+            })
+          })
+        });
+      })
+    })
+  }
+
 
   onEdit(editItem) {
     this.setState({ activePage: 'editPage', itemToEdit: editItem});
@@ -53,7 +98,7 @@ class Address extends Component {
   getView() {
     switch (this.state.activePage) {
       case 'table':
-        return <Table objectList={this.state.data} onEdit={this.onEdit} addPage={this.addPage} itemFieldsName={this.state.itemFieldsName} itemFields={this.state.itemFields} title='Matches' addButton='Add Match' helperAPI={this.state.helperAPI} helperAPIfield={this.state.helperAPIfield} />
+        return <Table objectList={this.state.renderTable} onEdit={this.onEdit} addPage={this.addPage} itemFieldsName={this.state.itemFieldsName} itemFields={this.state.itemFields} title='Matches' addButton='Add Match' helperAPI={this.state.helperAPI} helperAPIfield={this.state.helperAPIfield} />
       case 'editPage':
         return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/updateMatch' editName='Match'/>
       case 'addPage':
@@ -64,6 +109,8 @@ class Address extends Component {
   }
 
   render() {
+    // console.log(this.props.table, 'rendertable');
+    if (!this.state.renderComplete) return 'Loading...';
     return ( 
       <div>
         {this.getView()}
@@ -72,4 +119,11 @@ class Address extends Component {
   }
 }
 
-export default Address;
+const mapStateToProps = state => {
+  console.log(state, 'thestate');
+  return {
+    table: state.table
+  }
+}
+
+export default connect(mapStateToProps, {fetchTableData, setRowAPIhelpers})(Address);

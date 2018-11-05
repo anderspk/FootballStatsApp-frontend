@@ -1,1 +1,2 @@
 export const FETCH_TABLE_DATA = 'FETCH_TABLE_DATA';
+export const SET_ROW_API_HELPERS = 'SET_ROW_API_HELPERS';

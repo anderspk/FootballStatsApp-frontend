@@ -11,11 +11,11 @@ class Table extends Component {
     this.onSearchChange = this.onSearchChange.bind(this);
   }
 
-  componentWillReceiveProps(newProps) {
-    if (newProps.objectList !== this.props.objectList) {
-      this.setState({ objectList: newProps.objectList });
-    }
-  }
+  // componentWillReceiveProps(newProps) {
+  //   // if (newProps.objectList !== this.props.objectList) {
+  //   //   this.setState({ objectList: newProps.objectList });
+  //   // }
+  // }
 
   onSearchChange(e) {
     this.setState({
@@ -24,7 +24,17 @@ class Table extends Component {
   }
 
   renderTable(filteredObjectList) {
-    return filteredObjectList.map(filteredObject => <TableRow row={filteredObject} itemFields={this.props.itemFields} helperAPI={this.state.helperAPI} helperAPIfield={this.state.helperAPIfield} />)
+    console.log('rendering...')
+    return filteredObjectList.map(filteredObject => 
+      <tr>
+        {
+          this.props.itemFields.map(fieldName => {
+            return <td>{filteredObject[fieldName]}</td>
+          })
+        }
+        <td><button className="btn btn-info" onClick={e => {this.props.onEdit(filteredObject)}} >Edit</button></td>
+      </tr>
+    )
   }
 
   render() {
