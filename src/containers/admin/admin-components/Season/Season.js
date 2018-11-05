@@ -4,7 +4,7 @@ import Table from '../Table';
 import EditPage from '../EditPage';
 import AddPage from '../AddPage';
 
-class Address extends Component {
+class Season extends Component {
 
   constructor(props) {
     super(props);
@@ -58,4 +58,4 @@ class Address extends Component {
   }
 }
 
-export default Address;
+export default Season;

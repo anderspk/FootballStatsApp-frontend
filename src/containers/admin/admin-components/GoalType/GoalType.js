@@ -12,8 +12,8 @@ class Goal extends Component {
       data: [],
       activePage: 'table',
       itemToEdit: {},
-      itemFields: ['goal_id', 'player_id', 'goal_type_id', 'match_id', 'description'],
-      itemFieldsName: ['Goal ID', 'Player ID', 'Goal type ID', 'Match ID', 'Description']
+      itemFields: ['type'],
+      itemFieldsName: ['Goal Type']
     }
     this.getData();
     this.onEdit = this.onEdit.bind(this);
@@ -39,11 +39,11 @@ class Goal extends Component {
   getView() {
     switch (this.state.activePage) {
       case 'table':
-        return <Table objectList={this.state.data} onEdit={this.onEdit} addPage={this.addPage} itemFieldsName={this.state.itemFieldsName} itemFields={this.state.itemFields} title='Goals' addButton='Add Goal' />
+        return <Table objectList={this.state.data} onEdit={this.onEdit} addPage={this.addPage} itemFieldsName={this.state.itemFieldsName} itemFields={this.state.itemFields} title='Goals' addButton='Add Goal Type' />
       case 'editPage':
-        return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/updateGoal' editName='Goal'/>
+        return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/updateGoalType' editName='Goal Type'/>
       case 'addPage':
-        return <AddPage formFields={this.state.itemFields} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/createGoal' />
+        return <AddPage formFields={this.state.itemFields} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/createGoalType' />
       default:
         break;
     }

@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 
-const editPage = ({itemToEdit, onRouteChange, apiURL, editName }) => {
+const editPage = ({itemToEdit, onRouteChange, apiURL, editName}) => {
 
   return(
     <section className='container'>

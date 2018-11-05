@@ -4,7 +4,7 @@ import Table from '../Table';
 import EditPage from '../EditPage';
 import AddPage from '../AddPage';
 
-class Goal extends Component {
+class Contacts extends Component {
 
   constructor(props) {
     super(props);
@@ -12,15 +12,15 @@ class Goal extends Component {
       data: [],
       activePage: 'table',
       itemToEdit: {},
-      itemFields: ['goal_id', 'player_id', 'goal_type_id', 'match_id', 'description'],
-      itemFieldsName: ['Goal ID', 'Player ID', 'Goal type ID', 'Match ID', 'Description']
+      itemFields: ['contact_id', 'person_id', 'contact_type', 'contact_detail'],
+      itemFieldsName: ['Contact ID', 'Person ID', 'Contact Type', 'Contact Details']
     }
     this.getData();
     this.onEdit = this.onEdit.bind(this);
   }
 
   getData() {
-    axios.get('https://case-goal.herokuapp.com/showGoals')
+    axios.get('https://case-users.herokuapp.com/showContacts')
       .then(response => this.setState({ data: response.data }));
   }
 
@@ -39,11 +39,11 @@ class Goal extends Component {
   getView() {
     switch (this.state.activePage) {
       case 'table':
-        return <Table objectList={this.state.data} onEdit={this.onEdit} addPage={this.addPage} itemFieldsName={this.state.itemFieldsName} itemFields={this.state.itemFields} title='Goals' addButton='Add Goal' />
+        return <Table objectList={this.state.data} onEdit={this.onEdit} addPage={this.addPage} itemFieldsName={this.state.itemFieldsName} itemFields={this.state.itemFields} title='Contacts' addButton='Add Contact' />
       case 'editPage':
-        return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/updateGoal' editName='Goal'/>
+        return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/updateContacts' editName='Contact'/>
       case 'addPage':
-        return <AddPage formFields={this.state.itemFields} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/createGoal' />
+        return <AddPage formFields={this.state.itemFields} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/createContacts' />
       default:
         break;
     }
@@ -58,4 +58,4 @@ class Goal extends Component {
   }
 }
 
-export default Goal;
+export default Contacts;
