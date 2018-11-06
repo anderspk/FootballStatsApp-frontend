@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import PeopleTable from '../Table';
-import EditPage from '../EditPage';
+import EditPage from './EditPage';
 import AddPage from './AddPage';
 
-class Player extends Component {
+class Owner extends Component {
 
   constructor(props) {
     super(props);
@@ -12,8 +12,9 @@ class Player extends Component {
       people: [],
       activePage: 'personTable',
       itemToEdit: {},
-      itemFields: ['person_id', 'first_name', 'last_name', 'date_of_birth', 'address_id', 'owner_id'],
-      itemFieldsName: ['ID', 'First Name', 'Last Name', 'Date of Birth', 'Address ID', 'Owner ID']
+      itemFields: ['owner_id', 'first_name', 'last_name', 'date_of_birth', 'address_id'],
+      itemFieldsName: ['ID', 'First Name', 'Last Name', 'Date of Birth', 'Address ID'],
+      itemFieldsForAdd: ['first_name', 'last_name', 'date_of_birth', 'address_id']
     }
     this.getAddresses();
     this.onEdit = this.onEdit.bind(this);
@@ -41,9 +42,9 @@ class Player extends Component {
       case 'personTable':
         return <PeopleTable objectList={this.state.people} onEdit={this.onEdit} addPage={this.addPage} itemFieldsName={this.state.itemFieldsName} itemFields={this.state.itemFields} title='Owner' addButton='Add Owner' />
       case 'editPage':
-        return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/updateOwner' editName='Owner'/>
+        return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/updateOwner' deleteURL={`https://case-users.herokuapp.com/deleteOwner/${this.state.itemToEdit.owner_id}`} editName='Owner'/>
       case 'addPage':
-        return <AddPage formFields={this.state.itemFields} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/createOwner'/>
+        return <AddPage formFields={this.state.itemFieldsForAdd} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/createOwner' addName='Owner'/>
       default:
         break;
     }
@@ -58,4 +59,4 @@ class Player extends Component {
   }
 }
 
-export default Player;
+export default Owner;

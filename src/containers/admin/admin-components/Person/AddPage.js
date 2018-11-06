@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-class AddPage extends Component {
+class AddPlayer extends Component {
 
   constructor(props) {
     super(props);
@@ -30,12 +30,11 @@ class AddPage extends Component {
   render() {
     return (
       <section className='container'>
-        <h1>Add</h1>
+        <h1>Add {this.props.addName}</h1>
         <button className="btn btn-info" onClick={e => this.props.onRouteChange()}>Back</button>
         <form onSubmit={e => this.handleSubmit(e)}>
         {
           this.props.formFields.map((formField, i) => {
-            if(i === 0 ) return;
             return (
               <div className='form-group' key={i}>
                 <label className='col-2 col-form-label'>{formField}</label>
@@ -54,4 +53,4 @@ class AddPage extends Component {
   }
 }
 
-export default AddPage;
+export default AddPlayer;

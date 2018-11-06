@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-class AddPageAddresses extends Component {
+class AddPage extends Component {
 
   constructor(props) {
     super(props);
@@ -23,8 +23,9 @@ class AddPageAddresses extends Component {
 
   handleSubmit(e) {
      e.preventDefault();
-     console.log(this.state);
-     axios.post((this.props.apiURL) , this.state).then(response => this.props.onRouteChange()).catch(error => console.log(error));
+     console.log("object = " + this.state);
+     //axios.post((this.props.associationApiURL) , this.state).then(axios.post(this.props.teamApiURL) , this.state).then(response => this.props.onRouteChange()).catch(error => console.log(error));
+     axios.post(this.props.associationApiURL, this.state).then(axios.post(this.props.teamApiURL, this.state)).then(response => this.props.onRouteChange()).catch(error => console.log(error));
   }
 
   render() {
@@ -35,7 +36,7 @@ class AddPageAddresses extends Component {
         <form onSubmit={e => this.handleSubmit(e)}>
         {
           this.props.formFields.map((formField, i) => {
-            if(i === 0 || i == 7) return;
+            if(i === 0 || i === 1) return;
             return (
               <div className='form-group' key={i}>
                 <label className='col-2 col-form-label'>{formField}</label>
@@ -54,4 +55,4 @@ class AddPageAddresses extends Component {
   }
 }
 
-export default AddPageAddresses;
+export default AddPage;

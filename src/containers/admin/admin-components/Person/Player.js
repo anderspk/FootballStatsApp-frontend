@@ -1,22 +1,31 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import PeopleTable from '../Table';
-import EditPage from '../EditPage';
-import AddPage from '../AddPage';
+import EditPage from './EditPage';
+import AddPage from './AddPage';
 
 class Player extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      people: [],
       activePage: 'personTable',
       itemToEdit: {},
-      itemFields: ['person_id', 'first_name', 'last_name', 'date_of_birth', 'address_id', 'player_id', 'normal_position', 'number', 'team_id'],
-      itemFieldsName: ['ID', 'First Name', 'Last Name', 'Date of Birth', 'Address ID', 'Player ID', 'Normal Position', 'Number', 'Team ID']
+      itemFields: ['player_id', 'first_name', 'last_name', 'date_of_birth', 'address_id', 'normal_position', 'number', 'team_id'],
+      itemFieldsName: ['ID', 'First Name', 'Last Name', 'Date of Birth', 'Address ID', 'Normal Position', 'Number', 'Team ID'],
+      itemFieldsForAdd: ['first_name', 'last_name', 'date_of_birth', 'address_id', 'normal_position', 'number', 'team_id']
     }
     this.getAddresses();
     this.onEdit = this.onEdit.bind(this);
+  }
+
+
+  componentWillMount() {
+    this.props.fetchTableData('https://case-results.herokuapp.com/showResults');
+  }
+
+  componentWillReceiveProps(newProps) {
+    this.doThing(newProps);
   }
 
   getAddresses() {
@@ -41,9 +50,9 @@ class Player extends Component {
       case 'personTable':
         return <PeopleTable objectList={this.state.people} onEdit={this.onEdit} addPage={this.addPage} itemFieldsName={this.state.itemFieldsName} itemFields={this.state.itemFields} title='Player' addButton='Add Player' />
       case 'editPage':
-        return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/updatePlayer' editName='Player'/>
+        return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/updatePlayer' deleteURL={`https://case-users.herokuapp.com/deletePlayer/${this.state.itemToEdit.player_id}`} editName='Player'/>
       case 'addPage':
-        return <AddPage formFields={this.state.itemFields} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/createPlayer'/>
+        return <AddPage formFields={this.state.itemFieldsForAdd} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/createPlayer' addName='Player'/>
       default:
         break;
     }

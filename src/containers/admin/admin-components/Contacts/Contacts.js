@@ -43,7 +43,7 @@ class Contacts extends Component {
       case 'editPage':
         return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/updateContact' deleteURL={`https://case-users.herokuapp.com/deleteContact/${this.state.itemToEdit.contact_id}`} editName='Contact'/>
       case 'addPage':
-        return <AddPage formFields={this.state.itemFields} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/createContact' />
+        return <AddPage formFields={this.state.itemFields} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/createContact' addName='Contact'/>
       default:
         break;
     }

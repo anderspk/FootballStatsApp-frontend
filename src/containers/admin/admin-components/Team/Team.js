@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Table from '../Table';
-import EditPage from '../EditPage';
-import AddPage from '../AddPage';
+import EditPage from './EditTeam';
+import AddPage from './AddTeam';
 
 class Team extends Component {
 
@@ -41,9 +41,9 @@ class Team extends Component {
       case 'table':
         return <Table objectList={this.state.data} onEdit={this.onEdit} addPage={this.addPage} itemFieldsName={this.state.itemFieldsName} itemFields={this.state.itemFields} title='Teams' addButton='Add Team' />
       case 'editPage':
-        return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/updateTeam' editName='Team'/>
+        return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} associationApiURL='https://case-users.herokuapp.com/updateAssociation' teamApiURL='https://case-users.herokuapp.com/updateTeam' editName='Team'/>
       case 'addPage':
-        return <AddPage formFields={this.state.itemFields} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/createTeam' addName='Team'/>
+        return <AddPage formFields={this.state.itemFields} onRouteChange={this.onRouteChange} associationApiURL='https://case-users.herokuapp.com/createAssociation' teamApiURL='https://case-users.herokuapp.com/createTeam' addName='Team'/>
       default:
         break;
     }

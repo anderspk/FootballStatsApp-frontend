@@ -13,7 +13,8 @@ class Person extends Component {
       activePage: 'personTable',
       itemToEdit: {},
       itemFields: ['person_id', 'first_name', 'last_name', 'date_of_birth', 'address_id'],
-      itemFieldsName: ['ID', 'First Name', 'Last Name', 'Date of Birth', 'Address ID']
+      itemFieldsName: ['ID', 'First Name', 'Last Name', 'Date of Birth', 'Address ID'],
+      itemFieldsForAdd: ['first_name', 'last_name', 'date_of_birth', 'address_id']
     }
     this.getAddresses();
     this.onEdit = this.onEdit.bind(this);
@@ -41,9 +42,9 @@ class Person extends Component {
       case 'personTable':
         return <PeopleTable objectList={this.state.people} onEdit={this.onEdit} addPage={this.addPage} itemFieldsName={this.state.itemFieldsName} itemFields={this.state.itemFields} title='Person' addButton='Add Person' />
       case 'editPage':
-        return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/updatePerson' editName='Person'/>
+        return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/updatePerson' deleteURL={`https://case-users.herokuapp.com/deletePerson/${this.state.itemToEdit.person_id}`} editName='Person'/>
       case 'addPage':
-        return <AddPage formFields={this.state.itemFields} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/createPerson'/>
+        return <AddPage formFields={this.state.itemFieldsForAdd} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/createPerson' addName='Person' />
       default:
         break;
     }

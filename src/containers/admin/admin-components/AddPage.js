@@ -30,7 +30,7 @@ class AddPage extends Component {
   render() {
     return (
       <section className='container'>
-        <h1>Add</h1>
+        <h1>Add {this.props.addName}</h1>
         <button className="btn btn-info" onClick={e => this.props.onRouteChange()}>Back</button>
         <form onSubmit={e => this.handleSubmit(e)}>
         {
