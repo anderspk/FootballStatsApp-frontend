@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-class AddPage extends Component {
+class AddResult extends Component {
 
   constructor(props) {
     super(props);
@@ -35,7 +35,6 @@ class AddPage extends Component {
         <form onSubmit={e => this.handleSubmit(e)}>
         {
           this.props.formFields.map((formField, i) => {
-            if(i === 0 ) return;
             return (
               <div className='form-group' key={i}>
                 <label className='col-2 col-form-label'>{formField}</label>
@@ -54,4 +53,4 @@ class AddPage extends Component {
   }
 }
 
-export default AddPage;
+export default AddResult;

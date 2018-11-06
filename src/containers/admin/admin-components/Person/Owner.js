@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import PeopleTable from '../Table';
 import EditPage from '../EditPage';
-import AddPage from '../AddPage';
+import AddPage from './AddPage';
 
 class Player extends Component {
 
@@ -12,8 +12,8 @@ class Player extends Component {
       people: [],
       activePage: 'personTable',
       itemToEdit: {},
-      itemFields: ['person_id', 'first_name', 'last_name', 'date_of_birth', 'address_id', 'team_id'],
-      itemFieldsName: ['ID', 'First Name', 'Last Name', 'Date of Birth', 'Address ID', 'Team ID']
+      itemFields: ['person_id', 'first_name', 'last_name', 'date_of_birth', 'address_id', 'owner_id'],
+      itemFieldsName: ['ID', 'First Name', 'Last Name', 'Date of Birth', 'Address ID', 'Owner ID']
     }
     this.getAddresses();
     this.onEdit = this.onEdit.bind(this);

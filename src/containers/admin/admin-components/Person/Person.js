@@ -4,7 +4,7 @@ import PeopleTable from '../Table';
 import EditPage from '../EditPage';
 import AddPage from './AddPage';
 
-class Player extends Component {
+class Person extends Component {
 
   constructor(props) {
     super(props);
@@ -12,15 +12,15 @@ class Player extends Component {
       people: [],
       activePage: 'personTable',
       itemToEdit: {},
-      itemFields: ['person_id', 'first_name', 'last_name', 'date_of_birth', 'address_id', 'coach_id'],
-      itemFieldsName: ['ID', 'First Name', 'Last Name', 'Date of Birth', 'Address ID', 'Coach ID']
+      itemFields: ['person_id', 'first_name', 'last_name', 'date_of_birth', 'address_id'],
+      itemFieldsName: ['ID', 'First Name', 'Last Name', 'Date of Birth', 'Address ID']
     }
     this.getAddresses();
     this.onEdit = this.onEdit.bind(this);
   }
 
   getAddresses() {
-    axios.get('https://case-person.herokuapp.com/showCoaches')
+    axios.get('https://case-person.herokuapp.com/showPersons')
       .then(response => this.setState({ people: response.data }));
   }
 
@@ -39,11 +39,11 @@ class Player extends Component {
   getView() {
     switch (this.state.activePage) {
       case 'personTable':
-        return <PeopleTable objectList={this.state.people} onEdit={this.onEdit} addPage={this.addPage} itemFieldsName={this.state.itemFieldsName} itemFields={this.state.itemFields} title='Owner' addButton='Add Owner' />
+        return <PeopleTable objectList={this.state.people} onEdit={this.onEdit} addPage={this.addPage} itemFieldsName={this.state.itemFieldsName} itemFields={this.state.itemFields} title='Person' addButton='Add Person' />
       case 'editPage':
-        return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/updateCoach' editName='Coach'/>
+        return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/updatePerson' editName='Person'/>
       case 'addPage':
-        return <AddPage formFields={this.state.itemFields} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/createOwner'/>
+        return <AddPage formFields={this.state.itemFields} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/createPerson'/>
       default:
         break;
     }
@@ -58,4 +58,4 @@ class Player extends Component {
   }
 }
 
-export default Player;
+export default Person;

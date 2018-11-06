@@ -14,7 +14,7 @@ class Address extends Component {
       activePage: 'table',
       itemToEdit: {},
       itemFields: ['match_id', 'match_date', 'home_team_id', 'away_team_id', 'season_id', 'location_id'],
-      itemFieldsName: ['Match ID', 'Match Date', 'Home Team ID', 'Away Team ID', 'Season ID', 'Location ID'],
+      itemFieldsName: ['Match ID', 'Match Date', 'Home Team', 'Away Team', 'Season', 'Location'],
       renderTable: [],
       renderComplete: false
     }
@@ -70,7 +70,7 @@ class Address extends Component {
               counter++
               this.setState({ renderTable: newRenderTable })
               console.log(counter, input.table.data.length);
-              if (counter === input.table.data.length/4) this.setState({ renderComplete: true })
+              if (counter > input.table.data.length/4) this.setState({ renderComplete: true })
 
             })
           })
