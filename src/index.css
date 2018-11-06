@@ -52,7 +52,7 @@ body {
 .admin-dashboard-container {
   height: 100%;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   grid-template-rows: auto 1fr;
 }
 
@@ -86,4 +86,24 @@ article p {
 
 .player-menu {
   background: #646F72;
+}
+
+.players-stat{
+  color: #9709D7;
+}
+
+.teams-stat{
+  color: #FFD100;
+}
+
+.seasons-stat{
+  color: #14B508;
+}
+
+.goals-stat{
+  color: #B31515;
+}
+
+.placeholder{
+  margin:auto;
 }
