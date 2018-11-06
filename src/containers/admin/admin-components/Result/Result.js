@@ -30,12 +30,6 @@ class Result extends Component {
   }
 
   doThing(input) {
-    const apiURLs = 
-    ['https://case-team.herokuapp.com/showAllTeamData/'];
-    
-    const apiURLfieldNames =
-    ['association_name'];
-
     let counter=0;
     input.table.data.forEach((row, i) => {
       axios.get("https://case-team.herokuapp.com/showAllTeamData/" + row.team_id).then(first => {
@@ -53,8 +47,6 @@ class Result extends Component {
 
       })
     })
-
-    axios.get('https://case-team.herokuapp.com/showAllTeamData/')
   }
 
 
