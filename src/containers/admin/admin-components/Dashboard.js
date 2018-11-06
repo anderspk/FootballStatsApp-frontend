@@ -12,7 +12,7 @@ class Dashboard extends Component {
   }
 
   getData() {
-    axios.get('https://case-users2.herokuapp.com/getAllDashboardData')
+    axios.get('https://case-users.herokuapp.com/getAllDashboardData')
       .then(response => this.setState({ data: response.data }));
   }
 
