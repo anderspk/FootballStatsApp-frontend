@@ -12,15 +12,15 @@ class Team extends Component {
       data: [],
       activePage: 'table',
       itemToEdit: {},
-      itemFields: ['team_id', 'association_id', 'coach_id', 'owner_id', 'location_id', ],
-      itemFieldsName: ['Team ID', 'Association ID', 'Coach ID', 'Owner ID', 'Location ID']
+      itemFields: ['team_id', 'association_id', 'coach_id', 'owner_id', 'location_id', 'association_name', 'association_description'],
+      itemFieldsName: ['Team ID', 'Association ID', 'Coach ID', 'Owner ID', 'Location ID', 'Association Name', 'Association Description']
     }
     this.getData();
     this.onEdit = this.onEdit.bind(this);
   }
 
   getData() {
-    axios.get('https://case-team.herokuapp.com/showTeams')
+    axios.get('https://case-team.herokuapp.com/showAllTeamData')
       .then(response => this.setState({ data: response.data }));
   }
 

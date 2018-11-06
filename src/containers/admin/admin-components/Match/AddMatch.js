@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-class AddPage extends Component {
+class AddMatch extends Component {
 
   constructor(props) {
     super(props);
@@ -53,4 +53,4 @@ class AddPage extends Component {
   }
 }
 
-export default AddPage;
+export default AddMatch;

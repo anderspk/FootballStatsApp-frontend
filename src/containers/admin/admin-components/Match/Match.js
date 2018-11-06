@@ -31,20 +31,17 @@ class Address extends Component {
 
   doThing(input) {
 
-
-    
-
     const apiURLs = 
-    ['https://case-team.herokuapp.com/showOneTeam/',
-      'https://case-team.herokuapp.com/showOneTeam/',
-      'http://case-season.herokuapp.com/showOneSeason/',
-      'http://case-address.herokuapp.com/showOneAddress/'];
+    ['https://case-team.herokuapp.com/showAllTeamData/',
+     'https://case-team.herokuapp.com/showAllTeamData/',
+     'http://case-season.herokuapp.com/showOneSeason/',
+     'http://case-address.herokuapp.com/showOneAddress/'];
     
     const apiURLfieldNames =
     ['association_name',
-      'association_name',
-      'name',
-      'location_name'];
+     'association_name',
+     'name',
+     'location_name'];
 
     const columns = [2,3,4,5];
     let counter=0;
