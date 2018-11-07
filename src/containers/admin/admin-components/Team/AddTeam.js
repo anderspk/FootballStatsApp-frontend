@@ -1,12 +1,36 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 class AddPage extends Component {
+
 
   constructor(props) {
     super(props);
     this.state = {};
   }
+
+  createNotification = (type) => {
+    console.log(type, 'type');
+    return () => {
+      switch (type) {
+        case 'info':
+          NotificationManager.info('Info message');
+          break;
+        case 'success':
+          NotificationManager.success('A new team was created!', 'New Team');
+          break;
+        case 'warning':
+          NotificationManager.warning('Warning message', 'Close after 3000ms', 3000);
+          break;
+        case 'error':
+          NotificationManager.error('Error message', 'Click me!', 5000, () => {
+            alert('callback');
+          });
+          break;
+      }
+    };
+  };
 
   componentDidMount() {
     let newState = {};
@@ -23,24 +47,8 @@ class AddPage extends Component {
 
   handleSubmit(e) {
      e.preventDefault();
-
-     let associationID = null;
-     let coach_id = this.state.coach_id;
-     let owner_id = this.state.owner_id;
-     let location_id = this.state.location_id;
-
-     let teamData = [coach_id, associationID, owner_id, location_id]
-
-     let association_name = this.state.association_name;
-     let association_description = this.state.association_description;
-
-     let assocationData = [association_name, association_description]
-
-     console.log(assocationData);
-     console.log(teamData);
-
-     //axios.post((this.props.associationApiURL) , this.state).then(axios.post(this.props.teamApiURL) , this.state).then(response => this.props.onRouteChange()).catch(error => console.log(error));
-     axios.post(this.props.associationApiURL, assocationData).then(axios.post(this.props.teamApiURL, teamData)).then(response => this.props.onRouteChange()).catch(error => console.log(error));
+     console.log("object = " + this.state)     
+     axios.post(this.props.associationApiURL, this.state).then(axios.post(this.props.teamApiURL, this.state)).then(response => this.props.onRouteChange()).catch(error => console.log(error));
   }
 
   render() {
@@ -63,7 +71,7 @@ class AddPage extends Component {
             )
           })
         }
-        <button type="submit" className="btn btn-warning btn-lg">Add</button>
+        <button type="submit" className="btn btn-warning btn-lg" onClick={this.createNotification('success')}>Add</button>
         </form>
       </section>
     )
