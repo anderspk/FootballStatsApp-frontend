@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import {NotificationContainer, NotificationManager} from 'react-notifications';
+// import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 class AddPage extends Component {
 
@@ -10,39 +10,36 @@ class AddPage extends Component {
     this.state = {};
   }
 
-  createNotification = (type) => {
-    console.log(type, 'type');
-    return () => {
-      switch (type) {
-        case 'info':
-          NotificationManager.info('Info message');
-          break;
-        case 'success':
-          NotificationManager.success('A new team was created!', 'New Team');
-          break;
-        case 'warning':
-          NotificationManager.warning('Warning message', 'Close after 3000ms', 3000);
-          break;
-        case 'error':
-          NotificationManager.error('Error message', 'Click me!', 5000, () => {
-            alert('callback');
-          });
-          break;
-      }
-    };
-  };
+  // createNotification = (type) => {
+  //   console.log(type, 'type');
+  //   return () => {
+  //     switch (type) {
+  //       case 'info':
+  //         NotificationManager.info('Info message');
+  //         break;
+  //       case 'success':
+  //         NotificationManager.success('A new team was created!', 'New Team');
+  //         break;
+  //       case 'warning':
+  //         NotificationManager.warning('Warning message', 'Close after 3000ms', 3000);
+  //         break;
+  //       case 'error':
+  //         NotificationManager.error('Error message', 'Click me!', 5000, () => {
+  //           alert('callback');
+  //         });
+  //         break;
+  //     }
+  //   };
+  // };
 
   componentDidMount() {
     let newState = {};
     for (const fieldName of this.props.formFields) {
-      console.log(this.props.formFields, 'formfield')
       if (fieldName.includes('id'))
         continue;
-      console.log(fieldName, 'fieldName');
       this.setState({[fieldName]:null})
       newState[fieldName] = null;
     }
-    console.log(this.state);
   }
 
   handleSubmit(e) {

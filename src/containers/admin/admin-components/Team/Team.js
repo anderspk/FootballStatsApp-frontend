@@ -3,8 +3,8 @@ import axios from 'axios';
 import Table from '../Table';
 import EditPage from './EditTeam';
 import AddPage from './AddTeam';
-import {NotificationContainer, NotificationManager} from 'react-notifications';
-import 'react-notifications/lib/notifications.css';
+// import {NotificationContainer, NotificationManager} from 'react-notifications';
+// import 'react-notifications/lib/notifications.css';
 
 class Team extends Component {
 
@@ -55,7 +55,7 @@ class Team extends Component {
     return ( 
       <div>
         {this.getView()}
-        <NotificationContainer/>
+        {/* <NotificationContainer/> */}
       </div>
     )
   }

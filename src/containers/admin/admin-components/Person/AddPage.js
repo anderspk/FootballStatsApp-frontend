@@ -6,63 +6,90 @@ class AddPlayer extends Component {
     super(props);
     this.state = {
       filteredList: [],
-      addressInput: ''
+      addressInput: "",
+      renderAddresses: false,
+      renderTeams: false
     };
   }
 
   componentWillMount() {
-    axios.get("https://case-address.herokuapp.com/showAddresses")
-      .then(addresses => this.setState({ addresses: addresses.data }));
+    axios
+      .get("https://case-address.herokuapp.com/showAddresses")
+      .then(response => this.setState({ addresses: response.data }));
+    axios
+      .get("http://case-team.herokuapp.com/showAllTeamData")
+      .then(response => this.setState({ teams: response.data }));
   }
-
-  componentDidMount() {
-    let newState = {};
-    for (const fieldName of this.props.formFields) {
-      // console.log(this.props.formFields, "formfield");
-      if (fieldName.includes("id")) continue;
-      // console.log(fieldName, "fieldName");
-      this.setState({ [fieldName]: null });
-      newState[fieldName] = null;
-    }
-    // console.log(this.state);
-  }
-
+ 
   handleSubmit(e) {
     e.preventDefault();
-    console.log(this.state);
     axios
       .post(this.props.apiURL, this.state)
       .then(response => this.props.onRouteChange())
       .catch(error => console.log(error));
   }
 
-  handleDropdown = e => {
+  // HANDLE ADDRESS DROPDOWN
+
+  handleAddressDropdown = e => {
     let input = e.target.value.toLowerCase();
     let filteredList = this.state.addresses.filter(address => {
       return address.address_line_1.toLowerCase().includes(input);
     });
-    console.log(filteredList, 'filtered')
     this.setState({ filteredList: filteredList });
   };
 
-  renderDropdown() {
+  renderAddressDropdown = () => {
     return this.state.filteredList.map(listItem => {
-      return <div onClick={e => {
-        this.setState({ address_id: listItem.address_id, addressInput:listItem.address_line_1, filteredList: [] });
-      }}>{listItem.address_line_1}</div>;
+      return (
+        <div key={listItem.address_id}
+          onMouseDown={e => {
+            this.setState({
+              address_id: listItem.address_id,
+              addressInput: listItem.address_line_1,
+              filteredList: []
+            });
+          }}
+        >
+          {listItem.address_line_1}
+        </div>
+      );
     });
-  }
+  };
+
+  // HANDLE TEAM DROPDOWN
+
+  handleTeamDropdown = e => {
+    let input = e.target.value.toLowerCase();
+    let filteredList = this.state.teams.filter(team => {
+      return team.association_name.toLowerCase().includes(input);
+    });
+    this.setState({ filteredList: filteredList });
+  };
+
+  renderTeamDropdown = () => {
+    return this.state.filteredList.map(listItem => {
+      return (
+        <div key={listItem.team_id}
+          onMouseDown={e => {
+            this.setState({
+              team_id: listItem.team_id,
+              teamInput: listItem.association_name,
+              filteredList: []
+            });
+          }}
+        >
+          {listItem.association_name}
+        </div>
+      );
+    });
+  };
 
   render() {
-    console.log(this.state.filteredList, 'filtered list');
-    return (
-      <section className="container">
+    return <section className="container">
         {this.state.autoCompleteList}
         <h1>Add {this.props.addName}</h1>
-        <button
-          className="btn btn-info"
-          onClick={e => this.props.onRouteChange()}
-        >
+        <button className="btn btn-info" onClick={e => this.props.onRouteChange()}>
           Back
         </button>
         <form autoComplete="off" onSubmit={e => this.handleSubmit(e)}>
@@ -74,31 +101,37 @@ class AddPlayer extends Component {
           <input className="form-control" type="text" onChange={e => {}} />
           <label className="col-2 col-form-label">Address ID</label>
           <div className="autocomplete">
-            <input
-              autocomplete="new-password"
-              className="form-control"
-              type="text"
-              value={this.state.addressInput}
-              onBlur={e => {this.setState({filteredList: []})}}
-              onChange={e => {
-                this.setState({ addressInput: e.target.value })
-                this.handleDropdown(e);
-              }}
-            />
-            <div className="autocomplete-items">{this.renderDropdown()}</div>
+          <input autoComplete="new-password" className="form-control" type="text" value={this.state.addressInput} onClick={e => this.setState({ renderAddresses: true })} onBlur={e => {
+                this.setState({ filteredList: [], renderAddresses: false });
+              }} onChange={e => {
+                this.setState({ addressInput: e.target.value });
+                this.handleAddressDropdown(e);
+              }} />
+            <div className="autocomplete-items">
+              {this.state.renderAddresses && this.renderAddressDropdown()}
+            </div>
           </div>
           <label className="col-2 col-form-label">Normal Position</label>
           <input className="form-control" type="text" onChange={e => {}} />
           <label className="col-2 col-form-label">Number</label>
           <input className="form-control" type="text" onChange={e => {}} />
           <label className="col-2 col-form-label">Team</label>
-          <input className="form-control" type="text" onChange={e => {}} />
+          <div className="autocomplete">
+            <input autoComplete="new-password" className="form-control" type="text" value={this.state.teamInput} onClick={e => this.setState({ renderTeams: true })} onBlur={e => {
+                this.setState({ filteredList: [], renderTeams: false });
+              }} onChange={e => {
+                this.setState({ stateInput: e.target.value });
+                this.handleTeamDropdown(e);
+              }} />
+            <div className="autocomplete-items">
+              {this.state.renderTeams && this.renderTeamDropdown()}
+            </div>
+          </div>
           <button type="submit" className="btn btn-warning btn-lg">
             Add
           </button>
         </form>
-      </section>
-    );
+      </section>;
   }
 }
 
