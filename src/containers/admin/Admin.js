@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Address from './admin-components/Addresses/Address';
+import Person from './admin-components/Person/Person';
 import Player from './admin-components/Person/Player';
 import Owner from './admin-components/Person/Owner';
 import Coach from './admin-components/Person/Coach';
@@ -27,6 +28,8 @@ class Admin extends Component {
         return <Dashboard />
       case 'address':
         return <Address />;
+      case 'person':
+        return <Person />;
       case 'player':
         return <Player />;
       case 'coach':
@@ -59,6 +62,7 @@ class Admin extends Component {
         <ul className='admin-menu'>
           <li><button onClick={e => this.setState({currentPage: 'dashBoard'})}>Dashboard</button></li>
           <li><button onClick={e => this.setState({currentPage: 'address'})}>Address</button></li>
+          <li><button onClick={e => this.setState({currentPage: 'person'})}>Person</button></li>
           <li><button onClick={e => this.setState({ showPeople: !showPeople })}>People</button></li>
           {showPeople && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'player'})}>Players</button></li>}
           {showPeople && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'coach'})}>Coaches</button></li>}

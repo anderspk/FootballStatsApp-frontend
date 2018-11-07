@@ -14,7 +14,7 @@ class Address extends Component {
       activePage: 'table',
       itemToEdit: {},
       itemFields: ['match_id', 'match_date', 'home_team_id', 'away_team_id', 'season_id', 'location_id'],
-      itemFieldsName: ['Match ID', 'Match Date', 'Home Team ID', 'Away Team ID', 'Season ID', 'Location ID'],
+      itemFieldsName: ['Match ID', 'Match Date', 'Home Team', 'Away Team', 'Season', 'Location'],
       renderTable: [],
       renderComplete: false
     }
@@ -31,20 +31,17 @@ class Address extends Component {
 
   doThing(input) {
 
-
-    
-
     const apiURLs = 
-    ['https://case-team.herokuapp.com/showOneTeam/',
-      'https://case-team.herokuapp.com/showOneTeam/',
-      'http://case-season.herokuapp.com/showOneSeason/',
-      'http://case-address.herokuapp.com/showOneAddress/'];
+    ['https://case-team.herokuapp.com/showAllTeamData/',
+     'https://case-team.herokuapp.com/showAllTeamData/',
+     'http://case-season.herokuapp.com/showOneSeason/',
+     'http://case-address.herokuapp.com/showOneAddress/'];
     
     const apiURLfieldNames =
     ['association_name',
-      'association_name',
-      'name',
-      'location_name'];
+     'association_name',
+     'name',
+     'location_name'];
 
     const columns = [2,3,4,5];
     let counter=0;
@@ -73,7 +70,7 @@ class Address extends Component {
               counter++
               this.setState({ renderTable: newRenderTable })
               console.log(counter, input.table.data.length);
-              if (counter === input.table.data.length/4) this.setState({ renderComplete: true })
+              if (counter > input.table.data.length/4) this.setState({ renderComplete: true })
 
             })
           })
@@ -100,9 +97,9 @@ class Address extends Component {
       case 'table':
         return <Table objectList={this.state.renderTable} onEdit={this.onEdit} addPage={this.addPage} itemFieldsName={this.state.itemFieldsName} itemFields={this.state.itemFields} title='Matches' addButton='Add Match' helperAPI={this.state.helperAPI} helperAPIfield={this.state.helperAPIfield} />
       case 'editPage':
-        return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/updateMatch' editName='Match'/>
+        return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/updateMatch' deleteURL={`https://case-users.herokuapp.com/deleteMatch/${this.state.itemToEdit.match_id}`} editName='Match'/>
       case 'addPage':
-        return <AddPage formFields={this.state.itemFields} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/createMatch' />
+        return <AddPage formFields={this.state.itemFields} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/createMatch' addName='Match'/>
       default:
         break;
     }

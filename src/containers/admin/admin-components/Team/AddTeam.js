@@ -23,19 +23,35 @@ class AddPage extends Component {
 
   handleSubmit(e) {
      e.preventDefault();
-     console.log(this.state);
-     axios.post((this.props.apiURL) , this.state).then(response => this.props.onRouteChange()).catch(error => console.log(error));
+
+     let associationID = null;
+     let coach_id = this.state.coach_id;
+     let owner_id = this.state.owner_id;
+     let location_id = this.state.location_id;
+
+     let teamData = [coach_id, associationID, owner_id, location_id]
+
+     let association_name = this.state.association_name;
+     let association_description = this.state.association_description;
+
+     let assocationData = [association_name, association_description]
+
+     console.log(assocationData);
+     console.log(teamData);
+
+     //axios.post((this.props.associationApiURL) , this.state).then(axios.post(this.props.teamApiURL) , this.state).then(response => this.props.onRouteChange()).catch(error => console.log(error));
+     axios.post(this.props.associationApiURL, assocationData).then(axios.post(this.props.teamApiURL, teamData)).then(response => this.props.onRouteChange()).catch(error => console.log(error));
   }
 
   render() {
     return (
       <section className='container'>
-        <h1>Add {this.props.addName}</h1>
+        <h1>Add</h1>
         <button className="btn btn-info" onClick={e => this.props.onRouteChange()}>Back</button>
         <form onSubmit={e => this.handleSubmit(e)}>
         {
           this.props.formFields.map((formField, i) => {
-            if(i === 0 ) return;
+            if(i === 0 || i === 1) return;
             return (
               <div className='form-group' key={i}>
                 <label className='col-2 col-form-label'>{formField}</label>
