@@ -24,7 +24,6 @@ class Table extends Component {
   }
 
   renderTable(filteredObjectList) {
-<<<<<<< HEAD
     console.log('rendering...')
     return filteredObjectList.map(filteredObject => 
       <tr>
@@ -36,9 +35,6 @@ class Table extends Component {
         <td><button className="btn btn-info" onClick={e => {this.props.onEdit(filteredObject)}} >Edit</button></td>
       </tr>
     )
-=======
-    return filteredObjectList.map(filteredObject => <TableRow row={filteredObject} itemFields={this.props.itemFields} onEdit={this.props.onEdit} helperAPI={this.state.helperAPI} helperAPIfield={this.state.helperAPIfield} />)
->>>>>>> 36718217393aeb73f84581a42a2a817646842ad6
   }
 
   render() {
