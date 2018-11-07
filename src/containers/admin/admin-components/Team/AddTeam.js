@@ -23,9 +23,24 @@ class AddPage extends Component {
 
   handleSubmit(e) {
      e.preventDefault();
-     console.log("object = " + this.state);
+
+     let associationID = null;
+     let coach_id = this.state.coach_id;
+     let owner_id = this.state.owner_id;
+     let location_id = this.state.location_id;
+
+     let teamData = [coach_id, associationID, owner_id, location_id]
+
+     let association_name = this.state.association_name;
+     let association_description = this.state.association_description;
+
+     let assocationData = [association_name, association_description]
+
+     console.log(assocationData);
+     console.log(teamData);
+
      //axios.post((this.props.associationApiURL) , this.state).then(axios.post(this.props.teamApiURL) , this.state).then(response => this.props.onRouteChange()).catch(error => console.log(error));
-     axios.post(this.props.associationApiURL, this.state).then(axios.post(this.props.teamApiURL, this.state)).then(response => this.props.onRouteChange()).catch(error => console.log(error));
+     axios.post(this.props.associationApiURL, assocationData).then(axios.post(this.props.teamApiURL, teamData)).then(response => this.props.onRouteChange()).catch(error => console.log(error));
   }
 
   render() {
