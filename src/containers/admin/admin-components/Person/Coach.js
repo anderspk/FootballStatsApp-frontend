@@ -70,7 +70,7 @@ class Coach extends Component {
   getView() {
     switch (this.state.activePage) {
       case 'personTable':
-        return <PeopleTable objectList={this.state.renderTable} onEdit={this.onEdit} addPage={this.addPage} itemFieldsName={this.state.itemFieldsName} itemFields={this.state.itemFields} title='Coach' addButton='Add Owner' />
+        return <PeopleTable objectList={this.state.renderTable} onEdit={this.onEdit} addPage={this.addPage} itemFieldsName={this.state.itemFieldsName} itemFields={this.state.itemFields} title='Coach' addButton='Add Coach' />
       case 'editPage':
         return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/updateCoach' deleteURL={`https://case-users.herokuapp.com/deleteCoach/${this.state.itemToEdit.coach_id}`} editName='Coach'/>
       case 'addPage':

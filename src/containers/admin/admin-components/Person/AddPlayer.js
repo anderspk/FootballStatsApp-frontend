@@ -168,7 +168,7 @@ class AddPlayer extends Component {
           
           <div className="autocomplete">
           {!this.state.validation.address_id && <span className="help-block">Please correct the error</span>}
-          <input autoComplete="new-password" className="form-control" type="text" name='address_id' value={this.state.addressInput} onClick={e => this.setState({ renderAddresses: true })} onBlur={e => {
+          <input className="form-control" type="text" name='address_id' value={this.state.addressInput} onClick={e => this.setState({ renderAddresses: true })} onBlur={e => {
                 this.setState({ filteredList: [], renderAddresses: false });
               }} onChange={e => {
                 this.setState({ addressInput: e.target.value });
@@ -186,7 +186,7 @@ class AddPlayer extends Component {
           <label className="col-2 col-form-label">Team</label>
           <div className="autocomplete">
           {!this.state.validation.team_id && <span className="help-block">Please correct the error</span>}
-            <input autoComplete="new-password" className="form-control" type="text" name='team_id' value={this.state.teamInput} onClick={e => this.setState({ renderTeams: true })} onBlur={e => {
+            <input className="form-control" type="text" name='team_id' value={this.state.teamInput} onClick={e => this.setState({ renderTeams: true })} onBlur={e => {
                 this.setState({ filteredList: [], renderTeams: false });
               }} onChange={e => {
                 this.setState({ teamInput: e.target.value });
