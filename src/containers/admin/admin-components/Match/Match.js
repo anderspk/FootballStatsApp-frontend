@@ -32,6 +32,7 @@ class Match extends Component {
     axios.get('http://case-address.herokuapp.com/showAddresses/').then(response => this.setState({ addresses: response.data }));
 
   }
+
 /*
   componentWillReceiveProps(newProps) {
     this.doThing(newProps);
