@@ -191,7 +191,6 @@ class AddPlayer extends Component {
               }} onChange={e => {
                 this.setState({ teamInput: e.target.value });
                 this.handleTeamDropdown(e);
-                this.setState({ dataToSend: {...this.state.dataToSend, team_id: e.target.value}})
               }} />
             <div className="autocomplete-items">
               {this.state.renderTeams && this.renderTeamDropdown()}

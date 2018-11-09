@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Table from '../Table';
 import EditPage from '../EditPage';
-import AddPage from '../AddPage';
+import AddPage from './AddGoalType';
+
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
 class Goal extends Component {
 
@@ -39,7 +42,7 @@ class Goal extends Component {
   getView() {
     switch (this.state.activePage) {
       case 'table':
-        return <Table objectList={this.state.data} onEdit={this.onEdit} addPage={this.addPage} itemFieldsName={this.state.itemFieldsName} itemFields={this.state.itemFields} title='Goals' addButton='Add Goal Type' />
+        return <Table objectList={this.state.data} onEdit={this.onEdit} addPage={this.addPage} itemFieldsName={this.state.itemFieldsName} itemFields={this.state.itemFields} title='Goal Types' addButton='Add Goal Type' />
       case 'editPage':
         return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/updateGoalType' deleteURL={`https://case-users.herokuapp.com/deleteGoalType/${this.state.itemToEdit.goal_type_id}`} editName='Goal Type'/>
       case 'addPage':
@@ -53,6 +56,7 @@ class Goal extends Component {
     return ( 
       <div>
         {this.getView()}
+        <NotificationContainer/>
       </div>
     )
   }

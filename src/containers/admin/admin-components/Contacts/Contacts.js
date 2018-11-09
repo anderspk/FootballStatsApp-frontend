@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Table from '../Table';
 import EditPage from '../EditPage';
-import AddPage from '../AddPage';
+import AddPage from './AddContact';
 import { connect } from 'react-redux';
 import { fetchTableData, setRowAPIhelpers } from '../../../../actions/actions';
+
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
 class Contacts extends Component {
 
@@ -33,7 +36,7 @@ class Contacts extends Component {
   doThing(input) {
     let counter=0;
     input.table.data.forEach((row, i) => {
-      axios.get("https://case-person.herokuapp.com/showPersons/1" + row.person_id).then(first => {
+      axios.get("https://case-person.herokuapp.com/showPersons/" + row.person_id).then(first => {
         first = first.data.first_name + ' ' + first.data.last_name;
         let newRenderTable = this.state.renderTable;
         newRenderTable[i] = {
@@ -81,6 +84,7 @@ class Contacts extends Component {
     return ( 
       <div>
         {this.getView()}
+        <NotificationContainer/>
       </div>
     )
   }

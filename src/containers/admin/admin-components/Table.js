@@ -24,7 +24,6 @@ class Table extends Component {
   }
 
   renderTable(filteredObjectList) {
-    console.log('rendering...')
     return filteredObjectList.map(filteredObject => 
       <tr>
         {

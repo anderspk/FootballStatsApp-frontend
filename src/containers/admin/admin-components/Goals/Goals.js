@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Table from '../Table';
 import EditPage from '../EditPage';
-import AddPage from '../AddPage';
+import AddPage from './AddGoal';
 import { connect } from 'react-redux';
 import { fetchTableData, setRowAPIhelpers } from '../../../../actions/actions';
+
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
 class Goals extends Component {
 
@@ -81,6 +84,7 @@ class Goals extends Component {
     return ( 
       <div>
         {this.getView()}
+        <NotificationContainer/>
       </div>
     )
   }

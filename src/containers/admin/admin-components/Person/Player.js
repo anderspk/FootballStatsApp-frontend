@@ -2,9 +2,13 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import PeopleTable from '../Table';
 import EditPage from './EditPage';
-import AddPage from './AddPage';
+import AddPage from './AddPlayer';
+
 import { connect } from 'react-redux';
 import { fetchTableData, setRowAPIhelpers } from '../../../../actions/actions';
+
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
 class Player extends Component {
 
@@ -52,8 +56,6 @@ class Player extends Component {
 
       })
     })
-
-    axios.get('https://case-team.herokuapp.com/showAllTeamData/')
   }
 
   onEdit(editItem) {
@@ -85,6 +87,7 @@ class Player extends Component {
     return ( 
       <div>
         {this.getView()}
+        <NotificationContainer/>
       </div>
     )
   }

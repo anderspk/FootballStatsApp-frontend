@@ -2,11 +2,15 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Table from '../Table';
 import EditPage from '../EditPage';
-import AddPage from '../AddPage';
+import AddPage from './AddMatch';
+
 import { connect } from 'react-redux';
 import { fetchTableData, setRowAPIhelpers } from '../../../../actions/actions';
 
-class Address extends Component {
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
+
+class Match extends Component {
 
   constructor(props) {
     super(props);
@@ -23,14 +27,49 @@ class Address extends Component {
 
   componentWillMount() {
     this.props.fetchTableData('https://case-match.herokuapp.com/showMatches');
-  }
+    axios.get('https://case-team.herokuapp.com/showAllTeamData/').then(response => this.setState({ teams: response.data }));
+    axios.get('http://case-season.herokuapp.com/showSeasons').then(response => this.setState({ seasons: response.data }));
+    axios.get('http://case-address.herokuapp.com/showAddresses/').then(response => this.setState({ addresses: response.data }));
 
+  }
+/*
   componentWillReceiveProps(newProps) {
     this.doThing(newProps);
   }
 
   doThing(input) {
 
+    input.table.data.forEach((row,i) => {
+
+      let address = this.state.addresses.find(address => {
+        return address.location_id === row.location_id;
+      })
+
+      let season = this.state.seasons.find(season => {
+        return row.season_id === row.season_id;
+      })
+
+      let home_team = this.state.teams.find(team => {
+        return team.team_id === row.home_team_id;
+      })
+
+      let away_team = this.state.teams.find(team => {
+        return team.team_id === row.away_team_id;
+      })
+
+      let newRenderTable = this.state.renderTable;
+              newRenderTable[i] = {
+                match_id: row.match_id,
+                match_date: row.match_date,
+                home_team_id: home_team.association_name,
+                away_team_id: away_team.association_name,
+                season_id: season.name,
+                location_id:address.location_name
+              }
+      this.setState({ rendertable: newRenderTable})
+    })
+}
+ /*
     const apiURLs = 
     ['https://case-team.herokuapp.com/showAllTeamData/',
      'https://case-team.herokuapp.com/showAllTeamData/',
@@ -42,7 +81,7 @@ class Address extends Component {
      'association_name',
      'name',
      'location_name'];
-
+/*
     const columns = [2,3,4,5];
     let counter=0;
     input.table.data.forEach((row,i) => {
@@ -69,7 +108,6 @@ class Address extends Component {
               }
               counter++
               this.setState({ renderTable: newRenderTable })
-              console.log(counter, input.table.data.length);
               if (counter > input.table.data.length/4) this.setState({ renderComplete: true })
 
             })
@@ -77,9 +115,8 @@ class Address extends Component {
         });
       })
     })
-  }
 
-
+*/
   onEdit(editItem) {
     this.setState({ activePage: 'editPage', itemToEdit: editItem});
   }
@@ -107,10 +144,11 @@ class Address extends Component {
 
   render() {
     // console.log(this.props.table, 'rendertable');
-    if (!this.state.renderComplete) return 'Loading...';
+    if (!this.state.teams && !this.state.addresses && !this.state.seaons) return 'Loading...';
     return ( 
       <div>
         {this.getView()}
+        <NotificationContainer/>
       </div>
     )
   }
@@ -123,4 +161,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps, {fetchTableData, setRowAPIhelpers})(Address);
+export default connect(mapStateToProps, {fetchTableData, setRowAPIhelpers})(Match);

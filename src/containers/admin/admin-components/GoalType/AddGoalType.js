@@ -8,8 +8,8 @@ class AddAddress extends Component {
     super(props);
     this.state = {
       filteredList: [],
-      dataToSend: {match_id: null, team_id: null, score: null, result: null} ,
-      validation: {match_id: true, team_id: true, score: true, score: true} ,
+      dataToSend: {goal_type_id: null, type: null} ,
+      validation: {goal_type_id: true, type: true} ,
     };
   }
 
@@ -21,7 +21,7 @@ class AddAddress extends Component {
            NotificationManager.info('Info message');
            break;
          case 'success':
-           NotificationManager.success('A new result was added!', 'Added Result');
+           NotificationManager.success('A new goal type was created!', 'New Goal Type');
            break;
          case 'warning':
            NotificationManager.warning('Warning message', 'Correct the inputs', 3000);
@@ -35,34 +35,17 @@ class AddAddress extends Component {
      };
   };
 
+ 
   validateForm(){
     let isValidated = true;
     const validation = this.state.validation;
     const dataToSend = this.state.dataToSend;
 
 
-    if(dataToSend.match_id == null){
-      validation.match_id = false;
+    if(dataToSend.type == null){
+      validation.type = false;
     }else{
-      validation.match_id = true;
-    }
-
-    if(dataToSend.team_id == null){
-      validation.team_id = false;
-    }else{
-      validation.team_id = true;
-    }
-
-    if(dataToSend.score == null){
-      validation.score = false;
-    }else{
-      validation.score = true;
-    }
-
-    if(dataToSend.result == null){
-      validation.result = false;
-    }else{
-      validation.result = true;
+      validation.type = true;
     }
 
     this.setState({ validation: validation })
@@ -72,10 +55,10 @@ class AddAddress extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
+    console.log('object 1 = ', this.state.dataToSend)
     if(!this.validateForm()){
       return console.log('error');
     }else{
-    console.log('object to send = ', this.state.dataToSend)
     axios
       .post(this.props.apiURL, this.state.dataToSend)
       .then(response => this.props.onRouteChange())

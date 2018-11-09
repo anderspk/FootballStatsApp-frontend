@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import PeopleTable from '../Table';
 import EditPage from '../EditPage';
-import AddPage from './AddPage';
+import AddPage from '../AddPage';
 
 class Person extends Component {
 

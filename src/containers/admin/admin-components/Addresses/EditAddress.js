@@ -1,7 +1,32 @@
 import React from 'react';
 import axios from 'axios';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
-const editPage = ({itemToEdit, onRouteChange, apiURL, locationDeleteURL, addressDeleteURL, editName}) => {
+const editPage = ({itemToEdit, createNotification, onRouteChange, apiURL, locationDeleteURL, addressDeleteURL, editName}) => {
+
+  createNotification = (type) => {
+     console.log(type, 'type');
+     return () => {
+       switch (type) {
+         case 'info':
+           NotificationManager.info('Info message');
+           break;
+         case 'success':
+           NotificationManager.success('A new team was created!', 'New Team');
+           break;
+         case 'warning':
+           NotificationManager.warning('Warning message', 'Close after 3000ms', 3000);
+           break;
+         case 'error':
+           NotificationManager.error('Error message', 'You must delete the person associated with this address before you delete the address', 5000, () => {
+             alert('callback');
+           });
+           break;
+       }
+     };
+  };
+
 
   return(
     <section className='container'>
@@ -25,7 +50,7 @@ const editPage = ({itemToEdit, onRouteChange, apiURL, locationDeleteURL, address
       }
       </form>
       <button onClick={e => {axios.put(apiURL, itemToEdit).then(response => onRouteChange()).catch(error => console.log(error))}} type="button" className="btn btn-warning btn-lg">Save</button>
-      <button onClick={e => {axios.delete(locationDeleteURL, itemToEdit).then(axios.delete(addressDeleteURL, itemToEdit)).then(response => onRouteChange()).catch(error => console.log(error))}} type="button" className="btn btn-danger btn-lg btn-block">Delete</button>
+      <button onClick={e => {this.createNotification('error').then(axios.delete(locationDeleteURL, itemToEdit)).then(axios.delete(addressDeleteURL, itemToEdit)).then(response => onRouteChange()).catch(error => console.log(error))}} type="button" className="btn btn-danger btn-lg btn-block">Delete</button>
     </section>
   )
 }
