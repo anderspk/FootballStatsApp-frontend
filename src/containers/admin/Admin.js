@@ -53,6 +53,8 @@ class Admin extends Component {
         return <Goals />;  
       case 'goalType':
         return <GoalType />;  
+      case 'user':
+        return <User />;  
       default:
         break;
     }
@@ -78,6 +80,7 @@ class Admin extends Component {
           <li><button onClick={e => this.setState({currentPage: 'result'})}>Result</button></li>
           <li><button onClick={e => this.setState({currentPage: 'goals'})}>Goals</button></li>
           <li><button onClick={e => this.setState({currentPage: 'goalType'})}>Goal Type</button></li>
+          <li><button onClick={e => this.setState({currentPage: 'user'})}>User</button></li>
         </ul>
         <div className='admin-main-container'>
           {this.renderPage()}
