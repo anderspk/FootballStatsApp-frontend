@@ -13,6 +13,9 @@ import GoalType from './admin-components/GoalType/GoalType';
 import Contacts from './admin-components/Contacts/Contacts';
 import Dashboard from './admin-components/Dashboard';
 
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
+
 class Admin extends Component {
   constructor(props) {
     super(props);
@@ -59,6 +62,7 @@ class Admin extends Component {
     const { showPeople } = this.state;
     return (
       <section className='admin-page'>
+      <NotificationContainer/>
         <ul className='admin-menu'>
           <li><button onClick={e => this.setState({currentPage: 'dashBoard'})}>Dashboard</button></li>
           <li><button onClick={e => this.setState({currentPage: 'address'})}>Address</button></li>

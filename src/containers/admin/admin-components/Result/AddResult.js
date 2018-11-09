@@ -9,7 +9,7 @@ class AddAddress extends Component {
     this.state = {
       filteredList: [],
       dataToSend: {match_id: null, team_id: null, score: null, result: null} ,
-      validation: {match_id: true, team_id: true, score: true, score: true} ,
+      validation: {match_id: true, team_id: true, score: true, result: true} ,
     };
   }
 
@@ -40,29 +40,36 @@ class AddAddress extends Component {
     const validation = this.state.validation;
     const dataToSend = this.state.dataToSend;
 
-
-    if(dataToSend.match_id == null){
-      validation.match_id = false;
-    }else{
+    // Match id
+    if(dataToSend.match_id != null){
       validation.match_id = true;
+    }else{
+      validation.match_id = false;
+      isValidated = false;
     }
 
-    if(dataToSend.team_id == null){
-      validation.team_id = false;
-    }else{
+    // team name
+    if(dataToSend.team_id != null){
       validation.team_id = true;
+    }else{
+      validation.team_id = false;
+      isValidated = false;
     }
 
-    if(dataToSend.score == null){
-      validation.score = false;
-    }else{
+    // score
+    if(dataToSend.score != null){
       validation.score = true;
+    }else{
+      validation.score = false;
+      isValidated = false;
     }
 
-    if(dataToSend.result == null){
-      validation.result = false;
-    }else{
+    // result
+    if(dataToSend.result != null){
       validation.result = true;
+    }else{
+      validation.result = false;
+      isValidated = false;
     }
 
     this.setState({ validation: validation })
@@ -92,9 +99,23 @@ class AddAddress extends Component {
         <button className="btn btn-info" onClick={e => this.props.onRouteChange()}>Back</button>
 
         <form autoComplete="off" onSubmit={e => this.handleSubmit(e)}>
-          <label className="col-2 col-form-label">Goal Type</label>
-          {!this.state.validation.type && <span className="help-block">Please fill out this field!</span>}
-          <input className="form-control" type="text" name="type" onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, type: e.target.value}})}} />
+          <label className="col-2 col-form-label">Match ID</label>
+          {!this.state.validation.match_id && <span className="help-block">Please fill out this field!</span>}
+          <input className="form-control" type="text" name="match_id" onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, match_id: e.target.value}})}} />
+        
+          <label className="col-2 col-form-label">Team Name</label>
+          {!this.state.validation.team_id && <span className="help-block">Please fill out this field!</span>}
+          <input className="form-control" type="text" name="team_id" onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, team_id: e.target.value}})}} />
+        
+        <label className="col-2 col-form-label">Score</label>
+          {!this.state.validation.score && <span className="help-block">Please fill out this field!</span>}
+          <input className="form-control" type="text" name="score" onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, score: e.target.value}})}} />
+        
+        <label className="col-2 col-form-label">Result</label>
+          {!this.state.validation.result && <span className="help-block">Please fill out this field!</span>}
+          <input className="form-control" type="text" name="result" onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, result: e.target.value}})}} />
+        
+
           <button type="submit" className="btn btn-warning btn-lg">Add</button>
         </form>
       </section>;
