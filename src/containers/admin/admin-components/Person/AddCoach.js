@@ -12,9 +12,7 @@ class AddPlayer extends Component {
       dataToSend: {first_name: null, last_name: null, date_of_birth: null, address_id: null} ,
       validation: {first_name: true, last_name: true, date_of_birth: true, address_id: true},
       addressInput: "",
-      teamInput: "",
-      renderAddresses: false,
-      renderTeams: false
+      renderAddresses: false
     };
   }
 
@@ -70,10 +68,10 @@ class AddPlayer extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    console.log('object 1 = ', this.state.dataToSend)
     if(!this.validateForm()){
       return console.log('error');
     }else{
+    console.log('object 1 = ', this.state.dataToSend)
     axios
       .post(this.props.apiURL, this.state.dataToSend)
       .then(response => this.props.onRouteChange())
@@ -113,7 +111,6 @@ class AddPlayer extends Component {
   render() {
     return <section className="container">
         {this.state.autoCompleteList}
-        <NotificationContainer/>
         <h1>Add {this.props.addName}</h1>
         <button className="btn btn-info" onClick={e => this.props.onRouteChange()}>
           Back
@@ -127,9 +124,9 @@ class AddPlayer extends Component {
           <label className="col-2 col-form-label">Date of Birth</label>
           <input className="form-control" type="text" name='date_of_birth' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, date_of_birth: e.target.value}})}} />
           <label className="col-2 col-form-label">Address ID</label>
-          <div className="autocomplete">
+          <div autoComplete="off">
           {!this.state.validation.address_id && <span className="help-block">Please correct the error</span>}
-          <input autoComplete="new-password" className="form-control" type="text" name='address_id' value={this.state.addressInput} onClick={e => this.setState({ renderAddresses: true })} onBlur={e => {
+          <input className="form-control" type="text" name='address_id' value={this.state.addressInput} onClick={e => this.setState({ renderAddresses: true })} onBlur={e => {
                 this.setState({ filteredList: [], renderAddresses: false });
               }} onChange={e => {
                 this.setState({ addressInput: e.target.value });

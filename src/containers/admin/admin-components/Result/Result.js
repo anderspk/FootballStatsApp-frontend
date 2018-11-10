@@ -6,9 +6,6 @@ import AddPage from './AddResult';
 import { connect } from 'react-redux';
 import { fetchTableData, setRowAPIhelpers } from '../../../../actions/actions';
 
-import {NotificationContainer, NotificationManager} from 'react-notifications';
-import 'react-notifications/lib/notifications.css';
-
 class Result extends Component {
 
   constructor(props) {
@@ -83,7 +80,6 @@ class Result extends Component {
     return ( 
       <div>
         {this.getView()}
-        <NotificationContainer/>
       </div>
     )
   }

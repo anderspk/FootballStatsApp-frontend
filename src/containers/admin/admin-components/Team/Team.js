@@ -7,9 +7,6 @@ import AddPage from './AddTeam';
 import { connect } from 'react-redux';
 import { fetchTableData, setRowAPIhelpers } from '../../../../actions/actions';
 
-import {NotificationContainer, NotificationManager} from 'react-notifications';
-import 'react-notifications/lib/notifications.css';
-
 class Team extends Component {
 
   constructor(props) {

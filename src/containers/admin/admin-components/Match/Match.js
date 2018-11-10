@@ -7,9 +7,6 @@ import AddPage from './AddMatch';
 import { connect } from 'react-redux';
 import { fetchTableData, setRowAPIhelpers } from '../../../../actions/actions';
 
-import {NotificationContainer, NotificationManager} from 'react-notifications';
-import 'react-notifications/lib/notifications.css';
-
 class Match extends Component {
 
   constructor(props) {

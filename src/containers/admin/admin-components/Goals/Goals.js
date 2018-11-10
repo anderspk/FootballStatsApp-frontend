@@ -6,9 +6,6 @@ import AddPage from './AddGoal';
 import { connect } from 'react-redux';
 import { fetchTableData, setRowAPIhelpers } from '../../../../actions/actions';
 
-import {NotificationContainer, NotificationManager} from 'react-notifications';
-import 'react-notifications/lib/notifications.css';
-
 class Goals extends Component {
 
   constructor(props) {
