@@ -12,7 +12,7 @@ class AddPlayer extends Component {
       dataToSend: {first_name: null, last_name: null, date_of_birth: null, address_id: null, normal_position: null, number: null, team_id: null} ,
       validation: {first_name: true, last_name: true, date_of_birth: true, address_id: true, normal_position: true, number: true, team_id: true},
       addressInput: "",
-      teamInput: "",
+      teamInput: `${props.itemToEdit.team_id}`,
       renderAddresses: false,
       renderTeams: false
     };
@@ -44,10 +44,21 @@ class AddPlayer extends Component {
   componentWillMount() {
     axios
       .get("https://case-address.herokuapp.com/showAddresses")
-      .then(response => this.setState({ addresses: response.data }));
+      .then(response => {
+        const addressInput = response.data.find(addresses => addresses.address_id === this.props.itemToEdit.address_id).address_line_1;
+        this.setState({ addresses: response.data, addressInput: addressInput });
+      });
     axios
       .get("http://case-team.herokuapp.com/showAllTeamData")
-      .then(response => this.setState({ teams: response.data }));
+      .then(response => {
+        const teamInput = response.data.find(team => team.team_id === this.props.itemToEdit.team_id).association_name;
+        this.setState({ teams: response.data, teamInput: teamInput })
+      });
+  }
+
+  componentDidMount() {
+    const { itemToEdit } = this.props;
+    this.setState({ dataToSend: itemToEdit });
   }
  
   validateForm(){
@@ -127,16 +138,25 @@ class AddPlayer extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    console.log('object 1 = ', this.state.dataToSend)
     if(!this.validateForm()){
       return console.log('error');
     }else{
-    axios
-      .post(this.props.apiURL, this.state.dataToSend)
-      .then(response => this.props.onRouteChange())
-      .then(this.createNotification('success'))
-      .catch(error => console.log(error));
-    }  
+      if (this.props.toEdit) {
+        console.log('hit')
+        axios
+          .put(this.props.apiURL, this.state.dataToSend)
+          .then(response => this.props.onRouteChange())
+          .then(this.createNotification('info'))
+          .catch(error => console.log(error));
+      } else {
+        axios
+          .post(this.props.apiURL, this.state.dataToSend)
+          .then(response => this.props.onRouteChange())
+          .then(this.createNotification('success'))
+          .catch(error => console.log(error));
+      }
+
+      }  
   }
 
   // HANDLE ADDRESS DROPDOWN
@@ -197,27 +217,26 @@ class AddPlayer extends Component {
 
 
   render() {
+    const { deleteURL, itemToEdit } = this.props;
     return <section className="container">
         {this.state.autoCompleteList}
-        <NotificationContainer/>
-        <h1>Add {this.props.addName}</h1>
+        <h1>{this.props.toEdit ? 'Edit ' : 'Add'} {this.props.addName}</h1>
         <button className="btn btn-info" onClick={e => this.props.onRouteChange()}>Back</button>
-
         <form autoComplete="off" onSubmit={e => this.handleSubmit(e)}>
           <label className="col-2 col-form-label">First Name</label>
           {!this.state.validation.first_name && <span className="help-block">Please fill out this field</span>}
-          <input className="form-control" type="text" name="first_name" onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, first_name: e.target.value}})}} />
+          <input defaultValue={itemToEdit.first_name} className="form-control" type="text" name="first_name" onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, first_name: e.target.value}})}} />
           <label className="col-2 col-form-label">Last Name</label>
           {!this.state.validation.last_name && <span className="help-block">Please fill out this field</span>}
-          <input className="form-control" type="text" name='last_name' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, last_name: e.target.value}})}} />
+          <input defaultValue={itemToEdit.last_name} className="form-control" type="text" name='last_name' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, last_name: e.target.value}})}} />
           <label className="col-2 col-form-label">Date of Birth</label>
           {!this.state.validation.date_of_birth && <span className="help-block">Please fill out this field</span>}
-          <input className="form-control" type="text" name='date_of_birth' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, date_of_birth: e.target.value}})}} />
+          <input defaultValue={itemToEdit.date_of_birth} className="form-control" type="text" name='date_of_birth' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, date_of_birth: e.target.value}})}} />
           <label className="col-2 col-form-label">Address ID</label>
           
           <div className="autocomplete">
           {!this.state.validation.address_id && <span className="help-block">Please correct the error</span>}
-          <input className="form-control" type="text" name='address_id' value={this.state.addressInput} onClick={e => this.setState({ renderAddresses: true })} onBlur={e => {
+          <input autocomplete='new-password' className="form-control" type="text" name='address_id' value={this.state.addressInput} onFocus={e => this.setState({ renderAddresses: true })} onBlur={e => {
                 this.setState({ filteredList: [], renderAddresses: false });
               }} onChange={e => {
                 this.setState({ addressInput: e.target.value });
@@ -230,14 +249,14 @@ class AddPlayer extends Component {
           
           <label className="col-2 col-form-label">Normal Position</label>
           {!this.state.validation.normal_position && <span className="help-block">Please fill out this field</span>}
-          <input className="form-control" type="text" name='normal_position' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, normal_position: e.target.value}})}} />
+          <input defaultValue={itemToEdit.normal_position} className="form-control" type="text" name='normal_position' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, normal_position: e.target.value}})}} />
           <label className="col-2 col-form-label">Number</label>
           {!this.state.validation.number && <span className="help-block">Please fill out this field</span>}
-          <input className="form-control" type="text" name='number' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, number: e.target.value}})}} />
+          <input defaultValue={itemToEdit.number} className="form-control" type="text" name='number' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, number: e.target.value}})}} />
           <label className="col-2 col-form-label">Team</label>
           <div className="autocomplete">
           {!this.state.validation.team_id && <span className="help-block">Please correct the error</span>}
-            <input className="form-control" type="text" name='team_id' value={this.state.teamInput} onClick={e => this.setState({ renderTeams: true })} onBlur={e => {
+            <input className="form-control" type="text" name='team_id' value={this.state.teamInput} onFocus={e => this.setState({ renderTeams: true })} onBlur={e => {
                 this.setState({ filteredList: [], renderTeams: false });
               }} onChange={e => {
                 this.setState({ teamInput: e.target.value });
@@ -248,6 +267,8 @@ class AddPlayer extends Component {
             </div>
           </div>
           <button type="submit" className="btn btn-warning btn-lg">Add</button>
+          {this.props.toEdit && <button onClick={e => {axios.delete(deleteURL, itemToEdit).then(response => this.props.onRouteChange()).then(this.props.createNotification('warning')).catch(error => console.log(error))}} type="button" className="btn btn-danger btn-lg btn-block">Delete</button>}
+
         </form>
       </section>;
   }

@@ -23,6 +23,7 @@ const editPage = ({itemToEdit, createNotification, onRouteChange, apiURL, delete
              alert('callback');
            });
            break;
+          default:
        }
      };
   };
