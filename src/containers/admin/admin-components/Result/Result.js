@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Table from '../Table';
-import EditPage from '../EditPage';
+import EditPage from './EditResult';
 import AddPage from './AddResult';
 import { connect } from 'react-redux';
 import { fetchTableData, setRowAPIhelpers } from '../../../../actions/actions';

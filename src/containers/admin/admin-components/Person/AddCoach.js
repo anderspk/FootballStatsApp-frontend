@@ -53,6 +53,32 @@ class AddPlayer extends Component {
 
     let address = this.state.addresses.find(address => address.address_line_1 === this.state.addressInput);
 
+
+    // first_name
+    if(dataToSend.first_name != null){
+      validation.first_name = true;
+    }else{
+      validation.first_name = false;
+      isValidated = false;
+    }
+
+    // result
+    if(dataToSend.last_name != null){
+      validation.last_name = true;
+    }else{
+      validation.last_name = false;
+      isValidated = false;
+    }
+
+    // date
+    if(dataToSend.date_of_birth != null){
+      validation.date_of_birth = true;
+    }else{
+      validation.first_name = false;
+      isValidated = false;
+    }
+
+
     if(address){
       validation.address_id = true;
       dataToSend.address_id = address.address_id;
@@ -118,10 +144,13 @@ class AddPlayer extends Component {
 
         <form autoComplete="off" onSubmit={e => this.handleSubmit(e)}>
           <label className="col-2 col-form-label">First Name</label>
+          {!this.state.validation.first_name && <span className="help-block">Please fill out this field</span>}
           <input className="form-control" type="text" name="first_name" onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, first_name: e.target.value}})}} />
           <label className="col-2 col-form-label">Last Name</label>
+          {!this.state.validation.last_name && <span className="help-block">Please fill out this field</span>}
           <input className="form-control" type="text" name='last_name' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, last_name: e.target.value}})}} />
           <label className="col-2 col-form-label">Date of Birth</label>
+          {!this.state.validation.date_of_birth && <span className="help-block">Please fill out this field</span>}
           <input className="form-control" type="text" name='date_of_birth' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, date_of_birth: e.target.value}})}} />
           <label className="col-2 col-form-label">Address ID</label>
           <div autoComplete="off">

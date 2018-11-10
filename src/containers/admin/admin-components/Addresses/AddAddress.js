@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import {NotificationContainer, NotificationManager} from 'react-notifications';
+import {NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 
 
@@ -116,7 +116,6 @@ class AddAddress extends Component {
   render() {
     return <section className="container">
         {this.state.autoCompleteList}
-        <NotificationContainer/>
         <h1>Add {this.props.addName}</h1>
         <button className="btn btn-info" onClick={e => this.props.onRouteChange()}>Back</button>
 
