@@ -3,14 +3,15 @@ import axios from "axios";
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 
-class AddContact extends Component {
+
+class AddPlayer extends Component {
   constructor(props) {
     super(props);
     this.state = {
       filteredList: [],
       dataToSend: {person_id: null, contact_type: null, contact_detail: null} ,
       validation: {person_id: true, contact_type: true, contact_detail: true},
-      personInput: "",
+      personInput: `${props.itemToEdit.last_name}`,
       renderPersons: false
     };
   }
@@ -20,16 +21,16 @@ class AddContact extends Component {
      return () => {
        switch (type) {
          case 'info':
-           NotificationManager.info('Info message');
+           NotificationManager.info('The contact was edited!', 'Contact Edited');
            break;
          case 'success':
-           NotificationManager.success('A new contact was created!', 'New Contact');
+           NotificationManager.success('A new person was created!', 'New Player');
            break;
          case 'warning':
-           NotificationManager.warning('Warning message', 'Correct the inputs', 3000);
+           NotificationManager.warning('The contact was deleted!', 'Contact Deleted', 3000);
            break;
          case 'error':
-           NotificationManager.error('Error message', 'Click me!', 5000, () => {
+           NotificationManager.error('Error message', 'You must delete the person associated with this address before you delete the address', 5000, () => {
              alert('callback');
            });
            break;
@@ -37,10 +38,20 @@ class AddContact extends Component {
      };
   };
 
+
   componentWillMount() {
+    console.log(this.props.itemToEdit, 'itemtoedit');
     axios
       .get("https://case-person.herokuapp.com/showPersons")
-      .then(response => this.setState({ persons: response.data }));
+      .then(response => {
+        const personInput = response.data.find(persons => persons.person_id === this.props.itemToEdit.person_id).last_name;
+        this.setState({ persons: response.data, personInput: personInput });
+      });
+  }
+
+  componentDidMount() {
+    const { itemToEdit } = this.props;
+    this.setState({ dataToSend: itemToEdit });
   }
  
   validateForm(){
@@ -82,16 +93,16 @@ class AddContact extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    console.log('object 1 = ', this.state.dataToSend)
     if(!this.validateForm()){
-      return console.log('error');
+      return console.log('not valid input');
     }else{
-    axios
-      .post(this.props.apiURL, this.state.dataToSend)
-      .then(response => this.props.onRouteChange())
-      .then(this.createNotification('success'))
-      .catch(error => console.log(error));
-    }  
+        console.log('object 1 = ', this.state.dataToSend)
+        axios
+          .put(this.props.apiURL, this.state.dataToSend)
+          .then(response => this.props.onRouteChange())
+          .then(this.createNotification('info'))
+          .catch(error => console.log(error));
+      }  
   }
 
   // HANDLE PERSON DROPDOWN
@@ -122,7 +133,9 @@ class AddContact extends Component {
     });
   };
 
+
   render() {
+    const { deleteURL, itemToEdit } = this.props;
     return <section className="container">
         {this.state.autoCompleteList}
         <h1>Add {this.props.addName}</h1>
@@ -132,7 +145,7 @@ class AddContact extends Component {
           <label className="col-2 col-form-label">Person</label>
           <div className="autocomplete">
           {!this.state.validation.person_id && <span className="help-block">Please fill out this field!</span>}
-          <input autoComplete="new-password" className="form-control" type="text" name='person_id' value={this.state.personInput} onFocus={e => this.setState({ renderPersons: true })} onBlur={e => {
+          <input defaultValue={itemToEdit.person_id} autoComplete="new-password" className="form-control" type="text" name='person_id' value={this.state.personInput} onFocus={e => this.setState({ renderPersons: true })} onBlur={e => {
                 this.setState({ filteredList: [], renderPersons: false });
               }} onChange={e => {
                 this.setState({ personInput: e.target.value });
@@ -145,11 +158,11 @@ class AddContact extends Component {
           
           <label className="col-2 col-form-label">Contact Type</label>
           {!this.state.validation.contact_type && <span className="help-block">Please fill out this field!</span>}
-          <input className="form-control" type="text" name='contact_type' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, contact_type: e.target.value}})}} />
+          <input defaultValue={itemToEdit.contact_type}className="form-control" type="text" name='contact_type' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, contact_type: e.target.value}})}} />
           
           <label className="col-2 col-form-label">Contact Detail</label>
           {!this.state.validation.contact_detail && <span className="help-block">Please fill out this field!</span>}
-          <input className="form-control" type="text" name='contact_detail' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, contact_detail: e.target.value}})}} />
+          <input defaultValue={itemToEdit.contact_detail} className="form-control" type="text" name='contact_detail' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, contact_detail: e.target.value}})}} />
           <button type="submit" className="btn btn-warning btn-lg">Add</button>
 
 
@@ -158,4 +171,4 @@ class AddContact extends Component {
   }
 }
 
-export default AddContact;
+export default AddPlayer;

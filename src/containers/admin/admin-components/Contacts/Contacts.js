@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Table from '../Table';
-import EditPage from '../EditPage';
+import EditPage from './EditContact';
 import AddPage from './AddContact';
 import { connect } from 'react-redux';
 import { fetchTableData, setRowAPIhelpers } from '../../../../actions/actions';
 
-import {NotificationContainer, NotificationManager} from 'react-notifications';
-import 'react-notifications/lib/notifications.css';
 
 class Contacts extends Component {
 
@@ -31,6 +29,7 @@ class Contacts extends Component {
 
   componentWillReceiveProps(newProps) {
     this.doThing(newProps);
+    this.setState({table: newProps.table});
   }
 
   doThing(input) {
@@ -54,6 +53,7 @@ class Contacts extends Component {
   }
 
   onEdit(editItem) {
+    editItem.person_id = this.state.table.data.find(row => row.last_name === editItem.last_name).person_id;
     this.setState({ activePage: 'editPage', itemToEdit: editItem});
   }
 
@@ -63,6 +63,7 @@ class Contacts extends Component {
 
   onRouteChange = () => {
     this.setState({activePage: 'table'})
+    this.doThing(this.state);
   }
 
   getView() {
@@ -84,7 +85,6 @@ class Contacts extends Component {
     return ( 
       <div>
         {this.getView()}
-        <NotificationContainer/>
       </div>
     )
   }

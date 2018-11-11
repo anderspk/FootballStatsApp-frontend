@@ -7,8 +7,6 @@ import AddPage from './AddOwner';
 import { connect } from 'react-redux';
 import { fetchTableData, setRowAPIhelpers } from '../../../../actions/actions';
 
-import {NotificationContainer, NotificationManager} from 'react-notifications';
-import 'react-notifications/lib/notifications.css';
 
 class Owner extends Component {
 
@@ -84,7 +82,6 @@ class Owner extends Component {
     return ( 
       <div>
         {this.getView()}
-        <NotificationContainer/>
       </div>
     )
   }

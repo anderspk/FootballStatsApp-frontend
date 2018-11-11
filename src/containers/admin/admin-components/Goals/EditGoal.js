@@ -1,29 +1,28 @@
 import React from 'react';
 import axios from 'axios';
-import {NotificationManager} from 'react-notifications';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
 const editPage = ({itemToEdit, createNotification, onRouteChange, apiURL, deleteURL, editName}) => {
-
 
   createNotification = (type) => {
      console.log(type, 'type');
      return () => {
        switch (type) {
          case 'info':
-           NotificationManager.info('The person was edited!', 'Person Edited');
+           NotificationManager.info('The goal was edited!', 'Goal Edited');
            break;
          case 'success':
            NotificationManager.success('A new address was created!', 'New Address');
            break;
          case 'warning':
-           NotificationManager.warning('The person was deleted!', 'Person Deleted', 3000);
+           NotificationManager.warning('The goal was deleted!', 'Goal Deleted', 3000);
            break;
          case 'error':
            NotificationManager.error('Error message', 'You must delete the person associated with this address before you delete the address', 5000, () => {
              alert('callback');
            });
            break;
-          default:
        }
      };
   };
@@ -36,7 +35,7 @@ const editPage = ({itemToEdit, createNotification, onRouteChange, apiURL, delete
       <form>
       {
         Object.keys(itemToEdit).map((itemProperty, i) => {
-          if(i === 0 || i === 5) return;
+          if(i === 0) return;
           return (
             <div className='form-group' key={i}>
               <label className='col-2 col-form-label'>{itemProperty}</label>

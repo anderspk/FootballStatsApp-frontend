@@ -7,9 +7,6 @@ import AddPage from './AddMatch';
 import { connect } from 'react-redux';
 import { fetchTableData, setRowAPIhelpers } from '../../../../actions/actions';
 
-import {NotificationContainer, NotificationManager} from 'react-notifications';
-import 'react-notifications/lib/notifications.css';
-
 class Match extends Component {
 
   constructor(props) {
@@ -27,26 +24,26 @@ class Match extends Component {
 
   componentWillMount() {
     this.props.fetchTableData('https://case-match.herokuapp.com/showMatches');
-    axios.get('https://case-team.herokuapp.com/showAllTeamData/').then(response => this.setState({ teams: response.data }));
-    axios.get('http://case-season.herokuapp.com/showSeasons').then(response => this.setState({ seasons: response.data }));
-    axios.get('http://case-address.herokuapp.com/showAddresses/').then(response => this.setState({ addresses: response.data }));
-
+    axios.get('https://case-team.herokuapp.com/showAllTeamData/').then(response => { this.setState({ teams: response.data }); this.doThing();});
+    axios.get('http://case-season.herokuapp.com/showSeasons').then(response => { this.setState({ seasons: response.data }); this.doThing();});
+    axios.get('http://case-address.herokuapp.com/showAddresses/').then(response => { this.setState({ addresses: response.data }); this.doThing();});
   }
-/*
+
   componentWillReceiveProps(newProps) {
-    this.doThing(newProps);
+    this.setState({ table: newProps.table });
+    this.doThing();
   }
 
-  doThing(input) {
-
-    input.table.data.forEach((row,i) => {
+  doThing() {
+    if (!this.state.teams || !this.state.addresses || !this.state.seaons || !this.state.table) return;
+    this.state.table.data.forEach((row,i) => {
 
       let address = this.state.addresses.find(address => {
         return address.location_id === row.location_id;
       })
 
       let season = this.state.seasons.find(season => {
-        return row.season_id === row.season_id;
+        return season.season_id === row.season_id;
       })
 
       let home_team = this.state.teams.find(team => {
@@ -66,21 +63,10 @@ class Match extends Component {
                 season_id: season.name,
                 location_id:address.location_name
               }
-      this.setState({ rendertable: newRenderTable})
+      this.setState({ rendertable: newRenderTable});
     })
 }
- /*
-    const apiURLs = 
-    ['https://case-team.herokuapp.com/showAllTeamData/',
-     'https://case-team.herokuapp.com/showAllTeamData/',
-     'http://case-season.herokuapp.com/showOneSeason/',
-     'http://case-address.herokuapp.com/showOneAddress/'];
-    
-    const apiURLfieldNames =
-    ['association_name',
-     'association_name',
-     'name',
-     'location_name'];
+
 /*
     const columns = [2,3,4,5];
     let counter=0;
@@ -130,6 +116,7 @@ class Match extends Component {
   }
 
   getView() {
+    console.log(this.state.renderTable, 'renderTable getview');
     switch (this.state.activePage) {
       case 'table':
         return <Table objectList={this.state.renderTable} onEdit={this.onEdit} addPage={this.addPage} itemFieldsName={this.state.itemFieldsName} itemFields={this.state.itemFields} title='Matches' addButton='Add Match' helperAPI={this.state.helperAPI} helperAPIfield={this.state.helperAPIfield} />
@@ -143,19 +130,18 @@ class Match extends Component {
   }
 
   render() {
-    // console.log(this.props.table, 'rendertable');
-    if (!this.state.teams && !this.state.addresses && !this.state.seaons) return 'Loading...';
+    console.log(this.state, 'render');
+    if (!this.state.teams || !this.state.addresses || !this.state.seasons || !this.state.renderTable) return 'Loading...';
+    console.log('hit');
     return ( 
       <div>
         {this.getView()}
-        <NotificationContainer/>
       </div>
     )
   }
 }
 
 const mapStateToProps = state => {
-  console.log(state, 'thestate');
   return {
     table: state.table
   }

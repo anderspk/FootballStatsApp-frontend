@@ -10,13 +10,13 @@ const editPage = ({itemToEdit, createNotification, onRouteChange, apiURL, locati
      return () => {
        switch (type) {
          case 'info':
-           NotificationManager.info('Info message');
+           NotificationManager.info('The address was edited!', 'Address Edited');
            break;
          case 'success':
-           NotificationManager.success('A new team was created!', 'New Team');
+           NotificationManager.success('A new address was created!', 'New Address');
            break;
          case 'warning':
-           NotificationManager.warning('Warning message', 'Close after 3000ms', 3000);
+           NotificationManager.warning('The Address was deleted!', 'Address Deleted', 3000);
            break;
          case 'error':
            NotificationManager.error('Error message', 'You must delete the person associated with this address before you delete the address', 5000, () => {
@@ -35,7 +35,7 @@ const editPage = ({itemToEdit, createNotification, onRouteChange, apiURL, locati
       <form>
       {
         Object.keys(itemToEdit).map((itemProperty, i) => {
-          if(i === 0 || i === 5) return;
+          if(i === 0 || i === 7) return;
           return (
             <div className='form-group' key={i}>
               <label className='col-2 col-form-label'>{itemProperty}</label>
@@ -49,8 +49,8 @@ const editPage = ({itemToEdit, createNotification, onRouteChange, apiURL, locati
         })
       }
       </form>
-      <button onClick={e => {axios.put(apiURL, itemToEdit).then(response => onRouteChange()).catch(error => console.log(error))}} type="button" className="btn btn-warning btn-lg">Save</button>
-      <button onClick={e => {this.createNotification('error').then(axios.delete(locationDeleteURL, itemToEdit)).then(axios.delete(addressDeleteURL, itemToEdit)).then(response => onRouteChange()).catch(error => console.log(error))}} type="button" className="btn btn-danger btn-lg btn-block">Delete</button>
+      <button onClick={e => {axios.put(apiURL, itemToEdit).then(response => onRouteChange()).then(createNotification('info')).catch(error => console.log(error))}} type="button" className="btn btn-warning btn-lg">Save</button>
+      <button onClick={e => {axios.delete(locationDeleteURL, itemToEdit).then(axios.delete(addressDeleteURL, itemToEdit)).then(response => onRouteChange()).then(createNotification('warning')).catch(error => console.log(error))}} type="button" className="btn btn-danger btn-lg btn-block">Delete</button>
     </section>
   )
 }

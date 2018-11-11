@@ -9,11 +9,12 @@ import Season from './admin-components/Season/Season';
 import Team from './admin-components/Team/Team';
 import Result from './admin-components/Result/Result';
 import Goals from './admin-components/Goals/Goals';
+import User from './admin-components/Users/User';  
 import GoalType from './admin-components/GoalType/GoalType';
 import Contacts from './admin-components/Contacts/Contacts';
 import Dashboard from './admin-components/Dashboard';
 
-import {NotificationContainer, NotificationManager} from 'react-notifications';
+import {NotificationContainer} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 
 class Admin extends Component {
@@ -53,6 +54,8 @@ class Admin extends Component {
         return <Goals />;  
       case 'goalType':
         return <GoalType />;  
+      case 'user':
+        return <User />;  
       default:
         break;
     }
@@ -78,6 +81,7 @@ class Admin extends Component {
           <li><button onClick={e => this.setState({currentPage: 'result'})}>Result</button></li>
           <li><button onClick={e => this.setState({currentPage: 'goals'})}>Goals</button></li>
           <li><button onClick={e => this.setState({currentPage: 'goalType'})}>Goal Type</button></li>
+          <li><button onClick={e => this.setState({currentPage: 'user'})}>User</button></li>
         </ul>
         <div className='admin-main-container'>
           {this.renderPage()}

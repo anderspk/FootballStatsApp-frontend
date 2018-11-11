@@ -12,7 +12,7 @@ class AddPlayer extends Component {
       dataToSend: {first_name: null, last_name: null, date_of_birth: null, address_id: null, normal_position: null, number: null, team_id: null} ,
       validation: {first_name: true, last_name: true, date_of_birth: true, address_id: true, normal_position: true, number: true, team_id: true},
       addressInput: "",
-      teamInput: "",
+      teamInput: `${props.itemToEdit.team_id}`,
       addTeamInput: "",
       renderAddresses: false,
       renderTeams: false
@@ -47,12 +47,14 @@ class AddPlayer extends Component {
     axios
       .get("https://case-address.herokuapp.com/showAddresses")
       .then(response => {
-        this.setState({ addresses: response.data});
+        const addressInput = response.data.find(addresses => addresses.address_id === this.props.itemToEdit.address_id).address_line_1;
+        this.setState({ addresses: response.data, addressInput: addressInput });
       });
     axios
       .get("http://case-team.herokuapp.com/showAllTeamData")
       .then(response => {
-        this.setState({ teams: response.data})
+        const teamInput = response.data.find(team => team.team_id === this.props.itemToEdit.team_id).association_name;
+        this.setState({ teams: response.data, teamInput: teamInput })
       });
   }
 
@@ -225,17 +227,17 @@ class AddPlayer extends Component {
           {/* FIRST NAME */}
           <label className="col-2 col-form-label">First Name</label>
           {!this.state.validation.first_name && <span className="help-block">Please fill out this field</span>}
-          <input className="form-control" type="text" name="first_name" onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, first_name: e.target.value}})}} />
+          <input defaultValue={itemToEdit.first_name} className="form-control" type="text" name="first_name" onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, first_name: e.target.value}})}} />
 
           {/* LAST NAME */}
           <label className="col-2 col-form-label">Last Name</label>
           {!this.state.validation.last_name && <span className="help-block">Please fill out this field</span>}
-          <input className="form-control" type="text" name='last_name' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, last_name: e.target.value}})}} />
+          <input defaultValue={itemToEdit.last_name} className="form-control" type="text" name='last_name' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, last_name: e.target.value}})}} />
             
           {/* DATE OF BIRTH */}
           <label className="col-2 col-form-label">Date of Birth</label>
           {!this.state.validation.date_of_birth && <span className="help-block">Please fill out this field</span>}
-          <input className="form-control" type="text" name='date_of_birth' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, date_of_birth: e.target.value}})}} />
+          <input defaultValue={itemToEdit.date_of_birth} className="form-control" type="text" name='date_of_birth' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, date_of_birth: e.target.value}})}} />
           
           {/* ADDRESS ID*/}
           <label className="col-2 col-form-label">Address Name</label>
@@ -255,12 +257,12 @@ class AddPlayer extends Component {
           {/* NORMAL POSITION */}
           <label className="col-2 col-form-label">Normal Position</label>
           {!this.state.validation.normal_position && <span className="help-block">Please fill out this field</span>}
-          <input className="form-control" type="text" name='normal_position' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, normal_position: e.target.value}})}} />
+          <input defaultValue={itemToEdit.normal_position} className="form-control" type="text" name='normal_position' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, normal_position: e.target.value}})}} />
           
           {/* NUMBER*/}
           <label className="col-2 col-form-label">Number</label>
           {!this.state.validation.number && <span className="help-block">Please fill out this field</span>}
-          <input className="form-control" type="text" name='number' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, number: e.target.value}})}} />
+          <input defaultValue={itemToEdit.number} className="form-control" type="text" name='number' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, number: e.target.value}})}} />
           
           {/* TEAM NAME */}
           <label className="col-2 col-form-label">Team Name</label>
@@ -277,6 +279,7 @@ class AddPlayer extends Component {
             </div>
           </div>
           <button type="submit" className="btn btn-warning btn-lg">Add</button>
+          {this.props.toEdit && <button onClick={e => {axios.delete(deleteURL, itemToEdit).then(response => this.props.onRouteChange()).then(this.props.createNotification('warning')).catch(error => console.log(error))}} type="button" className="btn btn-danger btn-lg btn-block">Delete</button>}
 
         </form>
       </section>;

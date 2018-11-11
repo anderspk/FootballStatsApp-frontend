@@ -4,8 +4,6 @@ import Table from '../Table';
 import EditPage from '../EditPage';
 import AddPage from './AddGoalType';
 
-import {NotificationContainer, NotificationManager} from 'react-notifications';
-import 'react-notifications/lib/notifications.css';
 
 class Goal extends Component {
 
@@ -56,7 +54,6 @@ class Goal extends Component {
     return ( 
       <div>
         {this.getView()}
-        <NotificationContainer/>
       </div>
     )
   }

@@ -135,7 +135,6 @@ class AddAddress extends Component {
   render() {
     return <section className="container">
         {this.state.autoCompleteList}
-        <NotificationContainer/>
         <h1>Add {this.props.addName}</h1>
         <button className="btn btn-info" onClick={e => this.props.onRouteChange()}>Back</button>
 

@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import PeopleTable from '../Table';
-import EditPage from './EditPage';
+import EditPage from './EditPlayer';
 import AddPage from './AddPlayer';
 
 import { connect } from 'react-redux';
 import { fetchTableData, setRowAPIhelpers } from '../../../../actions/actions';
-
-import {NotificationContainer, NotificationManager} from 'react-notifications';
-import 'react-notifications/lib/notifications.css';
 
 class Player extends Component {
 
@@ -32,9 +29,11 @@ class Player extends Component {
 
   componentWillReceiveProps(newProps) {
     this.doThing(newProps);
+    this.setState({table: newProps.table});
   }
 
   doThing(input) {
+    console.log(this.props, 'props');
     let counter=0;
     input.table.data.forEach((row, i) => {
       axios.get("https://case-team.herokuapp.com/showAllTeamData/" + row.team_id).then(first => {
@@ -59,6 +58,8 @@ class Player extends Component {
   }
 
   onEdit(editItem) {
+    editItem.address_id = this.state.table.data.find(row => row.player_id === editItem.player_id).address_id;
+    editItem.team_id = this.state.table.data.find(row => row.player_id === editItem.player_id).team_id;
     this.setState({ activePage: 'editPage', itemToEdit: editItem});
   }
 
@@ -68,6 +69,7 @@ class Player extends Component {
 
   onRouteChange = () => {
     this.setState({activePage: 'personTable'})
+    this.doThing(this.state);
   }
 
   getView() {
@@ -75,7 +77,8 @@ class Player extends Component {
       case 'personTable':
         return <PeopleTable objectList={this.state.renderTable} onEdit={this.onEdit} addPage={this.addPage} itemFieldsName={this.state.itemFieldsName} itemFields={this.state.itemFields} title='Player' addButton='Add Player' />
       case 'editPage':
-        return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/updatePlayer' deleteURL={`https://case-users.herokuapp.com/deletePlayer/${this.state.itemToEdit.player_id}`} editName='Player'/>
+        return <EditPage itemToEdit={this.state.itemToEdit} formFields={this.state.itemFieldsForAdd} onRouteChange={this.onRouteChange} apiURL="https://case-users.herokuapp.com/updatePlayer" toEdit={true} addName="Player" deleteURL={`https://case-users.herokuapp.com/deletePlayer/${this.state.itemToEdit.player_id}`} />;
+        // return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/updatePlayer' deleteURL={`https://case-users.herokuapp.com/deletePlayer/${this.state.itemToEdit.player_id}`} editName='Player'/>
       case 'addPage':
         return <AddPage formFields={this.state.itemFieldsForAdd} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/createPlayer' addName='Player'/>
       default:
@@ -87,7 +90,6 @@ class Player extends Component {
     return ( 
       <div>
         {this.getView()}
-        <NotificationContainer/>
       </div>
     )
   }

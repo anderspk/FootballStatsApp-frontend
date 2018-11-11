@@ -9,14 +9,13 @@ class AddPlayer extends Component {
     super(props);
     this.state = {
       filteredList: [],
-      dataToSend: {first_name: null, last_name: null, date_of_birth: null, address_id: null, normal_position: null, number: null, team_id: null} ,
-      validation: {first_name: true, last_name: true, date_of_birth: true, address_id: true, normal_position: true, number: true, team_id: true},
+      dataToSend: {first_name: null, last_name: null, date_of_birth: null, address_id: null} ,
+      validation: {first_name: true, last_name: true, date_of_birth: true, address_id: true},
       addressInput: "",
-      teamInput: "",
-      renderAddresses: false,
-      renderTeams: false
+      renderAddresses: false
     };
   }
+
 
   createNotification = (type) => {
     console.log(type);
@@ -45,9 +44,6 @@ class AddPlayer extends Component {
     axios
       .get("https://case-address.herokuapp.com/showAddresses")
       .then(response => this.setState({ addresses: response.data }));
-    axios
-      .get("http://case-team.herokuapp.com/showAllTeamData")
-      .then(response => this.setState({ teams: response.data }));
   }
  
   validateForm(){
@@ -56,8 +52,33 @@ class AddPlayer extends Component {
     const dataToSend = this.state.dataToSend;
 
     let address = this.state.addresses.find(address => address.address_line_1 === this.state.addressInput);
-    let team = this.state.teams.find(team => team.association_name === this.state.teamInput);
 
+
+    // first_name
+    if(dataToSend.first_name != null){
+      validation.first_name = true;
+    }else{
+      validation.first_name = false;
+      isValidated = false;
+    }
+
+    // last_name
+    if(dataToSend.last_name != null){
+      validation.last_name = true;
+    }else{
+      validation.last_name = false;
+      isValidated = false;
+    }
+
+    // date_of_birth
+    if(dataToSend.date_of_birth != null){
+      validation.date_of_birth = true;
+    }else{
+      validation.date_of_birth = false;
+      isValidated = false;
+    }
+
+    // address
     if(address){
       validation.address_id = true;
       dataToSend.address_id = address.address_id;
@@ -66,13 +87,6 @@ class AddPlayer extends Component {
       isValidated = false;
     }
 
-    if(team){
-      validation.team_id = true;
-      dataToSend.team_id = team.team_id;
-    } else { 
-      validation.team_id = false;
-      isValidated = false;
-    }
 
     this.setState({ validation: validation })
     return isValidated;
@@ -81,10 +95,10 @@ class AddPlayer extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    console.log('object 1 = ', this.state.dataToSend)
     if(!this.validateForm()){
       return console.log('error');
     }else{
+    console.log('object 1 = ', this.state.dataToSend)
     axios
       .post(this.props.apiURL, this.state.dataToSend)
       .then(response => this.props.onRouteChange())
@@ -94,7 +108,6 @@ class AddPlayer extends Component {
   }
 
   // HANDLE ADDRESS DROPDOWN
-
   handleAddressDropdown = e => {
     let input = e.target.value.toLowerCase();
     let filteredList = this.state.addresses.filter(address => {
@@ -121,54 +134,34 @@ class AddPlayer extends Component {
     });
   };
 
-  // HANDLE TEAM DROPDOWN
-
-  handleTeamDropdown = e => {
-    let input = e.target.value.toLowerCase();
-    let filteredList = this.state.teams.filter(team => {
-      return team.association_name.toLowerCase().includes(input);
-    });
-    this.setState({ filteredList: filteredList });
-  };
-
-  renderTeamDropdown = () => {
-    return this.state.filteredList.map(listItem => {
-      return (
-        <div key={listItem.team_id}
-          onMouseDown={e => {
-            this.setState({
-              team_id: listItem.team_id,
-              teamInput: listItem.association_name,
-              filteredList: []
-            });
-          }}
-        >
-          {listItem.association_name}
-        </div>
-      );
-    });
-  };
-
 
   render() {
     return <section className="container">
         {this.state.autoCompleteList}
-        <NotificationContainer/>
         <h1>Add {this.props.addName}</h1>
-        <button className="btn btn-info" onClick={e => this.props.onRouteChange()}>Back</button>
+        <button className="btn btn-info" onClick={e => this.props.onRouteChange()}>
+          Back
+        </button>
 
         <form autoComplete="off" onSubmit={e => this.handleSubmit(e)}>
-          <label className="col-2 col-form-label">First Name</label>
-          <input className="form-control" type="text" name="first_name" onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, first_name: e.target.value}})}} />
-          <label className="col-2 col-form-label">Last Name</label>
-          <input className="form-control" type="text" name='last_name' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, last_name: e.target.value}})}} />
-          <label className="col-2 col-form-label">Date of Birth</label>
-          <input className="form-control" type="text" name='date_of_birth' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, date_of_birth: e.target.value}})}} />
-          <label className="col-2 col-form-label">Address ID</label>
           
+          <label className="col-2 col-form-label">First Name</label>
+          {!this.state.validation.first_name && <span className="help-block">Please fill out this field</span>}
+            <input className="form-control" type="text" name="first_name" onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, first_name: e.target.value}})}} />
+          
+          <label className="col-2 col-form-label">Last Name</label>
+          {!this.state.validation.last_name && <span className="help-block">Please fill out this field</span>}
+            <input className="form-control" type="text" name='last_name' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, last_name: e.target.value}})}} />
+          
+          <label className="col-2 col-form-label">Date of Birth</label>
+          {!this.state.validation.date_of_birth && <span className="help-block">Please fill out this field</span>}
+            <input className="form-control" type="text" name='date_of_birth' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, date_of_birth: e.target.value}})}} />
+          
+          {/* ADDRESS ID */}
+          <label className="col-2 col-form-label">Address Name</label>
           <div className="autocomplete">
           {!this.state.validation.address_id && <span className="help-block">Please correct the error</span>}
-          <input autoComplete="new-password" className="form-control" type="text" name='address_id' value={this.state.addressInput} onClick={e => this.setState({ renderAddresses: true })} onBlur={e => {
+          <input className="form-control" type="text" name='address_id' value={this.state.addressInput} onFocus={e => this.setState({ renderAddresses: true })} onBlur={e => {
                 this.setState({ filteredList: [], renderAddresses: false });
               }} onChange={e => {
                 this.setState({ addressInput: e.target.value });
@@ -178,25 +171,7 @@ class AddPlayer extends Component {
               {this.state.renderAddresses && this.renderAddressDropdown()}
             </div>
           </div>
-          
-          <label className="col-2 col-form-label">Normal Position</label>
-          <input className="form-control" type="text" name='normal_position' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, normal_position: e.target.value}})}} />
-          <label className="col-2 col-form-label">Number</label>
-          <input className="form-control" type="text" name='number' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, number: e.target.value}})}} />
-          <label className="col-2 col-form-label">Team</label>
-          <div className="autocomplete">
-          {!this.state.validation.team_id && <span className="help-block">Please correct the error</span>}
-            <input autoComplete="new-password" className="form-control" type="text" name='team_id' value={this.state.teamInput} onClick={e => this.setState({ renderTeams: true })} onBlur={e => {
-                this.setState({ filteredList: [], renderTeams: false });
-              }} onChange={e => {
-                this.setState({ teamInput: e.target.value });
-                this.handleTeamDropdown(e);
-                this.setState({ dataToSend: {...this.state.dataToSend, team_id: e.target.value}})
-              }} />
-            <div className="autocomplete-items">
-              {this.state.renderTeams && this.renderTeamDropdown()}
-            </div>
-          </div>
+
           <button type="submit" className="btn btn-warning btn-lg">Add</button>
         </form>
       </section>;

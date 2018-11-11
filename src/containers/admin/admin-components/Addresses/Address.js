@@ -4,8 +4,6 @@ import AddressTable from '../Table';
 import EditPage from './EditAddress';
 import AddPage from './AddAddress';
 
-import {NotificationContainer, NotificationManager} from 'react-notifications';
-import 'react-notifications/lib/notifications.css';
 
 class Address extends Component {
 
@@ -56,7 +54,6 @@ class Address extends Component {
     return ( 
       <div>
         {this.getView()}
-        <NotificationContainer/>
       </div>
     )
   }

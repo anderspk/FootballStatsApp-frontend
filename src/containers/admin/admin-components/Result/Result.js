@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Table from '../Table';
-import EditPage from '../EditPage';
+import EditPage from './EditResult';
 import AddPage from './AddResult';
 import { connect } from 'react-redux';
 import { fetchTableData, setRowAPIhelpers } from '../../../../actions/actions';
-
-import {NotificationContainer, NotificationManager} from 'react-notifications';
-import 'react-notifications/lib/notifications.css';
 
 class Result extends Component {
 
@@ -83,7 +80,6 @@ class Result extends Component {
     return ( 
       <div>
         {this.getView()}
-        <NotificationContainer/>
       </div>
     )
   }

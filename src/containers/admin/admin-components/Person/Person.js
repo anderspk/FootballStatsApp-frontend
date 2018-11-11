@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import PeopleTable from '../Table';
-import EditPage from '../EditPage';
-import AddPage from '../AddPage';
+import EditPage from './EditPage';
+import AddPage from './AddPerson';
 
 class Person extends Component {
 
@@ -44,7 +44,7 @@ class Person extends Component {
       case 'editPage':
         return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/updatePerson' deleteURL={`https://case-users.herokuapp.com/deletePerson/${this.state.itemToEdit.person_id}`} editName='Person'/>
       case 'addPage':
-        return <AddPage formFields={this.state.itemFieldsForAdd} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/createPerson' addName='Person' />
+        return <AddPage formFields={this.state.itemFieldsForAdd} onRouteChange={this.onRouteChange} apiURL='http://case-users.herokuapp.com/createPerson' addName='Person' />
       default:
         break;
     }

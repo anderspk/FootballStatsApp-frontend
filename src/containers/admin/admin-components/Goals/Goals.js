@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Table from '../Table';
-import EditPage from '../EditPage';
+import EditPage from './EditGoal';
 import AddPage from './AddGoal';
 import { connect } from 'react-redux';
 import { fetchTableData, setRowAPIhelpers } from '../../../../actions/actions';
-
-import {NotificationContainer, NotificationManager} from 'react-notifications';
-import 'react-notifications/lib/notifications.css';
 
 class Goals extends Component {
 
