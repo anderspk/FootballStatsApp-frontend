@@ -68,15 +68,17 @@ class AddAddress extends Component {
     }
 
     // score
-    if(dataToSend.score != null){
+    if(dataToSend.score != null && /^\d+$/.test(dataToSend.score)){
+
       validation.score = true;
     }else{
+      console.log(/^\d+$/.test(dataToSend.score));
       validation.score = false;
       isValidated = false;
     }
 
     // result
-    if(dataToSend.result != null){
+    if(dataToSend.result != null && (dataToSend.result.toLowerCase().match("win")||dataToSend.result.toLowerCase().match("loss")||dataToSend.result.toLowerCase().match("draw"))){
       validation.result = true;
     }else{
       validation.result = false;
@@ -161,7 +163,7 @@ class AddAddress extends Component {
           <input className="form-control" type="text" name="score" onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, score: e.target.value}})}} />
         
         <label className="col-2 col-form-label">Result</label>
-          {!this.state.validation.result && <span className="help-block">Please fill out this field!</span>}
+          {!this.state.validation.result && <span className="help-block">Enter Win, Loss or Draw </span>}
           <input className="form-control" type="text" name="result" onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, result: e.target.value}})}} />
         
 
