@@ -155,7 +155,7 @@ class AddPlayer extends Component {
           <label className="col-2 col-form-label">Address ID</label>
           <div autoComplete="off">
           {!this.state.validation.address_id && <span className="help-block">Please correct the error</span>}
-          <input className="form-control" type="text" name='address_id' value={this.state.addressInput} onClick={e => this.setState({ renderAddresses: true })} onBlur={e => {
+          <input className="form-control" type="text" name='address_id' value={this.state.addressInput} onFocus={e => this.setState({ renderAddresses: true })} onBlur={e => {
                 this.setState({ filteredList: [], renderAddresses: false });
               }} onChange={e => {
                 this.setState({ addressInput: e.target.value });

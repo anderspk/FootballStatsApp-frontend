@@ -12,6 +12,7 @@ class AddPlayer extends Component {
       validation: {player_id: true, goal_type_id: true, match_id: true, description: true},
       playerInput: "",
       goalTypeInput: "",
+      matchID:"",
       renderPlayerName: false,
       renderGoalType: false
     };
@@ -47,6 +48,16 @@ class AddPlayer extends Component {
     axios
       .get("http://case-goal.herokuapp.com/showGoalTypes")
       .then(response => this.setState({ goalTypes: response.data }));
+    
+    // * NEWS *
+    axios
+      .get("http://case-match.herokuapp.com/showMatches")
+      .then(response => this.setState({ matches: response.data }));
+
+    axios
+      .get("http://case-team.herokuapp.com/showAllTeamData")
+      .then(response => this.setState({ teams: response.data }));
+
   }
  
   validateForm(){
@@ -91,13 +102,34 @@ class AddPlayer extends Component {
     return isValidated;
   }
 
+  createNews(){
+    let player = this.state.players.find(player => player.last_name === this.state.playerInput);
+    let goalType = this.state.goalTypes.find(goalType => goalType.type === this.state.goalTypeInput);
+    let match = this.state.matches.find(match => match.match_id === this.state.dataToSend.match_id);
+    let homeTeam = this.state.teams.find(homeTeam => homeTeam.team_id === match.home_team_id);
+    let awayTeam = this.state.teams.find(awayTeam => awayTeam.team_id === match.away_team_id);
+
+    let newsData = player.first_name + " " + player.last_name + " scored a goal with a " + goalType.type.toLowerCase() + " in the lastest match between " + homeTeam.association_name + " and " + awayTeam.association_name;
+
+    console.log(this.state.dataToSend.player_id, "id")
+
+    let newsToSend = {news_string: newsData, team_id: null, player_id: Number(this.state.dataToSend.player_id)};
+
+    return newsToSend;
+}
+
 
   handleSubmit(e) {
     e.preventDefault();
+    console.log(this.createNews())
     console.log('object 1 = ', this.state.dataToSend)
     if(!this.validateForm()){
       return console.log('error');
     }else{
+      console.log(this.createNews(), "test")
+    axios
+      .post("https://case-users.herokuapp.com/createNews", this.createNews())
+      .catch(error => console.log(error));
     axios
       .post(this.props.apiURL, this.state.dataToSend)
       .then(response => this.props.onRouteChange())

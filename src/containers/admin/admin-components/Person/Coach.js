@@ -24,36 +24,33 @@ class Coach extends Component {
     this.onEdit = this.onEdit.bind(this);
   }
 
-  componentWillMount() {
-    this.props.fetchTableData('https://case-person.herokuapp.com/showCoaches');
+componentDidMount() {
+
+    const players = axios.get("https://case-person.herokuapp.com/showCoaches");
+    const addresses = axios.get("http://case-address.herokuapp.com/showAddresses");
+
+    Promise.all([players, addresses]).then(values => {
+      const renderTable = [];
+      values[0].data.forEach((player) => {
+        const address = values[1].data.find(address => address.address_id === player.address_id);
+        renderTable.push({
+          coach_id: player.coach_id,
+          player_id: player.player_id,
+          first_name: player.first_name,
+          last_name: player.last_name,
+          date_of_birth: player.date_of_birth,
+          address_id: address.address_line_1,
+        });
+      });
+      this.setState({ renderTable: renderTable, values:values });
+    });
   }
 
-  componentWillReceiveProps(newProps) {
-    this.doThing(newProps);
-  }
-
-  doThing(input) {
-    let counter=0;
-    input.table.data.forEach((row, i) => {
-      axios.get("https://case-address.herokuapp.com/showOneAddress/" + row.address_id).then(first => {
-        first = first.data.location_name;
-        let newRenderTable = this.state.renderTable;
-        newRenderTable[i] = {
-          coach_id: row.coach_id,
-          first_name: row.first_name,
-          last_name: row.last_name,
-          date_of_birth: row.date_of_birth,
-          address_id: first
-        }
-          counter++
-          this.setState({ renderTable: newRenderTable })
-          if (counter > input.table.data.length/4) this.setState({ renderComplete: true })
-
-      })
-    })
-  }
 
   onEdit(editItem) {
+    editItem.person_id = this.state.values[0].data.find(row => row.player_id === editItem.player_id).person_id;
+    editItem.address_id = this.state.values[1].data.find(row => row.address_line_1 === editItem.address_id).address_id;
+
     this.setState({ activePage: 'editPage', itemToEdit: editItem});
   }
 
