@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import PeopleTable from '../Table';
-import EditPage from './EditPage';
+import EditPage from './EditPlayer';
 import AddPage from './AddPlayer';
 
 import { connect } from 'react-redux';
@@ -60,7 +60,6 @@ class Player extends Component {
   onEdit(editItem) {
     editItem.address_id = this.state.table.data.find(row => row.player_id === editItem.player_id).address_id;
     editItem.team_id = this.state.table.data.find(row => row.player_id === editItem.player_id).team_id;
-    editItem.person_id = this.state.table.data.find(row => row.player_id === editItem.player_id).person_id;
     this.setState({ activePage: 'editPage', itemToEdit: editItem});
   }
 
@@ -78,7 +77,7 @@ class Player extends Component {
       case 'personTable':
         return <PeopleTable objectList={this.state.renderTable} onEdit={this.onEdit} addPage={this.addPage} itemFieldsName={this.state.itemFieldsName} itemFields={this.state.itemFields} title='Player' addButton='Add Player' />
       case 'editPage':
-        return <AddPage itemToEdit={this.state.itemToEdit} formFields={this.state.itemFieldsForAdd} onRouteChange={this.onRouteChange} apiURL="https://case-users.herokuapp.com/updatePlayer" toEdit={true} addName="Player" deleteURL={`https://case-users.herokuapp.com/deletePlayer/${this.state.itemToEdit.player_id}`} />;
+        return <EditPage itemToEdit={this.state.itemToEdit} formFields={this.state.itemFieldsForAdd} onRouteChange={this.onRouteChange} apiURL="https://case-users.herokuapp.com/updatePlayer" toEdit={true} addName="Player" deleteURL={`https://case-users.herokuapp.com/deletePlayer/${this.state.itemToEdit.player_id}`} />;
         // return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/updatePlayer' deleteURL={`https://case-users.herokuapp.com/deletePlayer/${this.state.itemToEdit.player_id}`} editName='Player'/>
       case 'addPage':
         return <AddPage formFields={this.state.itemFieldsForAdd} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/createPlayer' addName='Player'/>
