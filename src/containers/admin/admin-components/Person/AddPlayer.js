@@ -42,6 +42,7 @@ class AddPlayer extends Component {
 
 
   componentWillMount() {
+    console.log(this.props.itemToEdit, 'itemtoedit');
     axios
       .get("https://case-address.herokuapp.com/showAddresses")
       .then(response => {
@@ -142,9 +143,10 @@ class AddPlayer extends Component {
       return console.log('error');
     }else{
       if (this.props.toEdit) {
-        console.log('hit')
+        let dataToSend = {person_id: this.props.itemToEdit.person_id, ...this.state.dataToSend, player_image: null};
+        console.log(dataToSend, "datatosend");
         axios
-          .put(this.props.apiURL, this.state.dataToSend)
+          .put(this.props.apiURL, dataToSend)
           .then(response => this.props.onRouteChange())
           .then(this.createNotification('info'))
           .catch(error => console.log(error));

@@ -60,6 +60,7 @@ class Player extends Component {
   onEdit(editItem) {
     editItem.address_id = this.state.table.data.find(row => row.player_id === editItem.player_id).address_id;
     editItem.team_id = this.state.table.data.find(row => row.player_id === editItem.player_id).team_id;
+    editItem.person_id = this.state.table.data.find(row => row.player_id === editItem.player_id).person_id;
     this.setState({ activePage: 'editPage', itemToEdit: editItem});
   }
 
