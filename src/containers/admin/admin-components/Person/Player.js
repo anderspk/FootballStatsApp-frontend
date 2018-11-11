@@ -4,9 +4,6 @@ import PeopleTable from '../Table';
 import EditPage from './EditPage';
 import AddPage from './AddPlayer';
 
-import { connect } from 'react-redux';
-import { fetchTableData, setRowAPIhelpers } from '../../../../actions/actions';
-
 class Player extends Component {
 
   constructor(props) {
@@ -23,38 +20,28 @@ class Player extends Component {
     this.onEdit = this.onEdit.bind(this);
   }
 
-  componentWillMount() {
-    this.props.fetchTableData('https://case-person.herokuapp.com/showPlayers');
-  }
+  componentDidMount() {
 
-  componentWillReceiveProps(newProps) {
-    this.doThing(newProps);
-    this.setState({table: newProps.table});
-  }
+    const players = axios.get("https://case-person.herokuapp.com/showPlayers");
+    const teams = axios.get("https://case-team.herokuapp.com/showAllTeamData");
 
-  doThing(input) {
-    console.log(this.props, 'props');
-    let counter=0;
-    input.table.data.forEach((row, i) => {
-      axios.get("https://case-team.herokuapp.com/showAllTeamData/" + row.team_id).then(first => {
-        first = first.data.association_name;
-        let newRenderTable = this.state.renderTable;
-        newRenderTable[i] = {
-          player_id: row.player_id,
-          first_name: row.first_name,
-          last_name: row.last_name,
-          date_of_birth: row.date_of_birth,
-          address_id: row.address_id,
-          normal_position: row.normal_position,
-          number: row.number,
-          team_id: first
-        }
-          counter++
-          this.setState({ renderTable: newRenderTable })
-          if (counter > input.table.data.length/4) this.setState({ renderComplete: true })
-
-      })
-    })
+    Promise.all([players, teams]).then(values => {
+      const renderTable = [];
+      values[0].data.forEach((player) => {
+        const team = values[1].data.find(team => team.team_id === player.team_id);
+        renderTable.push({
+          player_id: player.player_id,
+          first_name: player.first_name,
+          last_name: player.last_name,
+          date_of_birth: player.date_of_birth,
+          address_id: player.address_id,
+          normal_position: player.normal_position,
+          number: player.number,
+          team_id: team.association_name
+        });
+      });
+      this.setState({ renderTable: renderTable });
+    });
   }
 
   onEdit(editItem) {
@@ -88,6 +75,7 @@ class Player extends Component {
   }
 
   render() {
+    if (!this.state.renderTable) return 'Loading...';
     return ( 
       <div>
         {this.getView()}
@@ -96,11 +84,4 @@ class Player extends Component {
   }
 }
 
-
-const mapStateToProps = state => {
-  return {
-    table: state.table
-  }
-}
-
-export default connect(mapStateToProps, {fetchTableData, setRowAPIhelpers})(Player);
+export default Player;

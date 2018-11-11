@@ -4,9 +4,6 @@ import Table from '../Table';
 import EditPage from '../EditPage';
 import AddPage from './AddMatch';
 
-import { connect } from 'react-redux';
-import { fetchTableData, setRowAPIhelpers } from '../../../../actions/actions';
-
 class Match extends Component {
 
   constructor(props) {
@@ -22,87 +19,33 @@ class Match extends Component {
     this.onEdit = this.onEdit.bind(this);
   }
 
-  componentWillMount() {
-    this.props.fetchTableData('https://case-match.herokuapp.com/showMatches');
-    axios.get('https://case-team.herokuapp.com/showAllTeamData/').then(response => { this.setState({ teams: response.data }); this.doThing();});
-    axios.get('http://case-season.herokuapp.com/showSeasons').then(response => { this.setState({ seasons: response.data }); this.doThing();});
-    axios.get('http://case-address.herokuapp.com/showAddresses/').then(response => { this.setState({ addresses: response.data }); this.doThing();});
+  componentDidMount() {
+
+    const matches = axios.get("https://case-match.herokuapp.com/showMatches");
+    const teams = axios.get("https://case-team.herokuapp.com/showAllTeamData");
+    const seasons = axios.get("http://case-season.herokuapp.com/showSeasons");
+    const locations = axios.get("http://case-address.herokuapp.com/showAddresses");
+
+    Promise.all([matches, teams, seasons, locations]).then(values => {
+      const renderTable = [];
+      values[0].data.forEach((match, i) => {
+        const home_team = values[1].data.find(team => team.team_id === match.home_team_id);
+        const away_team = values[1].data.find(team => team.team_id === match.away_team_id);
+        const season = values[2].data.find(season => season.season_id === match.season_id);
+        const location = values[3].data.find(location => location.location_id === match.location_id);
+        renderTable[i] = {
+          match_id: match.match_id,
+          match_date: match.match_date,
+          home_team_id: home_team.association_name,
+          away_team_id: away_team.association_name,
+          season_id: season.season_id,
+          location: location.location_id
+        }
+      });
+      this.setState({ renderTable: renderTable });
+    });
   }
 
-  componentWillReceiveProps(newProps) {
-    this.setState({ table: newProps.table });
-    this.doThing();
-  }
-
-  doThing() {
-    if (!this.state.teams || !this.state.addresses || !this.state.seaons || !this.state.table) return;
-    this.state.table.data.forEach((row,i) => {
-
-      let address = this.state.addresses.find(address => {
-        return address.location_id === row.location_id;
-      })
-
-      let season = this.state.seasons.find(season => {
-        return season.season_id === row.season_id;
-      })
-
-      let home_team = this.state.teams.find(team => {
-        return team.team_id === row.home_team_id;
-      })
-
-      let away_team = this.state.teams.find(team => {
-        return team.team_id === row.away_team_id;
-      })
-
-      let newRenderTable = this.state.renderTable;
-              newRenderTable[i] = {
-                match_id: row.match_id,
-                match_date: row.match_date,
-                home_team_id: home_team.association_name,
-                away_team_id: away_team.association_name,
-                season_id: season.name,
-                location_id:address.location_name
-              }
-      this.setState({ rendertable: newRenderTable});
-    })
-}
-
-/*
-    const columns = [2,3,4,5];
-    let counter=0;
-    input.table.data.forEach((row,i) => {
-      let index = 0
-      axios.get(apiURLs[index] + row[this.state.itemFields[columns[index]]]).then(first => {
-        first = first.data[apiURLfieldNames[index]];
-        index++;
-        axios.get(apiURLs[index] + row[this.state.itemFields[columns[index]]]).then(second => {
-          second = second.data[apiURLfieldNames[index]];
-          index++;
-          axios.get(apiURLs[index] + row[this.state.itemFields[columns[index]]]).then(third => {
-            third = third.data[apiURLfieldNames[index]];
-            index++;
-            axios.get(apiURLs[index] + row[this.state.itemFields[columns[index]]]).then(fourth => {
-              fourth = fourth.data[apiURLfieldNames[index]];
-              let newRenderTable = this.state.renderTable;
-              newRenderTable[i] = {
-                match_id: row.match_id,
-                match_date: row.match_date,
-                home_team_id: first,
-                away_team_id: second,
-                season_id: third,
-                location_id:fourth
-              }
-              counter++
-              this.setState({ renderTable: newRenderTable })
-              if (counter > input.table.data.length/4) this.setState({ renderComplete: true })
-
-            })
-          })
-        });
-      })
-    })
-
-*/
   onEdit(editItem) {
     this.setState({ activePage: 'editPage', itemToEdit: editItem});
   }
@@ -130,9 +73,7 @@ class Match extends Component {
   }
 
   render() {
-    console.log(this.state, 'render');
-    if (!this.state.teams || !this.state.addresses || !this.state.seasons || !this.state.renderTable) return 'Loading...';
-    console.log('hit');
+    if (!this.state.renderTable) return 'Loading...';
     return ( 
       <div>
         {this.getView()}
@@ -141,10 +82,4 @@ class Match extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    table: state.table
-  }
-}
-
-export default connect(mapStateToProps, {fetchTableData, setRowAPIhelpers})(Match);
+export default Match;
