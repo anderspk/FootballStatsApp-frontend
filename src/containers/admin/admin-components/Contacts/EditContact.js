@@ -9,8 +9,8 @@ class AddPlayer extends Component {
     super(props);
     this.state = {
       filteredList: [],
-      dataToSend: {person_id: null, contact_type: null, contact_detail: null} ,
-      validation: {person_id: true, contact_type: true, contact_detail: true},
+      dataToSend: {contact_type: null, contact_detail: null} ,
+      validation: {contact_type: true, contact_detail: true},
       personInput: `${props.itemToEdit.last_name}`,
       renderPersons: false
     };
@@ -59,7 +59,9 @@ class AddPlayer extends Component {
     const validation = this.state.validation;
     const dataToSend = this.state.dataToSend;
 
+
     let person = this.state.persons.find(person => person.last_name === this.state.personInput);
+    console.log("valid person = ", person)
 
     // person id
     if(person){
@@ -136,30 +138,19 @@ class AddPlayer extends Component {
 
   render() {
     const { deleteURL, itemToEdit } = this.props;
+    console.log("test = ", this.state.personInput);
     return <section className="container">
         {this.state.autoCompleteList}
         <h1>Add {this.props.addName}</h1>
         <button className="btn btn-info" onClick={e => this.props.onRouteChange()}>Back</button>
 
         <form autoComplete="off" onSubmit={e => this.handleSubmit(e)}>
-          <label className="col-2 col-form-label">Person</label>
-          <div className="autocomplete">
-          {!this.state.validation.person_id && <span className="help-block">Please fill out this field!</span>}
-          <input defaultValue={itemToEdit.person_id} autoComplete="new-password" className="form-control" type="text" name='person_id' value={this.state.personInput} onFocus={e => this.setState({ renderPersons: true })} onBlur={e => {
-                this.setState({ filteredList: [], renderPersons: false });
-              }} onChange={e => {
-                this.setState({ personInput: e.target.value });
-                this.handlePersonDropdown(e);
-              }} />
-            <div className="autocomplete-items">
-              {this.state.renderPersons && this.renderPersonDropdown()}
-            </div>
-          </div>
-          
+          {/* Contact Type */}    
           <label className="col-2 col-form-label">Contact Type</label>
           {!this.state.validation.contact_type && <span className="help-block">Please fill out this field!</span>}
           <input defaultValue={itemToEdit.contact_type}className="form-control" type="text" name='contact_type' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, contact_type: e.target.value}})}} />
           
+          {/* Contact Detail */}  
           <label className="col-2 col-form-label">Contact Detail</label>
           {!this.state.validation.contact_detail && <span className="help-block">Please fill out this field!</span>}
           <input defaultValue={itemToEdit.contact_detail} className="form-control" type="text" name='contact_detail' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, contact_detail: e.target.value}})}} />

@@ -5,6 +5,8 @@ import Player from './admin-components/Person/Player';
 import Owner from './admin-components/Person/Owner';
 import Coach from './admin-components/Person/Coach';
 import Match from './admin-components/Match/Match';
+import UpcomingMatches from './admin-components/Match/UpcomingMatches';
+import CompletedMatches from './admin-components/Match/CompletedMatches';
 import Season from './admin-components/Season/Season';
 import Team from './admin-components/Team/Team';
 import Result from './admin-components/Result/Result';
@@ -44,6 +46,10 @@ class Admin extends Component {
         return <Contacts />;
       case 'match':
         return <Match />;
+      case 'upcomingMatches':
+        return <UpcomingMatches />;
+      case 'completedMatches':
+        return <CompletedMatches />;
       case 'season':
         return <Season />;
       case 'team':
@@ -63,6 +69,7 @@ class Admin extends Component {
 
   render() {
     const { showPeople } = this.state;
+    const { showMatches } = this.state;
     return (
       <section className='admin-page'>
       <NotificationContainer/>
@@ -75,7 +82,10 @@ class Admin extends Component {
           {showPeople && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'coach'})}>Coaches</button></li>}
           {showPeople && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'owner'})}>Owners</button></li>}
           <li><button onClick={e => this.setState({currentPage: 'contacts'})}>Contacts</button></li>
-          <li><button onClick={e => this.setState({currentPage: 'match'})}>Matches</button></li>
+          <li><button onClick={e => this.setState({ showMatches: !showMatches })}>Matches</button></li>
+          {showMatches && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'match'})}>All Matches</button></li>}
+          {showMatches && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'upcomingMatches'})}>Upcoming Matches</button></li>}
+          {showMatches && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'completedMatches'})}>Completed Matches</button></li>}
           <li><button onClick={e => this.setState({currentPage: 'season'})}>Seasons</button></li>
           <li><button onClick={e => this.setState({currentPage: 'team'})}>Teams</button></li>
           <li><button onClick={e => this.setState({currentPage: 'result'})}>Result</button></li>

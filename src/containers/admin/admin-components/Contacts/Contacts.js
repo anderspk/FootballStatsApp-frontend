@@ -3,9 +3,6 @@ import axios from 'axios';
 import Table from '../Table';
 import EditPage from './EditContact';
 import AddPage from './AddContact';
-import { connect } from 'react-redux';
-import { fetchTableData, setRowAPIhelpers } from '../../../../actions/actions';
-
 
 class Contacts extends Component {
 
@@ -23,37 +20,31 @@ class Contacts extends Component {
   }
 
 
-  componentWillMount() {
-    this.props.fetchTableData('https://case-users.herokuapp.com/showContacts');
-  }
+  componentDidMount() {
 
-  componentWillReceiveProps(newProps) {
-    this.doThing(newProps);
-    this.setState({table: newProps.table});
-  }
+    const contacts = axios.get('https://case-users.herokuapp.com/showContacts');
+    const persons = axios.get("http://case-person.herokuapp.com/showPersons");
 
-  doThing(input) {
-    let counter=0;
-    input.table.data.forEach((row, i) => {
-      axios.get("https://case-person.herokuapp.com/showPersons/" + row.person_id).then(first => {
-        first = first.data.first_name + ' ' + first.data.last_name;
-        let newRenderTable = this.state.renderTable;
-        newRenderTable[i] = {
-          contact_id: row.contact_id,
-          person_id: first,
-          contact_type: row.contact_type,
-          contact_detail: row.contact_detail
-        }
-          counter++
-          this.setState({ renderTable: newRenderTable })
-          if (counter > input.table.data.length/4) this.setState({ renderComplete: true })
-
-      })
-    })
+    Promise.all([contacts, persons]).then(values => {
+      const renderTable = [];
+      values[0].data.forEach((contact) => {
+        const person = values[1].data.find(person => person.person_id === contact.person_id);
+        renderTable.push({
+          contact_id: contact.contact_id,
+          person_id: person.last_name,
+          contact_type: contact.contact_type,
+          contact_detail: contact.contact_detail
+        });
+      });
+      this.setState({ renderTable: renderTable, values:values });
+    });
   }
 
   onEdit(editItem) {
-    editItem.person_id = this.state.table.data.find(row => row.last_name === editItem.last_name).person_id;
+
+    editItem.contact_id = this.state.values[0].data.find(row => row.player_id === editItem.player_id).contact_id;
+    editItem.person_id = this.state.values[1].data.find(row => row.last_name === editItem.person_id).person_id;
+    
     this.setState({ activePage: 'editPage', itemToEdit: editItem});
   }
 
@@ -63,7 +54,6 @@ class Contacts extends Component {
 
   onRouteChange = () => {
     this.setState({activePage: 'table'})
-    this.doThing(this.state);
   }
 
   getView() {
@@ -81,7 +71,7 @@ class Contacts extends Component {
 
   
   render() {
-    if (!this.state.renderComplete) return 'Loading...';
+    if (!this.state.renderTable) return 'Loading...';
     return ( 
       <div>
         {this.getView()}
@@ -90,10 +80,5 @@ class Contacts extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    table: state.table
-  }
-}
 
-export default connect(mapStateToProps, {fetchTableData, setRowAPIhelpers})(Contacts);
+export default Contacts;

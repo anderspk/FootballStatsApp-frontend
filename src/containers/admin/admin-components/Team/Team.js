@@ -4,9 +4,6 @@ import Table from '../Table';
 import EditPage from './EditTeam';
 import AddPage from './AddTeam';
 
-import { connect } from 'react-redux';
-import { fetchTableData, setRowAPIhelpers } from '../../../../actions/actions';
-
 class Team extends Component {
 
   constructor(props) {
@@ -22,63 +19,32 @@ class Team extends Component {
     this.onEdit = this.onEdit.bind(this);
   }
 
- componentWillMount() {
-    this.props.fetchTableData('https://case-team.herokuapp.com/showAllTeamData');
-  }
-
-
-  componentWillReceiveProps(newProps) {
-    this.doThing(newProps);
-  }
-
-  doThing(input) {
-
-    const apiURLs = 
-    ['https://case-person.herokuapp.com/showOneCoach/',
-     'https://case-person.herokuapp.com/showOneOwner/',
-     'http://case-address.herokuapp.com/showOneAddress/'];
+  componentDidMount() {
     
-    const apiURLfieldNames =
-    ['last_name',
-     'last_name',
-     'location_name'];
+    const teams = axios.get("https://case-team.herokuapp.com/showAllTeamData");
+    const coaches = axios.get("https://case-person.herokuapp.com/showCoaches");
+    const owners = axios.get("https://case-person.herokuapp.com/showOwners");
+    const addresses = axios.get("http://case-address.herokuapp.com/showAddresses");
 
-    const columns = [2,3,4];
-    let counter=0;
-    input.table.data.forEach((row,i) => {
-      let index = 0
-      axios.get(apiURLs[index] + row[this.state.itemFields[columns[index]]]).then(first => {
-        first = first.data[apiURLfieldNames[index]];
-        index++;
-        axios.get(apiURLs[index] + row[this.state.itemFields[columns[index]]]).then(second => {
-          second = second.data[apiURLfieldNames[index]];
-          index++;
-          axios.get(apiURLs[index] + row[this.state.itemFields[columns[index]]]).then(third => {
-            third = third.data[apiURLfieldNames[index]];
-              let newRenderTable = this.state.renderTable;
-              newRenderTable[i] = {
-                team_id: row.team_id,
-                association_id: row.association_id,
-                coach_id: first,
-                owner_id: second,
-                location_id: third,
-                association_name:row.association_name,
-                association_description:row.association_description
-              }
-              counter++
-              this.setState({ renderTable: newRenderTable })
-              console.log(counter, input.table.data.length);
-              if (counter > input.table.data.length/4) this.setState({ renderComplete: true })
-
-            })
-          })
-        });
-      })
+    Promise.all([teams, coaches, owners, addresses]).then(values => {
+      const renderTable = [];
+      values[0].data.forEach((team, i) => {
+        const coach = values[1].data.find(coach => coach.coach_id === team.coach_id);
+        const owner = values[2].data.find(owner => owner.owner_id === team.owner_id);
+        const location = values[3].data.find(location => location.location_id === team.location_id);
+        renderTable[i] = {
+          team_id: team.team_id,
+          association_id: team.association_id,
+          coach_id: coach.last_name,
+          owner_id: owner.last_name,
+          location_id: location.location_name,
+          association_name: team.association_name,
+          association_description: team.association_description
+        }
+      });
+      this.setState({ renderTable: renderTable });
+    });
   }
-
-
-
-
 
   onEdit(editItem) {
     this.setState({ activePage: 'editPage', itemToEdit: editItem});
@@ -113,6 +79,7 @@ class Team extends Component {
   }
 
   render() {
+    if (!this.state.renderTable) return 'Loading...';
     return ( 
       <div>
         {this.getView()}
@@ -128,4 +95,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps, {fetchTableData, setRowAPIhelpers})(Team);
+export default Team;

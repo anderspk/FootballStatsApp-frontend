@@ -12,7 +12,7 @@ class AddPlayer extends Component {
       dataToSend: {first_name: null, last_name: null, date_of_birth: null, address_id: null, normal_position: null, number: null, team_id: null} ,
       validation: {first_name: true, last_name: true, date_of_birth: true, address_id: true, normal_position: true, number: true, team_id: true},
       addressInput: "",
-      teamInput: `${props.itemToEdit.team_id}`,
+      teamInput: "",
       addTeamInput: "",
       renderAddresses: false,
       renderTeams: false
@@ -43,7 +43,6 @@ class AddPlayer extends Component {
 
 
   componentWillMount() {
-    console.log(this.props.itemToEdit, 'itemtoedit');
     axios
       .get("https://case-address.herokuapp.com/showAddresses")
       .then(response => {
@@ -140,23 +139,13 @@ class AddPlayer extends Component {
     if(!this.validateForm()){
       return console.log('error');
     }else{
-      if (this.props.toEdit) {
-        let dataToSend = {person_id: this.props.itemToEdit.person_id, ...this.state.dataToSend, player_image: null};
-        console.log(dataToSend, "datatosend");
-        axios
-          .put(this.props.apiURL, dataToSend)
-          .then(response => this.props.onRouteChange())
-          .then(this.createNotification('info'))
-          .catch(error => console.log(error));
-      } else {
-        axios
-          .post(this.props.apiURL, this.state.dataToSend)
-          .then(response => this.props.onRouteChange())
-          .then(this.createNotification('success'))
-          .catch(error => console.log(error));
-      }
-
-      }  
+      console.log("data to send = ", this.state.dataToSend);
+      axios
+        .put(this.props.apiURL, this.state.dataToSend)
+        .then(response => this.props.onRouteChange())
+        .then(this.createNotification('info'))
+        .catch(error => console.log(error));
+    }
   }
 
   // HANDLE ADDRESS DROPDOWN

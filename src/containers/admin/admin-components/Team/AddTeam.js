@@ -124,7 +124,6 @@ class AddMatch extends Component {
     axios
       .post(this.props.associationApiURL, this.state.dataToSend)
       .catch(error => console.log(error));
-
     axios
       .post(this.props.teamApiURL, this.state.dataToSend)
       .then(response => this.props.onRouteChange())
