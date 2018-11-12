@@ -67,7 +67,6 @@ class Dashboard extends Component {
 
         <div className='admin-dashboard-graph'>
 
-          Graph
           </div>
       </section>
     )

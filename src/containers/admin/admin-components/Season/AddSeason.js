@@ -101,11 +101,11 @@ class AddAddress extends Component {
         <form autoComplete="off" onSubmit={e => this.handleSubmit(e)}>
         <label className="col-2 col-form-label">Start Date</label>
           {!this.state.validation.start_date && <span className="help-block">Please fill out this field!</span>}
-          <input className="form-control" type="text" name="start_date" onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, start_date: e.target.value}})}} />
+          <input className="form-control" type="date" name="start_date" onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, start_date: e.target.value}})}} />
         
         <label className="col-2 col-form-label">End Date</label>
           {!this.state.validation.end_date && <span className="help-block">Please fill out this field!</span>}
-          <input className="form-control" type="text" name="end_date" onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, end_date: e.target.value}})}} />
+          <input className="form-control" type="date" name="end_date" onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, end_date: e.target.value}})}} />
         
         <label className="col-2 col-form-label">Season Name</label>
           {!this.state.validation.name && <span className="help-block">Please fill out this field!</span>}

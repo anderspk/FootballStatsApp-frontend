@@ -3,8 +3,6 @@ import axios from 'axios';
 import Table from '../Table';
 import EditPage from './EditResult';
 import AddPage from './AddResult';
-import { connect } from 'react-redux';
-import { fetchTableData, setRowAPIhelpers } from '../../../../actions/actions';
 
 class Result extends Component {
 
@@ -21,37 +19,31 @@ class Result extends Component {
     this.onEdit = this.onEdit.bind(this);
   }
 
-  componentWillMount() {
-    this.props.fetchTableData('https://case-results.herokuapp.com/showResults');
-  }
+componentDidMount() {
+    
+    const resuls = axios.get("https://case-results.herokuapp.com/showResults");
+    const teams = axios.get("https://case-team.herokuapp.com/showAllTeamData/");
 
-  componentWillReceiveProps(newProps) {
-    this.doThing(newProps);
-  }
-
-  doThing(input) {
-    let counter=0;
-    input.table.data.forEach((row, i) => {
-      axios.get("https://case-team.herokuapp.com/showAllTeamData/" + row.team_id).then(first => {
-        first = first.data.association_name;
-        let newRenderTable = this.state.renderTable;
-        newRenderTable[i] = {
-          match_id: row.match_id,
-          team_id: first,
-          score: row.score,
-          result: row.result
+    Promise.all([resuls, teams]).then(values => {
+      const renderTable = [];
+      values[0].data.forEach((result, i) => {
+        const team = values[1].data.find(team => team.team_id === result.team_id);
+        renderTable[i] = {
+          match_id: result.match_id,
+          team_id: team.association_name,
+          score: result.score,
+          result: result.result
         }
-          counter++
-          this.setState({ renderTable: newRenderTable })
-          if (counter > input.table.data.length/4) this.setState({ renderComplete: true })
-
-      })
-    })
+      });
+      this.setState({ renderTable: renderTable, values:values});
+    });
   }
-
 
   onEdit(editItem) {
     this.setState({ activePage: 'editPage', itemToEdit: editItem});
+
+    editItem.match_id = this.state.values[0].data.find(row => editItem.match_id.includes(row.match_id)).match_id;
+    editItem.team_id = this.state.values[1].data.find(row => row.association_name === editItem.team_id).team_id;
   }
 
   addPage = () => {
@@ -76,7 +68,7 @@ class Result extends Component {
   }
 
   render() {
-    if (!this.state.renderComplete) return 'Loading...';
+    if (!this.state.renderTable) return 'Loading...';
     return ( 
       <div>
         {this.getView()}
@@ -85,10 +77,4 @@ class Result extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    table: state.table
-  }
-}
-
-export default connect(mapStateToProps, {fetchTableData, setRowAPIhelpers})(Result);
+export default Result;

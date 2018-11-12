@@ -4,7 +4,7 @@ import {NotificationContainer, NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 
 
-class AddPlayer extends Component {
+class AddCoach extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -12,7 +12,9 @@ class AddPlayer extends Component {
       dataToSend: {first_name: null, last_name: null, date_of_birth: null, address_id: null} ,
       validation: {first_name: true, last_name: true, date_of_birth: true, address_id: true},
       addressInput: "",
-      renderAddresses: false
+      teamInput: "",
+      renderAddresses: false,
+      renderTeams: false
     };
   }
 
@@ -78,7 +80,7 @@ class AddPlayer extends Component {
       isValidated = false;
     }
 
-
+    // address
     if(address){
       validation.address_id = true;
       dataToSend.address_id = address.address_id;
@@ -94,10 +96,10 @@ class AddPlayer extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
+    console.log('object 1 = ', this.state.dataToSend)
     if(!this.validateForm()){
       return console.log('error');
     }else{
-    console.log('object 1 = ', this.state.dataToSend)
     axios
       .post(this.props.apiURL, this.state.dataToSend)
       .then(response => this.props.onRouteChange())
@@ -144,18 +146,18 @@ class AddPlayer extends Component {
 
         <form autoComplete="off" onSubmit={e => this.handleSubmit(e)}>
           <label className="col-2 col-form-label">First Name</label>
-          {!this.state.validation.first_name && <span className="help-block">Please fill out this field</span>}
+          {!this.state.validation.first_name && <span className="help-block">Please correct the error</span>}
           <input className="form-control" type="text" name="first_name" onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, first_name: e.target.value}})}} />
           <label className="col-2 col-form-label">Last Name</label>
-          {!this.state.validation.last_name && <span className="help-block">Please fill out this field</span>}
+          {!this.state.validation.last_name && <span className="help-block">Please correct the error</span>}
           <input className="form-control" type="text" name='last_name' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, last_name: e.target.value}})}} />
           <label className="col-2 col-form-label">Date of Birth</label>
-          {!this.state.validation.date_of_birth && <span className="help-block">Please fill out this field</span>}
-          <input className="form-control" type="text" name='date_of_birth' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, date_of_birth: e.target.value}})}} />
+          {!this.state.validation.date_of_birth && <span className="help-block">Please correct the error</span>}
+          <input className="form-control" type="date" name='date_of_birth' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, date_of_birth: e.target.value}})}} />
           <label className="col-2 col-form-label">Address ID</label>
-          <div autoComplete="off">
+          <div className="autocomplete">
           {!this.state.validation.address_id && <span className="help-block">Please correct the error</span>}
-          <input className="form-control" type="text" name='address_id' value={this.state.addressInput} onFocus={e => this.setState({ renderAddresses: true })} onBlur={e => {
+          <input className="form-control" type="text" name='address_id' value={this.state.addressInput} onClick={e => this.setState({ renderAddresses: true })} onBlur={e => {
                 this.setState({ filteredList: [], renderAddresses: false });
               }} onChange={e => {
                 this.setState({ addressInput: e.target.value });
@@ -171,4 +173,4 @@ class AddPlayer extends Component {
   }
 }
 
-export default AddPlayer;
+export default AddCoach;

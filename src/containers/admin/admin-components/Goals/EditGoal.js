@@ -105,7 +105,6 @@ class AddPlayer extends Component {
     return isValidated;
   }
 
-
   handleSubmit(e) {
     e.preventDefault();
     console.log('object 1 = ', this.state.dataToSend)
@@ -115,7 +114,7 @@ class AddPlayer extends Component {
     axios
       .put(this.props.apiURL, this.state.dataToSend)
       .then(response => this.props.onRouteChange())
-      .then(this.createNotification('success'))
+      .then(this.createNotification('info'))
       .catch(error => console.log(error));
     }  
   }
@@ -221,6 +220,7 @@ class AddPlayer extends Component {
           <input defaultValue={itemToEdit.description} className="form-control" type="text" name='description' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, description: e.target.value}})}} />
           
           <button type="submit" className="btn btn-warning btn-lg">Add</button>
+          {this.props.itemToEdit && <button onClick={e => {axios.delete(deleteURL, itemToEdit).then(response => this.props.onRouteChange()).then(this.createNotification('warning')).catch(error => console.log(error))}} type="button" className="btn btn-danger btn-lg btn-block">Delete</button>}
         </form>
       </section>;
   }

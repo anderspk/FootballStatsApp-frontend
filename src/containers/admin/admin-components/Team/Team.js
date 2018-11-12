@@ -12,7 +12,7 @@ class Team extends Component {
       activePage: 'table',
       itemToEdit: {},
       itemFields: ['team_id', 'association_id', 'coach_id', 'owner_id', 'location_id', 'association_name', 'association_description'],
-      itemFieldsName: ['Team ID', 'Association ID', 'Last Name of Coach', 'Last Name of Owner', 'Location Name', 'Association Name', 'Association Description'],
+      itemFieldsName: ['Team ID', 'Association ID', 'Coach Name', 'Owner Name', 'Location Name', 'Association Name', 'Association Description'],
       renderTable: [],
       renderComplete: false
     }
@@ -35,19 +35,24 @@ class Team extends Component {
         renderTable[i] = {
           team_id: team.team_id,
           association_id: team.association_id,
-          coach_id: coach.last_name,
-          owner_id: owner.last_name,
+          coach_id: coach.first_name + " " + coach.last_name,
+          owner_id: owner.first_name + " " + owner.last_name,
           location_id: location.location_name,
           association_name: team.association_name,
           association_description: team.association_description
         }
       });
-      this.setState({ renderTable: renderTable });
+      this.setState({ renderTable: renderTable, values:values});
     });
   }
 
   onEdit(editItem) {
     this.setState({ activePage: 'editPage', itemToEdit: editItem});
+
+    editItem.coach_id = this.state.values[1].data.find(row => editItem.coach_id.includes(row.last_name)).coach_id;
+    editItem.owner_id = this.state.values[2].data.find(row => editItem.owner_id.includes(row.last_name)).owner_id;
+    editItem.location_id = this.state.values[3].data.find(row => row.location_name === editItem.location_id).location_id;
+    editItem.team_image = this.state.values[0].data.find(row => row.team_id === editItem.team_id).team_image;
   }
 
   addPage = () => {
@@ -68,7 +73,7 @@ class Team extends Component {
                          teamApiURL='https://case-users.herokuapp.com/updateTeam' 
                          teamDeleteURL={`https://case-users.herokuapp.com/deleteTeam/${this.state.itemToEdit.team_id}`} 
                          associationDeleteURL={`https://case-users.herokuapp.com/deleteAssociation/${this.state.itemToEdit.association_id}`} 
-                         editName='Team'/>
+                         editName={this.state.itemFields.association_name}/>
       case 'addPage':
         return <AddPage formFields={this.state.itemFields} onRouteChange={this.onRouteChange} 
                         associationApiURL='https://case-users.herokuapp.com/createAssociation' 
@@ -85,13 +90,6 @@ class Team extends Component {
         {this.getView()}
       </div>
     )
-  }
-}
-
-
-const mapStateToProps = state => {
-  return {
-    table: state.table
   }
 }
 

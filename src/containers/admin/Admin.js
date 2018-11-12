@@ -76,8 +76,8 @@ class Admin extends Component {
         <ul className='admin-menu'>
           <li><button onClick={e => this.setState({currentPage: 'dashBoard'})}>Dashboard</button></li>
           <li><button onClick={e => this.setState({currentPage: 'address'})}>Address</button></li>
-          <li><button onClick={e => this.setState({currentPage: 'person'})}>Person</button></li>
           <li><button onClick={e => this.setState({ showPeople: !showPeople })}>People</button></li>
+          {showPeople && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'person'})}>All People</button></li>}
           {showPeople && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'player'})}>Players</button></li>}
           {showPeople && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'coach'})}>Coaches</button></li>}
           {showPeople && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'owner'})}>Owners</button></li>}

@@ -10,13 +10,13 @@ const editPage = ({itemToEdit, createNotification, onRouteChange, apiURL, delete
      return () => {
        switch (type) {
          case 'info':
-           NotificationManager.info('The goal was edited!', 'Goal Edited');
+           NotificationManager.info('The result was edited!', 'Result Edited');
            break;
          case 'success':
            NotificationManager.success('A new address was created!', 'New Address');
            break;
          case 'warning':
-           NotificationManager.warning('The goal was deleted!', 'Goal Deleted', 3000);
+           NotificationManager.warning('The result was deleted!', 'Result Deleted', 3000);
            break;
          case 'error':
            NotificationManager.error('Error message', 'You must delete the person associated with this address before you delete the address', 5000, () => {
@@ -35,7 +35,7 @@ const editPage = ({itemToEdit, createNotification, onRouteChange, apiURL, delete
       <form>
       {
         Object.keys(itemToEdit).map((itemProperty, i) => {
-          if(i === 0) return;
+          if(i === 0 || i === 1) return;
           return (
             <div className='form-group' key={i}>
               <label className='col-2 col-form-label'>{itemProperty}</label>

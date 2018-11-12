@@ -9,7 +9,7 @@ class AddPlayer extends Component {
     super(props);
     this.state = {
       filteredList: [],
-      dataToSend: {first_name: null, last_name: null, date_of_birth: null, address_id: null, normal_position: null, number: null, team_id: null} ,
+      dataToSend: {first_name: null, last_name: null, date_of_birth: null, address_id: null, normal_position: null, number: null, team_id: null, player_image: null} ,
       validation: {first_name: true, last_name: true, date_of_birth: true, address_id: true, normal_position: true, number: true, team_id: true},
       addressInput: "",
       teamInput: "",
@@ -129,17 +129,35 @@ class AddPlayer extends Component {
       isValidated = false;
     }
 
+    // team id
+    if(team){
+      validation.team_id = true;
+      dataToSend.team_id = team.team_id;
+    } else { 
+      validation.team_id = false;
+      isValidated = false;
+    }
+
     this.setState({ validation: validation })
     return isValidated;
+  }
+
+  sendImage(){
+    let image_object = {player_image: this.state.dataToSend.player_image, player_id: this.state.dataToSend.player_id};
+    return image_object;
   }
 
 
   handleSubmit(e) {
     e.preventDefault();
+    console.log(this.sendImage(), "object")
     if(!this.validateForm()){
       return console.log('error');
     }else{
-      console.log("data to send = ", this.state.dataToSend);
+      axios
+        .put("https://case-users.herokuapp.com/updatePlayerImage", this.sendImage())
+        .catch(error => console.log(error));
+
       axios
         .put(this.props.apiURL, this.state.dataToSend)
         .then(response => this.props.onRouteChange())
@@ -226,7 +244,7 @@ class AddPlayer extends Component {
           {/* DATE OF BIRTH */}
           <label className="col-2 col-form-label">Date of Birth</label>
           {!this.state.validation.date_of_birth && <span className="help-block">Please fill out this field</span>}
-          <input defaultValue={itemToEdit.date_of_birth} className="form-control" type="text" name='date_of_birth' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, date_of_birth: e.target.value}})}} />
+          <input defaultValue={itemToEdit.date_of_birth} className="form-control" type="date" name='date_of_birth' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, date_of_birth: e.target.value}})}} />
           
           {/* ADDRESS ID*/}
           <label className="col-2 col-form-label">Address Name</label>
@@ -267,8 +285,13 @@ class AddPlayer extends Component {
               {this.state.renderTeams && this.renderTeamDropdown()}
             </div>
           </div>
+
+          {/*IMAGES*/}
+          <label className="col-2 col-form-label">Images</label>
+          <input defaultValue={itemToEdit.player_image} className="form-control" type="text" name='player_image' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, player_image: e.target.value}})}} />
+
           <button type="submit" className="btn btn-warning btn-lg">Edit</button>
-          {this.props.toEdit && <button onClick={e => {axios.delete(deleteURL, itemToEdit).then(response => this.props.onRouteChange()).then(this.props.createNotification('warning')).catch(error => console.log(error))}} type="button" className="btn btn-danger btn-lg btn-block">Delete</button>}
+          {this.props.itemToEdit && <button onClick={e => {axios.delete(deleteURL, itemToEdit).then(response => this.props.onRouteChange()).then(this.createNotification('warning')).catch(error => console.log(error))}} type="button" className="btn btn-danger btn-lg btn-block">Delete</button>}
 
         </form>
       </section>;

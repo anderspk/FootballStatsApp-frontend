@@ -4,10 +4,6 @@ import PeopleTable from '../Table';
 import EditPage from './EditPage';
 import AddPage from './AddOwner';
 
-import { connect } from 'react-redux';
-import { fetchTableData, setRowAPIhelpers } from '../../../../actions/actions';
-
-
 class Owner extends Component {
 
   constructor(props) {
@@ -16,7 +12,7 @@ class Owner extends Component {
       activePage: 'personTable',
       itemToEdit: {},
       itemFields: ['owner_id', 'first_name', 'last_name', 'date_of_birth', 'address_id'],
-      itemFieldsName: ['ID', 'First Name', 'Last Name', 'Date of Birth', 'Address ID'],
+      itemFieldsName: ['ID', 'First Name', 'Last Name', 'Date of Birth', 'Address Name'],
       itemFieldsForAdd: ['first_name', 'last_name', 'date_of_birth', 'address_id'],
       renderTable: [],
       renderComplete: false
@@ -24,36 +20,31 @@ class Owner extends Component {
     this.onEdit = this.onEdit.bind(this);
   }
 
-  componentWillMount() {
-    this.props.fetchTableData('https://case-person.herokuapp.com/showOwners');
-  }
 
-  componentWillReceiveProps(newProps) {
-    this.doThing(newProps);
-  }
+  componentDidMount() {
 
-  doThing(input) {
-    let counter=0;
-    input.table.data.forEach((row, i) => {
-      axios.get("https://case-address.herokuapp.com/showOneAddress/" + row.address_id).then(first => {
-        first = first.data.location_name;
-        let newRenderTable = this.state.renderTable;
-        newRenderTable[i] = {
-          owner_id: row.owner_id,
-          first_name: row.first_name,
-          last_name: row.last_name,
-          date_of_birth: row.date_of_birth,
-          address_id: first
-        }
-          counter++
-          this.setState({ renderTable: newRenderTable })
-          if (counter > input.table.data.length/4) this.setState({ renderComplete: true })
+    const owners = axios.get("https://case-person.herokuapp.com/showOwners");
+    const addresses = axios.get("http://case-address.herokuapp.com/showAddresses");
 
-      })
-    })
+    Promise.all([owners, addresses]).then(values => {
+      const renderTable = [];
+      values[0].data.forEach((owner) => {
+        const address = values[1].data.find(address => address.address_id === owner.address_id);
+        renderTable.push({
+          owner_id: owner.owner_id,
+          first_name: owner.first_name,
+          last_name: owner.last_name,
+          date_of_birth: owner.date_of_birth,
+          address_id: address.address_line_1,
+        });
+      });
+      this.setState({ renderTable: renderTable, values:values });
+    });
   }
 
   onEdit(editItem) {
+    editItem.person_id = this.state.values[0].data.find(row => row.owner_id === editItem.owner_id).person_id;
+    editItem.address_id = this.state.values[1].data.find(row => row.address_line_1 === editItem.address_id).address_id;
     this.setState({ activePage: 'editPage', itemToEdit: editItem});
   }
 
@@ -87,11 +78,4 @@ class Owner extends Component {
   }
 }
 
-
-const mapStateToProps = state => {
-  return {
-    table: state.table
-  }
-}
-
-export default connect(mapStateToProps, {fetchTableData, setRowAPIhelpers})(Owner);
+export default Owner;

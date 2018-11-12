@@ -153,7 +153,7 @@ class AddOwner extends Component {
           <input className="form-control" type="text" name='last_name' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, last_name: e.target.value}})}} />
           <label className="col-2 col-form-label">Date of Birth</label>
           {!this.state.validation.date_of_birth && <span className="help-block">Please correct the error</span>}
-          <input className="form-control" type="text" name='date_of_birth' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, date_of_birth: e.target.value}})}} />
+          <input className="form-control" type="date" name='date_of_birth' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, date_of_birth: e.target.value}})}} />
           <label className="col-2 col-form-label">Address ID</label>
           <div className="autocomplete">
           {!this.state.validation.address_id && <span className="help-block">Please correct the error</span>}

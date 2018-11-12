@@ -155,7 +155,7 @@ class AddPlayer extends Component {
           
           <label className="col-2 col-form-label">Date of Birth</label>
           {!this.state.validation.date_of_birth && <span className="help-block">Please fill out this field</span>}
-            <input className="form-control" type="text" name='date_of_birth' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, date_of_birth: e.target.value}})}} />
+            <input className="form-control" type="date" name='date_of_birth' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, date_of_birth: e.target.value}})}} />
           
           {/* ADDRESS ID */}
           <label className="col-2 col-form-label">Address Name</label>

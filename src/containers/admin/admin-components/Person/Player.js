@@ -51,6 +51,7 @@ class Player extends Component {
     editItem.person_id = this.state.values[0].data.find(row => row.player_id === editItem.player_id).person_id;
     editItem.address_id = this.state.values[1].data.find(row => row.address_line_1 === editItem.address_id).address_id;
     editItem.team_id = this.state.values[2].data.find(row => row.association_name === editItem.team_id).team_id;
+    editItem.player_image = this.state.values[0].data.find(row => row.player_id === editItem.player_id).player_image;
 
     this.setState({ activePage: 'editPage', itemToEdit: editItem});
   }

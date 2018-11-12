@@ -116,7 +116,7 @@ class AddPlayer extends Component {
     let newsToSend = {news_string: newsData, team_id: null, player_id: Number(this.state.dataToSend.player_id)};
 
     return newsToSend;
-}
+    }
 
 
   handleSubmit(e) {
@@ -128,7 +128,7 @@ class AddPlayer extends Component {
     }else{
       console.log(this.createNews(), "test")
     axios
-      .post("https://case-users.herokuapp.com/createNews", this.createNews())
+      .post("https://case-users3.herokuapp.com/createNews", this.createNews())    // 
       .catch(error => console.log(error));
     axios
       .post(this.props.apiURL, this.state.dataToSend)

@@ -4,10 +4,6 @@ import PeopleTable from '../Table';
 import EditPage from './EditPage';
 import AddPage from './AddCoach';
 
-import { connect } from 'react-redux';
-import { fetchTableData, setRowAPIhelpers } from '../../../../actions/actions';
-
-
 class Coach extends Component {
 
   constructor(props) {
@@ -16,7 +12,7 @@ class Coach extends Component {
       activePage: 'personTable',
       itemToEdit: {},
       itemFields: ['coach_id', 'first_name', 'last_name', 'date_of_birth', 'address_id'],
-      itemFieldsName: ['ID', 'First Name', 'Last Name', 'Date of Birth', 'Address ID'],
+      itemFieldsName: ['ID', 'First Name', 'Last Name', 'Date of Birth', 'Address Name'],
       itemFieldsForAdd: ['first_name', 'last_name', 'date_of_birth', 'address_id'],
       renderTable: [],
       renderComplete: false
@@ -35,7 +31,6 @@ componentDidMount() {
         const address = values[1].data.find(address => address.address_id === player.address_id);
         renderTable.push({
           coach_id: player.coach_id,
-          player_id: player.player_id,
           first_name: player.first_name,
           last_name: player.last_name,
           date_of_birth: player.date_of_birth,
@@ -48,9 +43,8 @@ componentDidMount() {
 
 
   onEdit(editItem) {
-    editItem.person_id = this.state.values[0].data.find(row => row.player_id === editItem.player_id).person_id;
+    editItem.person_id = this.state.values[0].data.find(row => row.coach_id === editItem.coach_id).person_id;
     editItem.address_id = this.state.values[1].data.find(row => row.address_line_1 === editItem.address_id).address_id;
-
     this.setState({ activePage: 'editPage', itemToEdit: editItem});
   }
 
@@ -84,11 +78,4 @@ componentDidMount() {
   }
 }
 
-
-const mapStateToProps = state => {
-  return {
-    table: state.table
-  }
-}
-
-export default connect(mapStateToProps, {fetchTableData, setRowAPIhelpers})(Coach);
+export default Coach;

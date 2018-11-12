@@ -138,7 +138,6 @@ class AddPlayer extends Component {
 
   render() {
     const { deleteURL, itemToEdit } = this.props;
-    console.log("test = ", this.state.personInput);
     return <section className="container">
         {this.state.autoCompleteList}
         <h1>Add {this.props.addName}</h1>
@@ -156,6 +155,7 @@ class AddPlayer extends Component {
           <input defaultValue={itemToEdit.contact_detail} className="form-control" type="text" name='contact_detail' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, contact_detail: e.target.value}})}} />
           <button type="submit" className="btn btn-warning btn-lg">Add</button>
 
+          {this.props.itemToEdit && <button onClick={e => {axios.delete(deleteURL, itemToEdit).then(response => this.props.onRouteChange()).then(this.createNotification('warning')).catch(error => console.log(error))}} type="button" className="btn btn-danger btn-lg btn-block">Delete</button>}
 
         </form>
       </section>;
