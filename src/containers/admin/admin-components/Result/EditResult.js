@@ -39,7 +39,7 @@ class EditResult extends Component {
 
   componentWillMount() {
     axios
-      .get("http://case-team.herokuapp.com/showAllTeamData")
+      .get("https://case-team.herokuapp.com/showAllTeamData")
       .then(response => {
           const teamInput = response.data.find(players => players.team_id === this.props.itemToEdit.team_id).association_name;
           this.setState({ teams: response.data, teamInput: teamInput });

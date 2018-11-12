@@ -23,7 +23,7 @@ class Player extends Component {
   componentDidMount() {
 
     const players = axios.get("https://case-person.herokuapp.com/showPlayers");
-    const addresses = axios.get("http://case-address.herokuapp.com/showAddresses");
+    const addresses = axios.get("https://case-address.herokuapp.com/showAddresses");
     const teams = axios.get("https://case-team.herokuapp.com/showAllTeamData");
 
     Promise.all([players, addresses, teams]).then(values => {

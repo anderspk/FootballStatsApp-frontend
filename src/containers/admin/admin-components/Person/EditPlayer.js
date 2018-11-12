@@ -50,7 +50,7 @@ class AddPlayer extends Component {
         this.setState({ addresses: response.data, addressInput: addressInput });
       });
     axios
-      .get("http://case-team.herokuapp.com/showAllTeamData")
+      .get("https://case-team.herokuapp.com/showAllTeamData")
       .then(response => {
         const teamInput = response.data.find(team => team.team_id === this.props.itemToEdit.team_id).association_name;
         this.setState({ teams: response.data, teamInput: teamInput })

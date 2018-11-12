@@ -70,14 +70,14 @@ class AddMatch extends Component {
         });
     // seasons
     axios
-      .get("http://case-season.herokuapp.com/showSeasons")
+      .get("https://case-season.herokuapp.com/showSeasons")
       .then(response => {
           const seasonInput = response.data.find(seasons => seasons.season_id === this.props.itemToEdit.season_id).name;
           this.setState({ seasons: response.data, seasonInput: seasonInput });
         });
     // addresses
     axios
-      .get("http://case-address.herokuapp.com/showAddresses")
+      .get("https://case-address.herokuapp.com/showAddresses")
       .then(response => {
           const addressInput = response.data.find(addresses => addresses.location_id === this.props.itemToEdit.location_id).location_name;
           this.setState({ addresses: response.data, addressInput: addressInput });

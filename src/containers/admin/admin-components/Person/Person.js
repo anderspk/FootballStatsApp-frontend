@@ -44,7 +44,7 @@ class Person extends Component {
       case 'editPage':
         return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/updatePerson' deleteURL={`https://case-users.herokuapp.com/deletePerson/${this.state.itemToEdit.person_id}`} editName='Person'/>
       case 'addPage':
-        return <AddPage formFields={this.state.itemFieldsForAdd} onRouteChange={this.onRouteChange} apiURL='http://case-users.herokuapp.com/createPerson' addName='Person' />
+        return <AddPage formFields={this.state.itemFieldsForAdd} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/createPerson' addName='Person' />
       default:
         break;
     }

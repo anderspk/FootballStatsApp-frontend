@@ -23,7 +23,7 @@ class Contacts extends Component {
   componentDidMount() {
 
     const contacts = axios.get('https://case-users.herokuapp.com/showContacts');
-    const persons = axios.get("http://case-person.herokuapp.com/showPersons");
+    const persons = axios.get("https://case-person.herokuapp.com/showPersons");
 
     Promise.all([contacts, persons]).then(values => {
       const renderTable = [];

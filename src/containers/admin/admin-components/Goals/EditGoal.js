@@ -49,7 +49,7 @@ class AddPlayer extends Component {
         });
 
     axios
-      .get("http://case-goal.herokuapp.com/showGoalTypes")
+      .get("https://case-goal.herokuapp.com/showGoalTypes")
       .then(response => {
           const goalTypeInput = response.data.find(goalTypes => goalTypes.goal_type_id === this.props.itemToEdit.goal_type_id).type;
           this.setState({ goalTypes: response.data, goalTypeInput: goalTypeInput });

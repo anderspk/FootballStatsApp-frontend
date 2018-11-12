@@ -52,14 +52,14 @@ componentWillMount() {
         });
     // owner_id
     axios
-      .get("http://case-person.herokuapp.com/showOwners")
+      .get("https://case-person.herokuapp.com/showOwners")
       .then(response => {
           const ownerIdInput = response.data.find(owners => owners.owner_id === this.props.itemToEdit.owner_id).last_name;
           this.setState({ owners: response.data, ownerIdInput: ownerIdInput });
         });
     // location_id
     axios
-      .get("http://case-address.herokuapp.com/showAddresses")
+      .get("https://case-address.herokuapp.com/showAddresses")
       .then(response => {
           const addressInput = response.data.find(addresses => addresses.location_id === this.props.itemToEdit.location_id).location_name;
           this.setState({ addresses: response.data, addressInput: addressInput });

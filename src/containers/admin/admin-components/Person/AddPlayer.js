@@ -50,7 +50,7 @@ class AddPlayer extends Component {
         this.setState({ addresses: response.data});
       });
     axios
-      .get("http://case-team.herokuapp.com/showAllTeamData")
+      .get("https://case-team.herokuapp.com/showAllTeamData")
       .then(response => {
         this.setState({ teams: response.data})
       });

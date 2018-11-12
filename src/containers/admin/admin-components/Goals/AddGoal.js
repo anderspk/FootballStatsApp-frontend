@@ -46,16 +46,16 @@ class AddPlayer extends Component {
       .get("https://case-person.herokuapp.com/showPlayers")
       .then(response => this.setState({ players: response.data }));
     axios
-      .get("http://case-goal.herokuapp.com/showGoalTypes")
+      .get("https://case-goal.herokuapp.com/showGoalTypes")
       .then(response => this.setState({ goalTypes: response.data }));
     
     // * NEWS *
     axios
-      .get("http://case-match.herokuapp.com/showMatches")
+      .get("https://case-match.herokuapp.com/showMatches")
       .then(response => this.setState({ matches: response.data }));
 
     axios
-      .get("http://case-team.herokuapp.com/showAllTeamData")
+      .get("https://case-team.herokuapp.com/showAllTeamData")
       .then(response => this.setState({ teams: response.data }));
 
   }

@@ -24,7 +24,7 @@ class Team extends Component {
     const teams = axios.get("https://case-team.herokuapp.com/showAllTeamData");
     const coaches = axios.get("https://case-person.herokuapp.com/showCoaches");
     const owners = axios.get("https://case-person.herokuapp.com/showOwners");
-    const addresses = axios.get("http://case-address.herokuapp.com/showAddresses");
+    const addresses = axios.get("https://case-address.herokuapp.com/showAddresses");
 
     Promise.all([teams, coaches, owners, addresses]).then(values => {
       const renderTable = [];
