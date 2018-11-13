@@ -31,7 +31,6 @@ class AddMatch extends Component {
   }
 
   createNotification = (type) => {
-    console.log(type);
      return () => {
        switch (type) {
          case 'info':
@@ -210,7 +209,6 @@ class AddMatch extends Component {
 
   handleSeasonDropdown = e => {
     let input = e.target.value.toLowerCase();
-    console.log(input, 'input');
     let filteredList = this.state.seasons.filter(season => {
       return season.name.toLowerCase().includes(input);
     });
@@ -266,8 +264,8 @@ class AddMatch extends Component {
 
  
   render() {
-    console.log(this.state.seasonInput, '= seasonInput test')
     const { deleteURL, itemToEdit } = this.props;
+    console.log(deleteURL, "delete")
     return <section className="container">
         {this.state.autoCompleteList}
         <NotificationContainer/>
