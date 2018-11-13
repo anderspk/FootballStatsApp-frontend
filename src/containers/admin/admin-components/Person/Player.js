@@ -29,8 +29,10 @@ class Player extends Component {
     Promise.all([players, addresses, teams]).then(values => {
       const renderTable = [];
       values[0].data.forEach((player) => {
+        console.log(player, 'player');
         const address = values[1].data.find(address => address.address_id === player.address_id);
         const team = values[2].data.find(team => team.team_id === player.team_id);
+        console.log(address, 'address');
         renderTable.push({
           player_id: player.player_id,
           first_name: player.first_name,

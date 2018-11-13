@@ -109,7 +109,7 @@ class AddPlayer extends Component {
     let homeTeam = this.state.teams.find(homeTeam => homeTeam.team_id === match.home_team_id);
     let awayTeam = this.state.teams.find(awayTeam => awayTeam.team_id === match.away_team_id);
 
-    let newsData = player.first_name + " " + player.last_name + " scored a goal with a " + goalType.type.toLowerCase() + " in the lastest match between " + homeTeam.association_name + " and " + awayTeam.association_name;
+    let newsData = player.first_name + " " + player.last_name + " scored a " + goalType.type.toLowerCase() + " in the lastest match between " + homeTeam.association_name + " and " + awayTeam.association_name;
 
     console.log(this.state.dataToSend.player_id, "id")
 
