@@ -35,7 +35,6 @@ class AddPage extends Component {
         <form onSubmit={e => this.handleSubmit(e)}>
         {
           this.props.formFields.map((formField, i) => {
-            if(i === 0 ) return;
             return (
               <div className='form-group' key={i}>
                 <label className='col-2 col-form-label'>{formField}</label>

@@ -9,8 +9,8 @@ class AddPlayer extends Component {
     super(props);
     this.state = {
       filteredList: [],
-      dataToSend: {first_name: null, last_name: null, date_of_birth: null, address_id: null} ,
-      validation: {first_name: true, last_name: true, date_of_birth: true, address_id: true},
+      dataToSend: {first_name: null, last_name: null, date_of_birth: null, address_id: null, normal_position: null, number: null, team_id: null} ,
+      validation: {first_name: true, last_name: true, date_of_birth: true, address_id: true, normal_position: true, number: true, team_id: true},
       addressInput: "",
       teamInput: "",
       addTeamInput: "",
@@ -24,13 +24,13 @@ class AddPlayer extends Component {
      return () => {
        switch (type) {
          case 'info':
-           NotificationManager.info('The person was edited!', 'Person Edited');
+           NotificationManager.info('The player was edited!', 'Player Edited');
            break;
          case 'success':
            NotificationManager.success('A new person was created!', 'New Player');
            break;
          case 'warning':
-           NotificationManager.warning('The person was deleted!', 'Person Deleted', 3000);
+           NotificationManager.warning('The player was deleted!', 'Player Deleted', 3000);
            break;
          case 'error':
            NotificationManager.error('Error message', 'You must delete the person associated with this address before you delete the address', 5000, () => {
@@ -43,13 +43,18 @@ class AddPlayer extends Component {
 
 
   componentWillMount() {
+    console.log(this.props.itemToEdit, 'itemtoedit');
     axios
       .get("https://case-address.herokuapp.com/showAddresses")
       .then(response => {
-        const addressInput = response.data.find(addresses => addresses.address_id === this.props.itemToEdit.address_id).address_line_1;
-        this.setState({ addresses: response.data, addressInput: addressInput });
+        this.setState({ addresses: response.data});
       });
-   }
+    axios
+      .get("http://case-team.herokuapp.com/showAllTeamData")
+      .then(response => {
+        this.setState({ teams: response.data})
+      });
+  }
 
   componentDidMount() {
     const { itemToEdit } = this.props;
@@ -62,6 +67,8 @@ class AddPlayer extends Component {
     const dataToSend = this.state.dataToSend;
 
     let address = this.state.addresses.find(address => address.address_line_1 === this.state.addressInput);
+    let team = this.state.teams.find(team => team.association_name === this.state.teamInput);
+
 
     // first_name
     if(dataToSend.first_name != null){
@@ -96,6 +103,31 @@ class AddPlayer extends Component {
       isValidated = false;
     }
 
+    // normal_position
+    if(dataToSend.normal_position != null){
+      validation.normal_position = true;
+    }else{
+      validation.normal_position = false;
+      isValidated = false;
+    }
+
+    // number
+    if(dataToSend.number != null){
+      validation.number = true;
+    }else{
+      validation.number = false;
+      isValidated = false;
+    }
+
+    // team id
+    if(team){
+      validation.team_id = true;
+      dataToSend.team_id = team.team_id;
+    } else { 
+      validation.team_id = false;
+      isValidated = false;
+    }
+
     this.setState({ validation: validation })
     return isValidated;
   }
@@ -106,13 +138,13 @@ class AddPlayer extends Component {
     if(!this.validateForm()){
       return console.log('error');
     }else{
-      console.log("data to send = ", this.state.dataToSend);
-      axios
-        .put(this.props.apiURL, this.state.dataToSend)
-        .then(response => this.props.onRouteChange())
-        .then(this.createNotification('info'))
-        .catch(error => console.log(error));
-    }
+        console.log(this.state.dataToSend, "datatosend");
+        axios
+          .post(this.props.apiURL, this.state.dataToSend)
+          .then(response => this.props.onRouteChange())
+          .then(this.createNotification('success'))
+          .catch(error => console.log(error));
+   }
   }
 
   // HANDLE ADDRESS DROPDOWN
@@ -143,6 +175,35 @@ class AddPlayer extends Component {
     });
   };
 
+  // HANDLE TEAM DROPDOWN
+
+  handleTeamDropdown = e => {
+    let input = e.target.value.toLowerCase();
+    let filteredList = this.state.teams.filter(team => {
+      return team.association_name.toLowerCase().includes(input);
+    });
+    this.setState({ filteredList: filteredList });
+  };
+
+  renderTeamDropdown = () => {
+    return this.state.filteredList.map(listItem => {
+      return (
+        <div key={listItem.team_id}
+          onMouseDown={e => {
+            this.setState({
+              team_id: listItem.team_id,
+              teamInput: listItem.association_name,
+              filteredList: []
+            });
+          }}
+        >
+          {listItem.association_name}
+        </div>
+      );
+    });
+  };
+
+
   render() {
     const { deleteURL, itemToEdit } = this.props;
     return <section className="container">
@@ -154,23 +215,23 @@ class AddPlayer extends Component {
           {/* FIRST NAME */}
           <label className="col-2 col-form-label">First Name</label>
           {!this.state.validation.first_name && <span className="help-block">Please fill out this field</span>}
-          <input defaultValue={itemToEdit.first_name} className="form-control" type="text" name="first_name" onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, first_name: e.target.value}})}} />
+          <input className="form-control" type="text" name="first_name" onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, first_name: e.target.value}})}} />
 
           {/* LAST NAME */}
           <label className="col-2 col-form-label">Last Name</label>
           {!this.state.validation.last_name && <span className="help-block">Please fill out this field</span>}
-          <input defaultValue={itemToEdit.last_name} className="form-control" type="text" name='last_name' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, last_name: e.target.value}})}} />
+          <input className="form-control" type="text" name='last_name' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, last_name: e.target.value}})}} />
             
           {/* DATE OF BIRTH */}
           <label className="col-2 col-form-label">Date of Birth</label>
           {!this.state.validation.date_of_birth && <span className="help-block">Please fill out this field</span>}
-          <input defaultValue={itemToEdit.date_of_birth} className="form-control" type="date" name='date_of_birth' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, date_of_birth: e.target.value}})}} />
+          <input className="form-control" type="date" name='date_of_birth' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, date_of_birth: e.target.value}})}} />
           
           {/* ADDRESS ID*/}
           <label className="col-2 col-form-label">Address Name</label>
           <div className="autocomplete">
           {!this.state.validation.address_id && <span className="help-block">Please correct the error</span>}
-          <input autocomplete='new-password' className="form-control" type="text" name='address_id' value={this.state.addressInput} onFocus={e => this.setState({ renderAddresses: true })} onBlur={e => {
+          <input autoComplete='new-password' className="form-control" type="text" name='address_id' value={this.state.addressInput} onFocus={e => this.setState({ renderAddresses: true })} onBlur={e => {
                 this.setState({ filteredList: [], renderAddresses: false });
               }} onChange={e => {
                 this.setState({ addressInput: e.target.value });
@@ -181,8 +242,31 @@ class AddPlayer extends Component {
             </div>
           </div>
           
-          <button type="submit" className="btn btn-warning btn-lg">Edit</button>
-          {this.props.toEdit && <button onClick={e => {axios.delete(deleteURL, itemToEdit).then(response => this.props.onRouteChange()).then(this.createNotification('warning')).catch(error => console.log(error))}} type="button" className="btn btn-danger btn-lg btn-block">Delete</button>}
+          {/* NORMAL POSITION */}
+          <label className="col-2 col-form-label">Normal Position</label>
+          {!this.state.validation.normal_position && <span className="help-block">Please fill out this field</span>}
+          <input className="form-control" type="text" name='normal_position' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, normal_position: e.target.value}})}} />
+          
+          {/* NUMBER*/}
+          <label className="col-2 col-form-label">Number</label>
+          {!this.state.validation.number && <span className="help-block">Please fill out this field</span>}
+          <input className="form-control" type="text" name='number' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, number: e.target.value}})}} />
+          
+          {/* TEAM NAME */}
+          <label className="col-2 col-form-label">Team Name</label>
+          <div className="autocomplete">
+          {!this.state.validation.team_id && <span className="help-block">Please correct the error</span>}
+            <input autoComplete='new-password' className="form-control" type="text" name='team_id' value={this.state.teamInput} onFocus={e => this.setState({ renderTeams: true })} onBlur={e => {
+                this.setState({ filteredList: [], renderTeams: false });
+              }} onChange={e => {
+                this.setState({ teamInput: e.target.value });
+                this.handleTeamDropdown(e);
+              }} />
+            <div className="autocomplete-items">
+              {this.state.renderTeams && this.renderTeamDropdown()}
+            </div>
+          </div>
+          <button type="submit" className="btn btn-warning btn-lg">Add</button>
 
         </form>
       </section>;

@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import PeopleTable from '../Table';
-import EditPage from './EditPage';
-import AddPage from './AddPage';
-import { connect } from 'react-redux';
-import { fetchTableData, setRowAPIhelpers } from '../../../../actions/actions';
+import EditPage from './EditPlayer';
+import AddPage from './AddPlayer';
 
 class Player extends Component {
 
@@ -14,7 +12,7 @@ class Player extends Component {
       activePage: 'personTable',
       itemToEdit: {},
       itemFields: ['player_id', 'first_name', 'last_name', 'date_of_birth', 'address_id', 'normal_position', 'number', 'team_id'],
-      itemFieldsName: ['ID', 'First Name', 'Last Name', 'Date of Birth', 'Address ID', 'Normal Position', 'Number', 'Team'],
+      itemFieldsName: ['ID', 'First Name', 'Last Name', 'Date of Birth', 'Address Name', 'Normal Position', 'Number', 'Team'],
       itemFieldsForAdd: ['first_name', 'last_name', 'date_of_birth', 'address_id', 'normal_position', 'number', 'team_id'],
       renderTable: [],
       renderComplete: false
@@ -22,41 +20,41 @@ class Player extends Component {
     this.onEdit = this.onEdit.bind(this);
   }
 
-  componentWillMount() {
-    this.props.fetchTableData('https://case-person.herokuapp.com/showPlayers');
+  componentDidMount() {
+
+    const players = axios.get("https://case-person.herokuapp.com/showPlayers");
+    const addresses = axios.get("http://case-address.herokuapp.com/showAddresses");
+    const teams = axios.get("https://case-team.herokuapp.com/showAllTeamData");
+
+    Promise.all([players, addresses, teams]).then(values => {
+      const renderTable = [];
+      values[0].data.forEach((player) => {
+        console.log(player, 'player');
+        const address = values[1].data.find(address => address.address_id === player.address_id);
+        const team = values[2].data.find(team => team.team_id === player.team_id);
+        console.log(address, 'address');
+        renderTable.push({
+          player_id: player.player_id,
+          first_name: player.first_name,
+          last_name: player.last_name,
+          date_of_birth: player.date_of_birth,
+          address_id: address.address_line_1,
+          normal_position: player.normal_position,
+          number: player.number,
+          team_id: team.association_name
+        });
+      });
+      this.setState({ renderTable: renderTable, values:values });
+    });
   }
 
-  componentWillReceiveProps(newProps) {
-    this.doThing(newProps);
-  }
-
-  doThing(input) {
-    let counter=0;
-    input.table.data.forEach((row, i) => {
-      axios.get("https://case-team.herokuapp.com/showAllTeamData/" + row.team_id).then(first => {
-        first = first.data.association_name;
-        let newRenderTable = this.state.renderTable;
-        newRenderTable[i] = {
-          player_id: row.player_id,
-          first_name: row.first_name,
-          last_name: row.last_name,
-          date_of_birth: row.date_of_birth,
-          address_id: row.address_id,
-          normal_position: row.normal_position,
-          number: row.number,
-          team_id: first
-        }
-          counter++
-          this.setState({ renderTable: newRenderTable })
-          if (counter > input.table.data.length/4) this.setState({ renderComplete: true })
-
-      })
-    })
-
-    axios.get('https://case-team.herokuapp.com/showAllTeamData/')
-  }
 
   onEdit(editItem) {
+    editItem.person_id = this.state.values[0].data.find(row => row.player_id === editItem.player_id).person_id;
+    editItem.address_id = this.state.values[1].data.find(row => row.address_line_1 === editItem.address_id).address_id;
+    editItem.team_id = this.state.values[2].data.find(row => row.association_name === editItem.team_id).team_id;
+    editItem.player_image = this.state.values[0].data.find(row => row.player_id === editItem.player_id).player_image;
+
     this.setState({ activePage: 'editPage', itemToEdit: editItem});
   }
 
@@ -73,7 +71,8 @@ class Player extends Component {
       case 'personTable':
         return <PeopleTable objectList={this.state.renderTable} onEdit={this.onEdit} addPage={this.addPage} itemFieldsName={this.state.itemFieldsName} itemFields={this.state.itemFields} title='Player' addButton='Add Player' />
       case 'editPage':
-        return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/updatePlayer' deleteURL={`https://case-users.herokuapp.com/deletePlayer/${this.state.itemToEdit.player_id}`} editName='Player'/>
+        return <EditPage itemToEdit={this.state.itemToEdit} formFields={this.state.itemFieldsForAdd} onRouteChange={this.onRouteChange} apiURL="https://case-users.herokuapp.com/updatePlayer" toEdit={true} addName="Player" deleteURL={`https://case-users.herokuapp.com/deletePlayer/${this.state.itemToEdit.player_id}`} />;
+        // return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/updatePlayer' deleteURL={`https://case-users.herokuapp.com/deletePlayer/${this.state.itemToEdit.player_id}`} editName='Player'/>
       case 'addPage':
         return <AddPage formFields={this.state.itemFieldsForAdd} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/createPlayer' addName='Player'/>
       default:
@@ -82,6 +81,7 @@ class Player extends Component {
   }
 
   render() {
+    if (!this.state.renderTable) return 'Loading...';
     return ( 
       <div>
         {this.getView()}
@@ -90,11 +90,4 @@ class Player extends Component {
   }
 }
 
-
-const mapStateToProps = state => {
-  return {
-    table: state.table
-  }
-}
-
-export default connect(mapStateToProps, {fetchTableData, setRowAPIhelpers})(Player);
+export default Player;

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import TableRow from './TableRow';
+import TableRow from '../TableRow';
 
 class Table extends Component {
 
@@ -31,7 +31,6 @@ class Table extends Component {
             return <td>{filteredObject[fieldName]}</td>
           })
         }
-        <td><button className="btn btn-info" onClick={e => {this.props.onEdit(filteredObject)}} >Edit</button></td>
       </tr>
     )
   }
@@ -52,7 +51,6 @@ class Table extends Component {
       <section className='address-page'>
         <div className="container-fluid">
           <h2>{this.props.title}</h2> 
-          <button type="button" className="btn btn-success" onClick={e => this.props.addPage()}>{this.props.addButton}</button>
           <input className='search' type='text' placeholder='Search address' onChange={this.onSearchChange} />
           <table className="table table-striped">
             <thead>

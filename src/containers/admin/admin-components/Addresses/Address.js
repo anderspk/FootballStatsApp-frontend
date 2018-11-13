@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import AddressTable from '../Table';
 import EditPage from './EditAddress';
-import AddPage from '../AddPage';
+import AddPage from './AddAddress';
+
 
 class Address extends Component {
 

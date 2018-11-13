@@ -3,13 +3,13 @@ import axios from "axios";
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 
-class AddAddress extends Component {
+class EditResult extends Component {
   constructor(props) {
     super(props);
     this.state = {
       filteredList: [],
-      dataToSend: {match_id: null, team_id: null, score: null, result: null} ,
-      validation: {match_id: true, team_id: true, score: true, result: true} ,
+      dataToSend: {score: null, result: null} ,
+      validation: {score: true, result: true} ,
       teamInput: "",
       renderTeams: false
     };
@@ -20,13 +20,13 @@ class AddAddress extends Component {
      return () => {
        switch (type) {
          case 'info':
-           NotificationManager.info('Info message');
+           NotificationManager.info('The result was edited!', 'Result Edited');
            break;
          case 'success':
            NotificationManager.success('A new result was added!', 'Added Result');
            break;
          case 'warning':
-           NotificationManager.warning('Warning message', 'Correct the inputs', 3000);
+           NotificationManager.warning('The result was deleted!', 'Result Deleted', 3000);
            break;
          case 'error':
            NotificationManager.error('Error message', 'Click me!', 5000, () => {
@@ -40,8 +40,18 @@ class AddAddress extends Component {
   componentWillMount() {
     axios
       .get("http://case-team.herokuapp.com/showAllTeamData")
-      .then(response => this.setState({ teams: response.data }));
+      .then(response => {
+          const teamInput = response.data.find(players => players.team_id === this.props.itemToEdit.team_id).association_name;
+          this.setState({ teams: response.data, teamInput: teamInput });
+    });
   }
+
+
+  componentDidMount() {
+    const { itemToEdit } = this.props;
+    this.setState({ dataToSend: itemToEdit });
+  }
+
 
   validateForm(){
     let isValidated = true;
@@ -97,9 +107,9 @@ class AddAddress extends Component {
     }else{
     console.log('object to send = ', this.state.dataToSend)
     axios
-      .post(this.props.apiURL, this.state.dataToSend)
+      .put(this.props.apiURL, this.state.dataToSend)
       .then(response => this.props.onRouteChange())
-      .then(this.createNotification('success'))
+      .then(this.createNotification('info'))
       .catch(error => console.log(error));
     }  
   }
@@ -133,43 +143,28 @@ class AddAddress extends Component {
   };
 
   render() {
+    const { deleteURL, itemToEdit } = this.props;
     return <section className="container">
         {this.state.autoCompleteList}
         <h1>Add {this.props.addName}</h1>
         <button className="btn btn-info" onClick={e => this.props.onRouteChange()}>Back</button>
 
         <form autoComplete="off" onSubmit={e => this.handleSubmit(e)}>
-        <label className="col-2 col-form-label">Match ID</label>
-          {!this.state.validation.match_id && <span className="help-block">Please fill out this field!</span>}
-          <input className="form-control" type="text" name="match_id" onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, match_id: e.target.value}})}} />
-        
-         <label className="col-2 col-form-label">Team</label>
-          <div className="autocomplete">
-          {!this.state.validation.team_id && <span className="help-block">Please correct the error</span>}
-            <input className="form-control" type="text" name='team_id' value={this.state.teamInput} onClick={e => this.setState({ renderTeams: true })} onBlur={e => {
-                this.setState({ filteredList: [], renderTeams: false });
-              }} onChange={e => {
-                this.setState({ teamInput: e.target.value });
-                this.handleTeamDropdown(e);
-              }} />
-            <div className="autocomplete-items">
-              {this.state.renderTeams && this.renderTeamDropdown()}
-            </div>
-          </div>
-        
+             
         <label className="col-2 col-form-label">Score</label>
           {!this.state.validation.score && <span className="help-block">Please fill out this field!</span>}
-          <input className="form-control" type="text" name="score" onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, score: e.target.value}})}} />
+          <input defaultValue={itemToEdit.score} className="form-control" type="text" name="score" onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, score: e.target.value}})}} />
         
         <label className="col-2 col-form-label">Result</label>
           {!this.state.validation.result && <span className="help-block">Enter Win, Loss or Draw </span>}
-          <input className="form-control" type="text" name="result" onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, result: e.target.value}})}} />
+          <input defaultValue={itemToEdit.result} className="form-control" type="text" name="result" onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, result: e.target.value}})}} />
         
 
-          <button type="submit" className="btn btn-warning btn-lg">Add</button>
+          <button type="submit" className="btn btn-warning btn-lg">Edit</button>
+          {this.props.itemToEdit && <button onClick={e => {axios.delete(deleteURL, itemToEdit).then(response => this.props.onRouteChange()).then(this.createNotification('warning')).catch(error => console.log(error))}} type="button" className="btn btn-danger btn-lg btn-block">Delete</button>}
         </form>
       </section>;
   }
 }
 
-export default AddAddress;
+export default EditResult;

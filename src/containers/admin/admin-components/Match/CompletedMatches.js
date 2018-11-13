@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import Table from '../Table';
-import EditPage from './EditMatch';
+import Table from './Table';
+import EditPage from '../EditPage';
 import AddPage from './AddMatch';
 
-class Match extends Component {
+class CompletedMatches extends Component {
 
   constructor(props) {
     super(props);
@@ -22,7 +22,7 @@ class Match extends Component {
 
   componentDidMount() {
 
-    const matches = axios.get("https://case-match.herokuapp.com/showMatches");
+    const matches = axios.get("https://case-match.herokuapp.com/showCompletedMatches");
     const teams = axios.get("https://case-team.herokuapp.com/showAllTeamData");
     const seasons = axios.get("http://case-season.herokuapp.com/showSeasons");
     const locations = axios.get("http://case-address.herokuapp.com/showAddresses");
@@ -43,18 +43,12 @@ class Match extends Component {
           location_id: location.location_name
         }
       });
-      this.setState({ renderTable: renderTable, values:values});
+      this.setState({ renderTable: renderTable });
     });
   }
 
 
   onEdit(editItem) {
-    editItem.home_team_id = this.state.values[1].data.find(row => row.association_name === editItem.home_team_id).team_id;
-    editItem.away_team_id = this.state.values[1].data.find(row => row.association_name === editItem.away_team_id).team_id;
-    editItem.season_id = this.state.values[2].data.find(row => row.name === editItem.season_id).season_id;
-    editItem.location_id = this.state.values[3].data.find(row => row.location_name === editItem.location_id).location_id;
-
-    console.log(editItem, " = item to edit")
     this.setState({ activePage: 'editPage', itemToEdit: editItem});
   }
 
@@ -71,16 +65,13 @@ class Match extends Component {
     switch (this.state.activePage) {
       case 'table':
         return <Table objectList={this.state.renderTable} onEdit={this.onEdit} addPage={this.addPage} itemFieldsName={this.state.itemFieldsName} itemFields={this.state.itemFields} title='Matches' addButton='Add Match' helperAPI={this.state.helperAPI} helperAPIfield={this.state.helperAPIfield} />
-      case 'editPage':
-        return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/updateMatch' deleteURL={`https://case-users.herokuapp.com/deleteMatch/${this.state.itemToEdit.match_id}`} editName='Match'/>
-      case 'addPage':
-        return <AddPage formFields={this.state.itemFields} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/createMatch' addName='Match'/>
       default:
         break;
     }
   }
 
   render() {
+    console.log(this.state, 'render');
     if (!this.state.renderTable) return 'Loading...';
     console.log('hit');
     return ( 
@@ -91,4 +82,4 @@ class Match extends Component {
   }
 }
 
-export default Match;
+export default CompletedMatches;

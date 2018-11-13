@@ -4,7 +4,7 @@ import {NotificationContainer, NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 
 
-class AddPlayer extends Component {
+class AddOwner extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -13,27 +13,27 @@ class AddPlayer extends Component {
       validation: {first_name: true, last_name: true, date_of_birth: true, address_id: true},
       addressInput: "",
       teamInput: "",
-      addTeamInput: "",
       renderAddresses: false,
       renderTeams: false
     };
   }
+
 
   createNotification = (type) => {
     console.log(type);
      return () => {
        switch (type) {
          case 'info':
-           NotificationManager.info('The person was edited!', 'Person Edited');
+           NotificationManager.info('Info message');
            break;
          case 'success':
-           NotificationManager.success('A new person was created!', 'New Player');
+           NotificationManager.success('A new owner was created!', 'New Owner');
            break;
          case 'warning':
-           NotificationManager.warning('The person was deleted!', 'Person Deleted', 3000);
+           NotificationManager.warning('Warning message', 'Correct the inputs', 3000);
            break;
          case 'error':
-           NotificationManager.error('Error message', 'You must delete the person associated with this address before you delete the address', 5000, () => {
+           NotificationManager.error('Error message', 'Click me!', 5000, () => {
              alert('callback');
            });
            break;
@@ -45,15 +45,7 @@ class AddPlayer extends Component {
   componentWillMount() {
     axios
       .get("https://case-address.herokuapp.com/showAddresses")
-      .then(response => {
-        const addressInput = response.data.find(addresses => addresses.address_id === this.props.itemToEdit.address_id).address_line_1;
-        this.setState({ addresses: response.data, addressInput: addressInput });
-      });
-   }
-
-  componentDidMount() {
-    const { itemToEdit } = this.props;
-    this.setState({ dataToSend: itemToEdit });
+      .then(response => this.setState({ addresses: response.data }));
   }
  
   validateForm(){
@@ -63,6 +55,7 @@ class AddPlayer extends Component {
 
     let address = this.state.addresses.find(address => address.address_line_1 === this.state.addressInput);
 
+
     // first_name
     if(dataToSend.first_name != null){
       validation.first_name = true;
@@ -71,7 +64,7 @@ class AddPlayer extends Component {
       isValidated = false;
     }
 
-    // last name
+    // result
     if(dataToSend.last_name != null){
       validation.last_name = true;
     }else{
@@ -79,7 +72,7 @@ class AddPlayer extends Component {
       isValidated = false;
     }
 
-    // date of birth
+    // date
     if(dataToSend.date_of_birth != null){
       validation.date_of_birth = true;
     }else{
@@ -87,7 +80,7 @@ class AddPlayer extends Component {
       isValidated = false;
     }
 
-    // Address
+    // address
     if(address){
       validation.address_id = true;
       dataToSend.address_id = address.address_id;
@@ -103,16 +96,16 @@ class AddPlayer extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
+    console.log('object 1 = ', this.state.dataToSend)
     if(!this.validateForm()){
       return console.log('error');
     }else{
-      console.log("data to send = ", this.state.dataToSend);
-      axios
-        .put(this.props.apiURL, this.state.dataToSend)
-        .then(response => this.props.onRouteChange())
-        .then(this.createNotification('info'))
-        .catch(error => console.log(error));
-    }
+    axios
+      .post(this.props.apiURL, this.state.dataToSend)
+      .then(response => this.props.onRouteChange())
+      .then(this.createNotification('success'))
+      .catch(error => console.log(error));
+    }  
   }
 
   // HANDLE ADDRESS DROPDOWN
@@ -144,33 +137,27 @@ class AddPlayer extends Component {
   };
 
   render() {
-    const { deleteURL, itemToEdit } = this.props;
     return <section className="container">
         {this.state.autoCompleteList}
-        <h1>{this.props.toEdit ? 'Edit ' : 'Add'} {this.props.addName}</h1>
-        <button className="btn btn-info" onClick={e => this.props.onRouteChange()}>Back</button>
+        <h1>Add {this.props.addName}</h1>
+        <button className="btn btn-info" onClick={e => this.props.onRouteChange()}>
+          Back
+        </button>
+
         <form autoComplete="off" onSubmit={e => this.handleSubmit(e)}>
-
-          {/* FIRST NAME */}
           <label className="col-2 col-form-label">First Name</label>
-          {!this.state.validation.first_name && <span className="help-block">Please fill out this field</span>}
-          <input defaultValue={itemToEdit.first_name} className="form-control" type="text" name="first_name" onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, first_name: e.target.value}})}} />
-
-          {/* LAST NAME */}
+          {!this.state.validation.first_name && <span className="help-block">Please correct the error</span>}
+          <input className="form-control" type="text" name="first_name" onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, first_name: e.target.value}})}} />
           <label className="col-2 col-form-label">Last Name</label>
-          {!this.state.validation.last_name && <span className="help-block">Please fill out this field</span>}
-          <input defaultValue={itemToEdit.last_name} className="form-control" type="text" name='last_name' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, last_name: e.target.value}})}} />
-            
-          {/* DATE OF BIRTH */}
+          {!this.state.validation.last_name && <span className="help-block">Please correct the error</span>}
+          <input className="form-control" type="text" name='last_name' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, last_name: e.target.value}})}} />
           <label className="col-2 col-form-label">Date of Birth</label>
-          {!this.state.validation.date_of_birth && <span className="help-block">Please fill out this field</span>}
-          <input defaultValue={itemToEdit.date_of_birth} className="form-control" type="date" name='date_of_birth' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, date_of_birth: e.target.value}})}} />
-          
-          {/* ADDRESS ID*/}
-          <label className="col-2 col-form-label">Address Name</label>
+          {!this.state.validation.date_of_birth && <span className="help-block">Please correct the error</span>}
+          <input className="form-control" type="date" name='date_of_birth' onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, date_of_birth: e.target.value}})}} />
+          <label className="col-2 col-form-label">Address ID</label>
           <div className="autocomplete">
           {!this.state.validation.address_id && <span className="help-block">Please correct the error</span>}
-          <input autocomplete='new-password' className="form-control" type="text" name='address_id' value={this.state.addressInput} onFocus={e => this.setState({ renderAddresses: true })} onBlur={e => {
+          <input className="form-control" type="text" name='address_id' value={this.state.addressInput} onClick={e => this.setState({ renderAddresses: true })} onBlur={e => {
                 this.setState({ filteredList: [], renderAddresses: false });
               }} onChange={e => {
                 this.setState({ addressInput: e.target.value });
@@ -180,13 +167,10 @@ class AddPlayer extends Component {
               {this.state.renderAddresses && this.renderAddressDropdown()}
             </div>
           </div>
-          
-          <button type="submit" className="btn btn-warning btn-lg">Edit</button>
-          {this.props.toEdit && <button onClick={e => {axios.delete(deleteURL, itemToEdit).then(response => this.props.onRouteChange()).then(this.createNotification('warning')).catch(error => console.log(error))}} type="button" className="btn btn-danger btn-lg btn-block">Delete</button>}
-
+          <button type="submit" className="btn btn-warning btn-lg">Add</button>
         </form>
       </section>;
   }
 }
 
-export default AddPlayer;
+export default AddOwner;
