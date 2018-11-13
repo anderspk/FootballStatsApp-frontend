@@ -11,8 +11,8 @@ class Team extends Component {
     this.state = {
       activePage: 'table',
       itemToEdit: {},
-      itemFields: ['team_id', 'association_id', 'coach_id', 'owner_id', 'location_id', 'association_name', 'association_description'],
-      itemFieldsName: ['Team ID', 'Association ID', 'Coach Name', 'Owner Name', 'Location Name', 'Association Name', 'Association Description'],
+      itemFields: ['team_id', 'coach_id', 'owner_id', 'location_id', 'association_name', 'association_description'],
+      itemFieldsName: ['Team ID', 'Coach Name', 'Owner Name', 'Location Name', 'Association Name', 'Association Description'],
       renderTable: [],
       renderComplete: false
     }
@@ -32,9 +32,9 @@ class Team extends Component {
         const coach = values[1].data.find(coach => coach.coach_id === team.coach_id);
         const owner = values[2].data.find(owner => owner.owner_id === team.owner_id);
         const location = values[3].data.find(location => location.location_id === team.location_id);
+
         renderTable[i] = {
           team_id: team.team_id,
-          association_id: team.association_id,
           coach_id: coach.first_name + " " + coach.last_name,
           owner_id: owner.first_name + " " + owner.last_name,
           location_id: location.location_name,
@@ -49,10 +49,12 @@ class Team extends Component {
   onEdit(editItem) {
     this.setState({ activePage: 'editPage', itemToEdit: editItem});
 
+    editItem.team_id = this.state.values[0].data.find(row => row.team_id === editItem.team_id).team_id;
+    editItem.association_id = this.state.values[0].data.find(row => row.association_id === editItem.association_id).association_id;
+    editItem.team_image = this.state.values[0].data.find(row => row.team_id === editItem.team_id).team_image;
     editItem.coach_id = this.state.values[1].data.find(row => editItem.coach_id.includes(row.last_name)).coach_id;
     editItem.owner_id = this.state.values[2].data.find(row => editItem.owner_id.includes(row.last_name)).owner_id;
     editItem.location_id = this.state.values[3].data.find(row => row.location_name === editItem.location_id).location_id;
-    editItem.team_image = this.state.values[0].data.find(row => row.team_id === editItem.team_id).team_image;
   }
 
   addPage = () => {

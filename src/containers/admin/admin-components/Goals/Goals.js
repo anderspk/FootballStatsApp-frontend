@@ -32,6 +32,11 @@ componentDidMount() {
       values[0].data.forEach((goal, i) => {
         const player = values[1].data.find(player => player.player_id === goal.player_id);
         const goalType = values[2].data.find(goalType => goalType.goal_type_id === goal.goal_type_id);
+        
+        console.log(goals, " = goals check");
+        console.log(players, " = players check");
+        console.log(goalTypes, " = goalTypes check");
+        
         renderTable[i] = {
           goal_id: goal.goal_id,
           player_id: player.first_name + " " + player.last_name,

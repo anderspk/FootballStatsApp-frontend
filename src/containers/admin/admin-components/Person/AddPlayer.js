@@ -133,18 +133,31 @@ class AddPlayer extends Component {
   }
 
 
+  createNews(){
+    let team = this.state.teams.find(team => team.team_id === this.state.dataToSend.team_id);
+
+    let newsData = this.state.dataToSend.first_name + " " + this.state.dataToSend.last_name + " joined " + team.association_name;
+    let newsToSend = {news_string: newsData, team_id: this.state.dataToSend.team_id, player_id: null};
+
+    return newsToSend;
+    }
+
   handleSubmit(e) {
     e.preventDefault();
     if(!this.validateForm()){
       return console.log('error');
     }else{
-        console.log(this.state.dataToSend, "datatosend");
+        axios
+          .post("https://case-users.herokuapp.com/createNews", this.createNews())   
+          .catch(error => console.log(error));
+        
         axios
           .post(this.props.apiURL, this.state.dataToSend)
           .then(response => this.props.onRouteChange())
           .then(this.createNotification('success'))
           .catch(error => console.log(error));
    }
+
   }
 
   // HANDLE ADDRESS DROPDOWN

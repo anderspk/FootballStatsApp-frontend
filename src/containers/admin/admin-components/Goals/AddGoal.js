@@ -128,7 +128,7 @@ class AddPlayer extends Component {
     }else{
       console.log(this.createNews(), "test")
     axios
-      .post("https://case-users3.herokuapp.com/createNews", this.createNews())    // 
+      .post("https://case-users.herokuapp.com/createNews", this.createNews())    // 
       .catch(error => console.log(error));
     axios
       .post(this.props.apiURL, this.state.dataToSend)
