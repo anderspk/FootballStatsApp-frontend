@@ -82,28 +82,6 @@ class Admin extends Component {
     const { showMatches } = this.state;
     return (
       <section className='admin-page'>
-<<<<<<< HEAD
-      <button onClick={() => this.changeLanguage('no')}>Norwegian</button>
-      <button onClick={() => this.changeLanguage('en')}>English</button>
-        <ul className='admin-menu'>
-          <h1>Admin page</h1>
-          <li><button onClick={e => this.setState({currentPage: 'dashBoard'})}>{t('Dashboard')}</button></li>
-          <li><button onClick={e => this.setState({currentPage: 'address'})}>{t('Address')}</button></li>
-          <li><button onClick={e => this.setState({currentPage: 'person'})}>{t('Person')}</button></li>
-          <li><button onClick={e => this.setState({ showPeople: !showPeople })}>{t('People')}</button></li>
-          {showPeople && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'player'})}>Players</button></li>}
-          {showPeople && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'coach'})}>Coaches</button></li>}
-          {showPeople && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'owner'})}>Owners</button></li>}
-          <li><button onClick={e => this.setState({currentPage: 'contacts'})}>{t('Contacts')}</button></li>
-          <li><button onClick={e => this.setState({currentPage: 'match'})}>{t('Matches')}</button></li>
-          <li><button onClick={e => this.setState({currentPage: 'season'})}>{t('Seasons')}</button></li>
-          <li><button onClick={e => this.setState({currentPage: 'team'})}>{t('Teams')}</button></li>
-          <li><button onClick={e => this.setState({currentPage: 'result'})}>{t('Result')}</button></li>
-          <li><button onClick={e => this.setState({currentPage: 'goals'})}>{t('Goals')}</button></li>
-          <li><button onClick={e => this.setState({currentPage: 'goalType'})}>{t('Goal Type')}</button></li>
-          <li><button onClick={e => this.props.logout()}>Log out</button></li>
-
-=======
       <NotificationContainer/>
         <ul className='admin-menu'>
           <li><button onClick={e => this.setState({currentPage: 'dashBoard'})}>Dashboard</button></li>
@@ -124,7 +102,6 @@ class Admin extends Component {
           <li><button onClick={e => this.setState({currentPage: 'goals'})}>Goals</button></li>
           <li><button onClick={e => this.setState({currentPage: 'goalType'})}>Goal Type</button></li>
           <li><button onClick={e => this.setState({currentPage: 'user'})}>User</button></li>
->>>>>>> ef5e0f46a0bcc2f9e41e601acc5ab836f78cd55a
         </ul>
         <div className='admin-main-container'>
           {this.renderPage()}
