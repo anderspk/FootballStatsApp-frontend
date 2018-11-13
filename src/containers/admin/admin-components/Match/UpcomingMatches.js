@@ -34,6 +34,14 @@ class Match extends Component {
         const away_team = values[1].data.find(team => team.team_id === match.away_team_id);
         const season = values[2].data.find(season => season.season_id === match.season_id);
         const location = values[3].data.find(location => location.location_id === match.location_id);
+
+        
+        console.log(matches, " = matches check");
+        console.log(teams, " = teams check");
+        console.log(seasons, " = seasons check");
+        console.log(locations, " = locations check");
+        
+        
         renderTable[i] = {
           match_id: match.match_id,
           match_date: match.match_date,

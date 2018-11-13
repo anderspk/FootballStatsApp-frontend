@@ -9,8 +9,9 @@ class AddMatch extends Component {
     super(props);
     this.state = {
       filteredList: [],
-      dataToSend: {coach_id: null, owner_id: null, location_id: null, association_name: null, association_description: null, team_image: null} ,
+      dataToSend: {coach_id: null, owner_id: null, location_id: null, association_name: null, association_description: null} ,
       validation: {coach_id: true, owner_id: true, location_id: true, association_name: true, association_description: true},
+      team_image: this.props.itemToEdit.team_image,
       coachIdInput: "",
       ownerIdInput: "",
       addressInput: "",
@@ -133,23 +134,31 @@ componentWillMount() {
     return image_object;
   }
 
+  sendTeam(){
+    let team_object = {team_id: this.state.dataToSend.team_id, coach_id: this.state.dataToSend.coach_id, owner_id: this.state.dataToSend.owner_id, location_id: this.state.dataToSend.location_id, association_name: this.state.dataToSend.association_name, association_description: this.state.dataToSend.association_description};
+    return team_object;
+  }
+
   handleSubmit(e) {
     e.preventDefault();
     if(!this.validateForm()){
       return console.log('error');
     }else{
-    console.log('object 1 = ', this.state.dataToSend)
+      console.log(this.sendTeam(), " = team")
+    /*
     axios
       .put("https://case-users.herokuapp.com/updateTeamImage", this.sendImage())
       .catch(error => console.log(error));
+    /*
     axios
-      .put(this.props.associationApiURL, this.state.dataToSend)
+      .put(this.props.associationApiURL, this.sendTeam())
       .catch(error => console.log(error));
+    */
     axios
-      .put(this.props.teamApiURL, this.state.dataToSend)
+      .put(this.props.teamApiURL, this.sendTeam())
+      .catch(error => console.log(error))
       .then(response => this.props.onRouteChange())
-      .then(this.createNotification('success'))
-      .catch(error => console.log(error));
+      .then(this.createNotification('info'));
     }  
   }
 
@@ -242,6 +251,7 @@ componentWillMount() {
  
   render() {
     const { deleteURL, itemToEdit } = this.props;
+    console.log(itemToEdit.team_image, "image")
     return <section className="container">
         {this.state.autoCompleteList}
         <h1>Edit {this.props.editName}</h1>
