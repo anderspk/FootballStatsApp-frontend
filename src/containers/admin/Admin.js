@@ -12,9 +12,13 @@ import Goals from './admin-components/Goals/Goals';
 import GoalType from './admin-components/GoalType/GoalType';
 import Contacts from './admin-components/Contacts/Contacts';
 import Dashboard from './admin-components/Dashboard';
+import i18n from '../../i18n';
+import { withNamespaces } from 'react-i18next';
+import t from "i18next";
 
 class Admin extends Component {
   constructor(props) {
+    console.log(props, 'props')
     super(props);
     this.state = {
       currentPage: 'dashBoard',
@@ -55,25 +59,36 @@ class Admin extends Component {
     }
   }
 
+  changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  }
+
   render() {
+
+    const { t } = this.props;
     const { showPeople } = this.state;
     return (
       <section className='admin-page'>
+      <button onClick={() => this.changeLanguage('no')}>Norwegian</button>
+      <button onClick={() => this.changeLanguage('en')}>English</button>
         <ul className='admin-menu'>
-          <li><button onClick={e => this.setState({currentPage: 'dashBoard'})}>Dashboard</button></li>
-          <li><button onClick={e => this.setState({currentPage: 'address'})}>Address</button></li>
-          <li><button onClick={e => this.setState({currentPage: 'person'})}>Person</button></li>
-          <li><button onClick={e => this.setState({ showPeople: !showPeople })}>People</button></li>
+          <h1>Admin page</h1>
+          <li><button onClick={e => this.setState({currentPage: 'dashBoard'})}>{t('Dashboard')}</button></li>
+          <li><button onClick={e => this.setState({currentPage: 'address'})}>{t('Address')}</button></li>
+          <li><button onClick={e => this.setState({currentPage: 'person'})}>{t('Person')}</button></li>
+          <li><button onClick={e => this.setState({ showPeople: !showPeople })}>{t('People')}</button></li>
           {showPeople && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'player'})}>Players</button></li>}
           {showPeople && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'coach'})}>Coaches</button></li>}
           {showPeople && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'owner'})}>Owners</button></li>}
-          <li><button onClick={e => this.setState({currentPage: 'contacts'})}>Contacts</button></li>
-          <li><button onClick={e => this.setState({currentPage: 'match'})}>Matches</button></li>
-          <li><button onClick={e => this.setState({currentPage: 'season'})}>Seasons</button></li>
-          <li><button onClick={e => this.setState({currentPage: 'team'})}>Teams</button></li>
-          <li><button onClick={e => this.setState({currentPage: 'result'})}>Result</button></li>
-          <li><button onClick={e => this.setState({currentPage: 'goals'})}>Goals</button></li>
-          <li><button onClick={e => this.setState({currentPage: 'goalType'})}>Goal Type</button></li>
+          <li><button onClick={e => this.setState({currentPage: 'contacts'})}>{t('Contacts')}</button></li>
+          <li><button onClick={e => this.setState({currentPage: 'match'})}>{t('Matches')}</button></li>
+          <li><button onClick={e => this.setState({currentPage: 'season'})}>{t('Seasons')}</button></li>
+          <li><button onClick={e => this.setState({currentPage: 'team'})}>{t('Teams')}</button></li>
+          <li><button onClick={e => this.setState({currentPage: 'result'})}>{t('Result')}</button></li>
+          <li><button onClick={e => this.setState({currentPage: 'goals'})}>{t('Goals')}</button></li>
+          <li><button onClick={e => this.setState({currentPage: 'goalType'})}>{t('Goal Type')}</button></li>
+          <li><button onClick={e => this.props.logout()}>Log out</button></li>
+
         </ul>
         <div className='admin-main-container'>
           {this.renderPage()}
@@ -83,4 +98,6 @@ class Admin extends Component {
   }
 }
 
-export default Admin
+export default withNamespaces()(Admin);
+
+// <h5>You are logged in!{' '}<a style={{ cursor: 'pointer' }} onClick={this.logout}>Log Out</a>.</h5>
