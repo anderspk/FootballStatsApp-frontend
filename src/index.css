@@ -10,13 +10,6 @@ body {
   height: 100vh;
 }
 
-h1 {
-  color:white;
-  text-align: center;
-  border-bottom: 2px solid #57c4d0;
- padding: 10px;
-}
-
 .admin-page {
   width: 100%;
   min-height: 100vh;
@@ -29,11 +22,16 @@ h1 {
   background: #2d3436;
   padding-top: 2rem;
   margin: 0;
+  color: white;
 }
 
 .admin-menu li {
   text-align: center;
   padding: 1rem;
+}
+
+.admin-menu li button:hover {
+  opacity: .7;
 }
 
 .admin-menu button {
@@ -148,4 +146,22 @@ article p {
   /*when navigating through the items using the arrow keys:*/
   background-color: DodgerBlue !important; 
   color: #ffffff; 
+}
+
+span:hover {
+  color: #0984e3;
+  cursor: pointer;
+}
+
+i {
+    border: solid #646F72;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+    margin-left: 5px;
+}
+
+.right {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
 }

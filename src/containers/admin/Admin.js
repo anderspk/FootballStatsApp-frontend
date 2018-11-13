@@ -82,11 +82,8 @@ class Admin extends Component {
     const { showMatches } = this.state;
     return (
       <section className='admin-page'>
-<<<<<<< HEAD
-      <button onClick={() => this.changeLanguage('no')}>Norwegian</button>
-      <button onClick={() => this.changeLanguage('en')}>English</button>
         <ul className='admin-menu'>
-          <h1>Admin page</h1>
+          <li><span onClick={() => this.changeLanguage('en')}>EN</span>/<span onClick={() => this.changeLanguage('no')}>NO</span></li>
           <li><button onClick={e => this.setState({currentPage: 'dashBoard'})}>{t('Dashboard')}</button></li>
           <li><button onClick={e => this.setState({currentPage: 'address'})}>{t('Address')}</button></li>
           <li><button onClick={e => this.setState({currentPage: 'person'})}>{t('Person')}</button></li>
@@ -103,28 +100,6 @@ class Admin extends Component {
           <li><button onClick={e => this.setState({currentPage: 'goalType'})}>{t('Goal Type')}</button></li>
           <li><button onClick={e => this.props.logout()}>Log out</button></li>
 
-=======
-      <NotificationContainer/>
-        <ul className='admin-menu'>
-          <li><button onClick={e => this.setState({currentPage: 'dashBoard'})}>Dashboard</button></li>
-          <li><button onClick={e => this.setState({currentPage: 'address'})}>Address</button></li>
-          <li><button onClick={e => this.setState({ showPeople: !showPeople })}>People</button></li>
-          {showPeople && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'person'})}>All People</button></li>}
-          {showPeople && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'player'})}>Players</button></li>}
-          {showPeople && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'coach'})}>Coaches</button></li>}
-          {showPeople && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'owner'})}>Owners</button></li>}
-          <li><button onClick={e => this.setState({currentPage: 'contacts'})}>Contacts</button></li>
-          <li><button onClick={e => this.setState({ showMatches: !showMatches })}>Matches</button></li>
-          {showMatches && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'match'})}>All Matches</button></li>}
-          {showMatches && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'upcomingMatches'})}>Upcoming Matches</button></li>}
-          {showMatches && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'completedMatches'})}>Completed Matches</button></li>}
-          <li><button onClick={e => this.setState({currentPage: 'season'})}>Seasons</button></li>
-          <li><button onClick={e => this.setState({currentPage: 'team'})}>Teams</button></li>
-          <li><button onClick={e => this.setState({currentPage: 'result'})}>Result</button></li>
-          <li><button onClick={e => this.setState({currentPage: 'goals'})}>Goals</button></li>
-          <li><button onClick={e => this.setState({currentPage: 'goalType'})}>Goal Type</button></li>
-          <li><button onClick={e => this.setState({currentPage: 'user'})}>User</button></li>
->>>>>>> ef5e0f46a0bcc2f9e41e601acc5ab836f78cd55a
         </ul>
         <div className='admin-main-container'>
           {this.renderPage()}
