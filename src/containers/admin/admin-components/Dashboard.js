@@ -27,6 +27,7 @@ class Dashboard extends Component {
     const { t } = this.props;
     return (
       <section className='admin-dashboard-container'>
+        <div className='language-container'><span onClick={() => this.changeLanguage('en')}>EN</span>/<span onClick={() => this.changeLanguage('no')}>NO</span></div>
         <article className='admin-dashboard-stat users-stat'>
           <p>{this.state.data[5]}</p>
           <div>

@@ -17,18 +17,15 @@ import Contacts from './admin-components/Contacts/Contacts';
 import Dashboard from './admin-components/Dashboard';
 import i18n from '../../i18n';
 import { withNamespaces } from 'react-i18next';
-import t from "i18next";
 
 import {NotificationContainer} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 
 class Admin extends Component {
   constructor(props) {
-    console.log(props, 'props')
     super(props);
     this.state = {
-      currentPage: 'dashBoard',
-      showPeople: false
+      currentPage: 'dashBoard'
     }
   }
 
@@ -82,17 +79,20 @@ class Admin extends Component {
     const { showMatches } = this.state;
     return (
       <section className='admin-page'>
+        <NotificationContainer />
         <ul className='admin-menu'>
-          <li><span onClick={() => this.changeLanguage('en')}>EN</span>/<span onClick={() => this.changeLanguage('no')}>NO</span></li>
           <li><button onClick={e => this.setState({currentPage: 'dashBoard'})}>{t('Dashboard')}</button></li>
           <li><button onClick={e => this.setState({currentPage: 'address'})}>{t('Address')}</button></li>
-          <li><button onClick={e => this.setState({currentPage: 'person'})}>{t('Person')}</button></li>
           <li><button onClick={e => this.setState({ showPeople: !showPeople })}>{t('People')}</button></li>
+          {showPeople && <li className='player-menu'><button onClick={e => this.setState({ currentPage: 'person' })}>All People</button></li>}
           {showPeople && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'player'})}>Players</button></li>}
           {showPeople && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'coach'})}>Coaches</button></li>}
           {showPeople && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'owner'})}>Owners</button></li>}
           <li><button onClick={e => this.setState({currentPage: 'contacts'})}>{t('Contacts')}</button></li>
-          <li><button onClick={e => this.setState({currentPage: 'match'})}>{t('Matches')}</button></li>
+          <li><button onClick={e => this.setState({ showMatches: !showMatches })}>{t('Matches')}</button></li>
+          {showMatches && <li className='player-menu'><button onClick={e => this.setState({ currentPage: 'match' })}>All Matches</button></li>}
+          {showMatches && <li className='player-menu'><button onClick={e => this.setState({ currentPage: 'upcomingMatches' })}>Upcoming Matches</button></li>}
+          {showMatches && <li className='player-menu'><button onClick={e => this.setState({ currentPage: 'completedMatches' })}>Completed Matches</button></li>}
           <li><button onClick={e => this.setState({currentPage: 'season'})}>{t('Seasons')}</button></li>
           <li><button onClick={e => this.setState({currentPage: 'team'})}>{t('Teams')}</button></li>
           <li><button onClick={e => this.setState({currentPage: 'result'})}>{t('Result')}</button></li>
@@ -100,6 +100,26 @@ class Admin extends Component {
           <li><button onClick={e => this.setState({currentPage: 'goalType'})}>{t('Goal Type')}</button></li>
           <li><button onClick={e => this.props.logout()}>Log out</button></li>
 
+      
+        {/* <ul className='admin-menu'>
+          <li><button onClick={e => this.setState({currentPage: 'dashBoard'})}>Dashboard</button></li>
+          <li><button onClick={e => this.setState({currentPage: 'address'})}>Address</button></li>
+          <li><button onClick={e => this.setState({ showPeople: !showPeople })}>People</button></li>
+          {showPeople && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'person'})}>All People</button></li>}
+          {showPeople && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'player'})}>Players</button></li>}
+          {showPeople && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'coach'})}>Coaches</button></li>}
+          {showPeople && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'owner'})}>Owners</button></li>}
+          <li><button onClick={e => this.setState({currentPage: 'contacts'})}>Contacts</button></li>
+          <li><button onClick={e => this.setState({ showMatches: !showMatches })}>Matches</button></li>
+          {showMatches && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'match'})}>All Matches</button></li>}
+          {showMatches && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'upcomingMatches'})}>Upcoming Matches</button></li>}
+          {showMatches && <li className='player-menu'><button onClick={e => this.setState({currentPage: 'completedMatches'})}>Completed Matches</button></li>}
+          <li><button onClick={e => this.setState({currentPage: 'season'})}>Seasons</button></li>
+          <li><button onClick={e => this.setState({currentPage: 'team'})}>Teams</button></li>
+          <li><button onClick={e => this.setState({currentPage: 'result'})}>Result</button></li>
+          <li><button onClick={e => this.setState({currentPage: 'goals'})}>Goals</button></li>
+          <li><button onClick={e => this.setState({currentPage: 'goalType'})}>Goal Type</button></li>
+          <li><button onClick={e => this.setState({currentPage: 'user'})}>User</button></li> */}
         </ul>
         <div className='admin-main-container'>
           {this.renderPage()}

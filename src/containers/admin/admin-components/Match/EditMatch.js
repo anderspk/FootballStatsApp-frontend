@@ -31,7 +31,6 @@ class AddMatch extends Component {
   }
 
   createNotification = (type) => {
-    console.log(type);
      return () => {
        switch (type) {
          case 'info':
@@ -142,7 +141,6 @@ class AddMatch extends Component {
     if(!this.validateForm()){
       return console.log('error');
     }else{
-    console.log('object 1 = ', this.state.dataToSend)
     axios
       .put(this.props.apiURL, this.state.dataToSend)
       .then(response => this.props.onRouteChange())
@@ -210,7 +208,6 @@ class AddMatch extends Component {
 
   handleSeasonDropdown = e => {
     let input = e.target.value.toLowerCase();
-    console.log(input, 'input');
     let filteredList = this.state.seasons.filter(season => {
       return season.name.toLowerCase().includes(input);
     });
@@ -266,7 +263,6 @@ class AddMatch extends Component {
 
  
   render() {
-    console.log(this.state.seasonInput, '= seasonInput test')
     const { deleteURL, itemToEdit } = this.props;
     return <section className="container">
         {this.state.autoCompleteList}
@@ -276,7 +272,7 @@ class AddMatch extends Component {
 
         <form autoComplete="off" onSubmit={e => this.handleSubmit(e)}>
           <label className="col-2 col-form-label">Match Date</label>
-          <input defaultValue={itemToEdit.match_date} className="form-control" type="text" name="match_date" onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, match_date: e.target.value}})}} />
+          <input defaultValue={itemToEdit.match_date} className="form-control" type="date" name="match_date" onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, match_date: e.target.value}})}} />
          
           {/* HOME TEAM */}
 

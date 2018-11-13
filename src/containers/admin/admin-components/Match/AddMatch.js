@@ -245,7 +245,7 @@ class AddMatch extends Component {
 
         <form autoComplete="off" onSubmit={e => this.handleSubmit(e)}>
           <label className="col-2 col-form-label">Match Date</label>
-          <input className="form-control" type="text" name="match_date" onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, match_date: e.target.value}})}} />
+          <input className="form-control" type="date" name="match_date" onChange={e => {this.setState({ dataToSend: {...this.state.dataToSend, match_date: e.target.value}})}} />
          
           {/* HOME TEAM */}
 

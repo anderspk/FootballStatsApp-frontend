@@ -144,16 +144,12 @@ componentWillMount() {
     if(!this.validateForm()){
       return console.log('error');
     }else{
-      console.log(this.sendTeam(), " = team")
-    /*
     axios
       .put("https://case-users.herokuapp.com/updateTeamImage", this.sendImage())
       .catch(error => console.log(error));
-    /*
     axios
       .put(this.props.associationApiURL, this.sendTeam())
       .catch(error => console.log(error));
-    */
     axios
       .put(this.props.teamApiURL, this.sendTeam())
       .catch(error => console.log(error))

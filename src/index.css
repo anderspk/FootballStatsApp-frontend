@@ -26,8 +26,8 @@ body {
 }
 
 .admin-menu li {
-  text-align: center;
   padding: 1rem;
+  padding-left: 4rem;
 }
 
 .admin-menu li button:hover {
@@ -48,6 +48,7 @@ body {
 
 .admin-main-container {
   padding: 5rem;
+  padding-top: 1rem;
 }
 
 .admin-dashboard h1 {
@@ -58,7 +59,12 @@ body {
   height: 100%;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto auto 1fr;
+}
+
+.language-container {
+  grid-column: span 3;
+  justify-self: right;
 }
 
 .admin-dashboard-stat {
@@ -164,4 +170,13 @@ i {
 .right {
     transform: rotate(-45deg);
     -webkit-transform: rotate(-45deg);
+}
+
+.language {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.player-menu {
+  padding-left: 6rem !important;
 }
