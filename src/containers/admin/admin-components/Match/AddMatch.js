@@ -50,10 +50,10 @@ class AddMatch extends Component {
       .get("https://case-team.herokuapp.com/showAllTeamData")
       .then(response => this.setState({ teams: response.data }));
     axios
-      .get("https://case-season.herokuapp.com/showSeasons")
+      .get("http://case-season.herokuapp.com/showSeasons")
       .then(response => this.setState({ seasons: response.data }));
     axios
-      .get("https://case-address.herokuapp.com/showAddresses")
+      .get("http://case-address.herokuapp.com/showAddresses")
       .then(response => this.setState({ addresses: response.data }));
 
 

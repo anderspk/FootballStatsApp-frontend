@@ -48,10 +48,10 @@ class AddMatch extends Component {
       .get("https://case-person.herokuapp.com/showCoaches")
       .then(response => this.setState({ coaches: response.data }));
     axios
-      .get("https://case-person.herokuapp.com/showOwners")
+      .get("http://case-person.herokuapp.com/showOwners")
       .then(response => this.setState({ owners: response.data }));
     axios
-      .get("https://case-address.herokuapp.com/showAddresses")
+      .get("http://case-address.herokuapp.com/showAddresses")
       .then(response => this.setState({ addresses: response.data }));
 
 

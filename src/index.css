@@ -22,11 +22,16 @@ body {
   background: #2d3436;
   padding-top: 2rem;
   margin: 0;
+  color: white;
 }
 
 .admin-menu li {
-  text-align: center;
   padding: 1rem;
+  padding-left: 4rem;
+}
+
+.admin-menu li button:hover {
+  opacity: .7;
 }
 
 .admin-menu button {
@@ -43,6 +48,7 @@ body {
 
 .admin-main-container {
   padding: 5rem;
+  padding-top: 1rem;
 }
 
 .admin-dashboard h1 {
@@ -53,7 +59,12 @@ body {
   height: 100%;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto auto 1fr;
+}
+
+.language-container {
+  grid-column: span 3;
+  justify-self: right;
 }
 
 .admin-dashboard-stat {
@@ -141,4 +152,31 @@ article p {
   /*when navigating through the items using the arrow keys:*/
   background-color: DodgerBlue !important; 
   color: #ffffff; 
+}
+
+span:hover {
+  color: #0984e3;
+  cursor: pointer;
+}
+
+i {
+    border: solid #646F72;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+    margin-left: 5px;
+}
+
+.right {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+}
+
+.language {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.player-menu {
+  padding-left: 6rem !important;
 }

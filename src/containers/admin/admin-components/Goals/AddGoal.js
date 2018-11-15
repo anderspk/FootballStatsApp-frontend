@@ -46,16 +46,16 @@ class AddPlayer extends Component {
       .get("https://case-person.herokuapp.com/showPlayers")
       .then(response => this.setState({ players: response.data }));
     axios
-      .get("https://case-goal.herokuapp.com/showGoalTypes")
+      .get("http://case-goal.herokuapp.com/showGoalTypes")
       .then(response => this.setState({ goalTypes: response.data }));
     
     // * NEWS *
     axios
-      .get("https://case-match.herokuapp.com/showMatches")
+      .get("http://case-match.herokuapp.com/showMatches")
       .then(response => this.setState({ matches: response.data }));
 
     axios
-      .get("https://case-team.herokuapp.com/showAllTeamData")
+      .get("http://case-team.herokuapp.com/showAllTeamData")
       .then(response => this.setState({ teams: response.data }));
 
   }
@@ -109,7 +109,7 @@ class AddPlayer extends Component {
     let homeTeam = this.state.teams.find(homeTeam => homeTeam.team_id === match.home_team_id);
     let awayTeam = this.state.teams.find(awayTeam => awayTeam.team_id === match.away_team_id);
 
-    let newsData = player.first_name + " " + player.last_name + " scored a goal with a " + goalType.type.toLowerCase() + " in the lastest match between " + homeTeam.association_name + " and " + awayTeam.association_name;
+    let newsData = player.first_name + " " + player.last_name + " scored a " + goalType.type.toLowerCase() + " in the lastest match between " + homeTeam.association_name + " and " + awayTeam.association_name;
 
     console.log(this.state.dataToSend.player_id, "id")
 
@@ -128,7 +128,7 @@ class AddPlayer extends Component {
     }else{
       console.log(this.createNews(), "test")
     axios
-      .post("https://case-users3.herokuapp.com/createNews", this.createNews())    // 
+      .post("https://case-users.herokuapp.com/createNews", this.createNews())    // 
       .catch(error => console.log(error));
     axios
       .post(this.props.apiURL, this.state.dataToSend)

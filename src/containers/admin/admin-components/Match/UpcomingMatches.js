@@ -24,8 +24,8 @@ class Match extends Component {
 
     const matches = axios.get("https://case-match.herokuapp.com/showUpcommingMatches");
     const teams = axios.get("https://case-team.herokuapp.com/showAllTeamData");
-    const seasons = axios.get("https://case-season.herokuapp.com/showSeasons");
-    const locations = axios.get("https://case-address.herokuapp.com/showAddresses");
+    const seasons = axios.get("http://case-season.herokuapp.com/showSeasons");
+    const locations = axios.get("http://case-address.herokuapp.com/showAddresses");
 
     Promise.all([matches, teams, seasons, locations]).then(values => {
       const renderTable = [];
@@ -34,6 +34,14 @@ class Match extends Component {
         const away_team = values[1].data.find(team => team.team_id === match.away_team_id);
         const season = values[2].data.find(season => season.season_id === match.season_id);
         const location = values[3].data.find(location => location.location_id === match.location_id);
+
+        
+        console.log(matches, " = matches check");
+        console.log(teams, " = teams check");
+        console.log(seasons, " = seasons check");
+        console.log(locations, " = locations check");
+        
+        
         renderTable[i] = {
           match_id: match.match_id,
           match_date: match.match_date,

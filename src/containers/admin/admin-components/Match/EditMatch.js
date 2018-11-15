@@ -31,7 +31,6 @@ class AddMatch extends Component {
   }
 
   createNotification = (type) => {
-    console.log(type);
      return () => {
        switch (type) {
          case 'info':
@@ -70,14 +69,14 @@ class AddMatch extends Component {
         });
     // seasons
     axios
-      .get("https://case-season.herokuapp.com/showSeasons")
+      .get("http://case-season.herokuapp.com/showSeasons")
       .then(response => {
           const seasonInput = response.data.find(seasons => seasons.season_id === this.props.itemToEdit.season_id).name;
           this.setState({ seasons: response.data, seasonInput: seasonInput });
         });
     // addresses
     axios
-      .get("https://case-address.herokuapp.com/showAddresses")
+      .get("http://case-address.herokuapp.com/showAddresses")
       .then(response => {
           const addressInput = response.data.find(addresses => addresses.location_id === this.props.itemToEdit.location_id).location_name;
           this.setState({ addresses: response.data, addressInput: addressInput });
@@ -142,7 +141,6 @@ class AddMatch extends Component {
     if(!this.validateForm()){
       return console.log('error');
     }else{
-    console.log('object 1 = ', this.state.dataToSend)
     axios
       .put(this.props.apiURL, this.state.dataToSend)
       .then(response => this.props.onRouteChange())
@@ -210,7 +208,6 @@ class AddMatch extends Component {
 
   handleSeasonDropdown = e => {
     let input = e.target.value.toLowerCase();
-    console.log(input, 'input');
     let filteredList = this.state.seasons.filter(season => {
       return season.name.toLowerCase().includes(input);
     });
@@ -266,7 +263,6 @@ class AddMatch extends Component {
 
  
   render() {
-    console.log(this.state.seasonInput, '= seasonInput test')
     const { deleteURL, itemToEdit } = this.props;
     return <section className="container">
         {this.state.autoCompleteList}

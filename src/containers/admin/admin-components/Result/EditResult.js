@@ -39,7 +39,7 @@ class EditResult extends Component {
 
   componentWillMount() {
     axios
-      .get("https://case-team.herokuapp.com/showAllTeamData")
+      .get("http://case-team.herokuapp.com/showAllTeamData")
       .then(response => {
           const teamInput = response.data.find(players => players.team_id === this.props.itemToEdit.team_id).association_name;
           this.setState({ teams: response.data, teamInput: teamInput });
@@ -146,7 +146,7 @@ class EditResult extends Component {
     const { deleteURL, itemToEdit } = this.props;
     return <section className="container">
         {this.state.autoCompleteList}
-        <h1>Add {this.props.addName}</h1>
+        <h1>Edit {this.props.editName}</h1>
         <button className="btn btn-info" onClick={e => this.props.onRouteChange()}>Back</button>
 
         <form autoComplete="off" onSubmit={e => this.handleSubmit(e)}>

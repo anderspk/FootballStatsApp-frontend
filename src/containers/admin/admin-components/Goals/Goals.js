@@ -32,6 +32,11 @@ componentDidMount() {
       values[0].data.forEach((goal, i) => {
         const player = values[1].data.find(player => player.player_id === goal.player_id);
         const goalType = values[2].data.find(goalType => goalType.goal_type_id === goal.goal_type_id);
+        
+        console.log(goals, " = goals check");
+        console.log(players, " = players check");
+        console.log(goalTypes, " = goalTypes check");
+        
         renderTable[i] = {
           goal_id: goal.goal_id,
           player_id: player.first_name + " " + player.last_name,
@@ -64,7 +69,7 @@ componentDidMount() {
       case 'table':
         return <Table objectList={this.state.renderTable} onEdit={this.onEdit} addPage={this.addPage} itemFieldsName={this.state.itemFieldsName} itemFields={this.state.itemFields} title='Goals' addButton='Add Goal' />
       case 'editPage':
-        return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/updateGoal' deleteURL={`https://case-users.herokuapp.com/deleteGoal/${this.state.itemToEdit.goal_id}`}editName={this.state.itemToEdit.first_name + " " + this.state.itemToEdit.last_name}/>
+        return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/updateGoal' deleteURL={`https://case-users.herokuapp.com/deleteGoal/${this.state.itemToEdit.goal_id}`} editName='Goal'/>
       case 'addPage':
         return <AddPage formFields={this.state.itemFields} onRouteChange={this.onRouteChange} apiURL='https://case-users.herokuapp.com/createGoal' addName='Goal' />
       default:

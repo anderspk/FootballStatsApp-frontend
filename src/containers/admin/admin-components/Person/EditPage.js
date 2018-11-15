@@ -147,7 +147,7 @@ class AddPlayer extends Component {
     const { deleteURL, itemToEdit } = this.props;
     return <section className="container">
         {this.state.autoCompleteList}
-        <h1>{this.props.toEdit ? 'Edit ' : 'Add'} {this.props.addName}</h1>
+        <h1>Edit {this.props.addName}</h1>
         <button className="btn btn-info" onClick={e => this.props.onRouteChange()}>Back</button>
         <form autoComplete="off" onSubmit={e => this.handleSubmit(e)}>
 

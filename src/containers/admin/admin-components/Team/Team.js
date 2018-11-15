@@ -6,6 +6,8 @@ import AddPage from './AddTeam';
 
 class Team extends Component {
 
+  // ADD Association ID to the itemToEdit
+
   constructor(props) {
     super(props);
     this.state = {
@@ -20,11 +22,11 @@ class Team extends Component {
   }
 
   componentDidMount() {
-    
+
     const teams = axios.get("https://case-team.herokuapp.com/showAllTeamData");
     const coaches = axios.get("https://case-person.herokuapp.com/showCoaches");
     const owners = axios.get("https://case-person.herokuapp.com/showOwners");
-    const addresses = axios.get("https://case-address.herokuapp.com/showAddresses");
+    const addresses = axios.get("http://case-address.herokuapp.com/showAddresses");
 
     Promise.all([teams, coaches, owners, addresses]).then(values => {
       const renderTable = [];
@@ -42,25 +44,25 @@ class Team extends Component {
           association_description: team.association_description
         }
       });
-      this.setState({ renderTable: renderTable, values:values});
+      this.setState({ renderTable: renderTable, values: values });
     });
   }
 
   onEdit(editItem) {
-    this.setState({ activePage: 'editPage', itemToEdit: editItem});
+    this.setState({ activePage: 'editPage', itemToEdit: editItem });
 
-    editItem.coach_id = this.state.values[1].data.find(row => editItem.coach_id.includes(row.last_name)).coach_id;
     editItem.owner_id = this.state.values[2].data.find(row => editItem.owner_id.includes(row.last_name)).owner_id;
+    editItem.coach_id = this.state.values[1].data.find(row => editItem.coach_id.includes(row.last_name)).coach_id;
     editItem.location_id = this.state.values[3].data.find(row => row.location_name === editItem.location_id).location_id;
     editItem.team_image = this.state.values[0].data.find(row => row.team_id === editItem.team_id).team_image;
   }
 
   addPage = () => {
-    this.setState({ activePage: 'addPage'});
+    this.setState({ activePage: 'addPage' });
   }
 
   onRouteChange = () => {
-    this.setState({activePage: 'table'})
+    this.setState({ activePage: 'table' })
   }
 
   getView() {
@@ -68,16 +70,16 @@ class Team extends Component {
       case 'table':
         return <Table objectList={this.state.renderTable} onEdit={this.onEdit} addPage={this.addPage} itemFieldsName={this.state.itemFieldsName} itemFields={this.state.itemFields} title='Teams' addButton='Add Team' />
       case 'editPage':
-        return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange} 
-                         associationApiURL='https://case-users.herokuapp.com/updateAssociation' 
-                         teamApiURL='https://case-users.herokuapp.com/updateTeam' 
-                         teamDeleteURL={`https://case-users.herokuapp.com/deleteTeam/${this.state.itemToEdit.team_id}`} 
-                         associationDeleteURL={`https://case-users.herokuapp.com/deleteAssociation/${this.state.itemToEdit.association_id}`} 
-                         editName={this.state.itemFields.association_name}/>
+        return <EditPage itemToEdit={this.state.itemToEdit} onRouteChange={this.onRouteChange}
+          associationApiURL='https://case-users.herokuapp.com/updateAssociation'
+          teamApiURL='https://case-users.herokuapp.com/updateTeam'
+          teamDeleteURL={`https://case-users.herokuapp.com/deleteTeam/${this.state.itemToEdit.team_id}`}
+          associationDeleteURL={`https://case-users.herokuapp.com/deleteAssociation/${this.state.itemToEdit.association_id}`}
+          editName={this.state.itemFields.association_name} />
       case 'addPage':
-        return <AddPage formFields={this.state.itemFields} onRouteChange={this.onRouteChange} 
-                        associationApiURL='https://case-users.herokuapp.com/createAssociation' 
-                        teamApiURL='https://case-users.herokuapp.com/createTeam' addName='Team'/>
+        return <AddPage formFields={this.state.itemFields} onRouteChange={this.onRouteChange}
+          associationApiURL='https://case-users.herokuapp.com/createAssociation'
+          teamApiURL='https://case-users.herokuapp.com/createTeam' addName='Team' />
       default:
         break;
     }
@@ -85,7 +87,7 @@ class Team extends Component {
 
   render() {
     if (!this.state.renderTable) return 'Loading...';
-    return ( 
+    return (
       <div>
         {this.getView()}
       </div>

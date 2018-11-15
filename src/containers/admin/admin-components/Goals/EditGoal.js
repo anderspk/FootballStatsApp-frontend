@@ -49,7 +49,7 @@ class AddPlayer extends Component {
         });
 
     axios
-      .get("https://case-goal.herokuapp.com/showGoalTypes")
+      .get("http://case-goal.herokuapp.com/showGoalTypes")
       .then(response => {
           const goalTypeInput = response.data.find(goalTypes => goalTypes.goal_type_id === this.props.itemToEdit.goal_type_id).type;
           this.setState({ goalTypes: response.data, goalTypeInput: goalTypeInput });
@@ -179,7 +179,7 @@ class AddPlayer extends Component {
     const { deleteURL, itemToEdit } = this.props;
     return <section className="container">
         {this.state.autoCompleteList}
-        <h1>Add {this.props.editName}</h1>
+        <h1>Edit {this.props.editName}</h1>
         <button className="btn btn-info" onClick={e => this.props.onRouteChange()}>Back</button>
 
         <form autoComplete="off" onSubmit={e => this.handleSubmit(e)}>

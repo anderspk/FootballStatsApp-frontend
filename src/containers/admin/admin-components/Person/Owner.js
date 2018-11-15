@@ -24,7 +24,7 @@ class Owner extends Component {
   componentDidMount() {
 
     const owners = axios.get("https://case-person.herokuapp.com/showOwners");
-    const addresses = axios.get("https://case-address.herokuapp.com/showAddresses");
+    const addresses = axios.get("http://case-address.herokuapp.com/showAddresses");
 
     Promise.all([owners, addresses]).then(values => {
       const renderTable = [];
